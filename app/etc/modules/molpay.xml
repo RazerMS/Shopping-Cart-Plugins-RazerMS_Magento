@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Mage_MOLPay>
+      <active>true</active>
+      <codePool>local</codePool>
+      <depends>
+        <Mage_Payment/>
+      </depends>
+      <version>1.8.0</version>
+   </Mage_MOLPay>
+  </modules>
+</config>
