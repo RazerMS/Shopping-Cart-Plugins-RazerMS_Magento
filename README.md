@@ -6,7 +6,7 @@ MOLPay Magento Plugin
 
 Requirement
 -----------
-Magento Version 1.7.x.x
+Magento Version 1.7.x.x and above
 
 Notes
 -----
