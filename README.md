@@ -39,7 +39,7 @@ Please ensure the file permission is correct. For starting installation purpose,
 
 - Save the advance Disabled Module Output
 
-- Now, under SALES menu, click on the Payment Methods
+- Now, under SALES menu (at the sidebar), click on the Payment Methods.
 
 - Under panel MOLPay payment method. Again, please ensure it's on enable state. Insert the MOLPay Merchant ID 
 and MOLPay Verify Key and also change New order status to `pending`. Then save the config
