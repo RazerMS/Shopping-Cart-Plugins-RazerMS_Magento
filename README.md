@@ -17,21 +17,19 @@ assistance, please email support@molpay.com
 Installations
 -------------
 - Download this plugin, Extract/Unzip the files. You will get the following files and folders under the main folder `app/`
-  * `etc/modules/molpay.xml`
+  * `etc/modules/Mage_MOLPay.xml`
   * `code/local/Mage/MOLPay/`
   * `code/core/Mage/Checkout/Block/Callback.php`
 
 - Upload or copy those file and folder into Magento root directory (installed folder) and its subdirectories<br>
   <i>This won't replace any of your Magento system core file</i>
-  * `<MagentoRoot>/app/etc/modules/molpay.xml`
+  * `<MagentoRoot>/app/etc/modules/Mage_MOLPay.xml`
   * `<MagentoRoot>/app/code/local/Mage/MOLPay/`
   * `<MagentoRoot>/app/code/core/Mage/Checkout/Block/Callback.php`
 
 - (Skip this if your magento is not hosted not in UNIX environment)
-Please ensure the file permission is correct. For starting installation purpose, It's recommended to CHMOD to 777
+Please ensure the file permission is correct. For starting installation purpose, It's recommended to CHMOD to 777 or any permission that allow the file to be read and write
   * `<MagentoRoot>/app/etc/modules/molpay.xml`
-  * `<MagentoRoot>/app/code/local/Mage/MOLPay/`
-  * `<MagentoRoot>/app/code/core/Mage/Checkout/Block/Callback.php`
 
 - Login as Magento Store Admin, go to System > Configuration > Advanced
 
