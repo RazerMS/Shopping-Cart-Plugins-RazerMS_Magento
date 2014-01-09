@@ -29,7 +29,7 @@ Installations
 
 - (Skip this if your magento is not hosted not in UNIX environment)
 Please ensure the file permission is correct. For starting installation purpose, It's recommended to CHMOD to 777 or any permission that allow the file to be read and write
-  * `<MagentoRoot>/app/etc/modules/molpay.xml`
+  * `<MagentoRoot>/app/etc/modules/Mage_MOLPay.xml`
 
 - Login as Magento Store Admin, go to System > Configuration > Advanced
 
