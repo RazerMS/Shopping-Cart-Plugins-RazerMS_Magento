@@ -11,13 +11,11 @@
         <class>Mage_MOLPay_Model</class>
       </molpay>
     </models>
-    <!--
     <helpers>
       <molpay>
         <class>Mage_MOLPay_Helper</class>
       </molpay>
     </helpers>
-    -->
     <blocks>
       <molpay>
         <class>Mage_MOLPay_Block</class>
