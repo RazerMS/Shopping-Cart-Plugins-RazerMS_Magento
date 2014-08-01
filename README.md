@@ -45,6 +45,14 @@ and MOLPay Verify Key and also change New order status to `pending`. Then save t
 - Test the plugin is functioning properly by making a test payment 
 (You can test it with test account, You can get test account credentials from our support team)
 
+- To set the Return URL and callback URL for this module, logon to your MOLPay Control Panel and go to your Merchant Profile. Add the following line into Return URL and callback URL field on your merchant profile and save the changes 
+
+    `Return URL : http://www.yourdomain.com.my/index.php/molpay/paymentmethod/success/`
+    
+    `Callback URL : http://www.yourdomain.com.my/index.php/molpay/paymentmethod/callback/`
+
+    **Kindly replace `www.yourdomain.com.my` with your online shop URL.
+
 Support
 -------
 Merchant Technical Support / Customer Care : support@molpay.com <br>
