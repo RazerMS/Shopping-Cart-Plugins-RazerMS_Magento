@@ -7,7 +7,7 @@
             <depends>
               <Mage_Payment/>
             </depends>
-            <version>1.8.0</version>
+            <version>1.7.0</version>
        </Mage_MOLPay>
     </modules>
 </config>
