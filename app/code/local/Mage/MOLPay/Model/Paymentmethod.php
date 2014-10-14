@@ -118,10 +118,15 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
             if(  strpos($_history->getComment(), "/paymentmethod/pay/") !== false   ){$foundit=1;break;}
         }
         if( !$foundit ) {
-            $url = Mage::getUrl( "*/*/pay",  array("order_id" => $order->getRealOrderId() )  );
+            /* quick fix only */
+            /* update notification by farid 13th oct 2014 */
+            $url = Mage::getUrl('sales/order/reorder/', array("order_id" => $order->getId() ));
+            //$url = Mage::getUrl( "*/*/pay",  array("order_id" => $order->getRealOrderId() )  );
             $order->addStatusToHistory(
                       $order->getStatus(),
-                      "If you not complete payment yet, please <a href='$url' >Click here to pay (MOLPay Malaysia Online Payment)</a> .",
+                      //quick fix for temporary only
+                      //"If you not complete payment yet, please <a href='$url' >Click here to pay (MOLPay Malaysia Online Payment)</a> .",
+                      "If the customer has not complete a payment yet, please provide the customer the following link to advise them to reorder : '$url'  .",
                       true );
             $order->save(); 
         }
