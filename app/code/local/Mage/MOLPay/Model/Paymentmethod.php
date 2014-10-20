@@ -126,7 +126,7 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
                       $order->getStatus(),
                       //quick fix for temporary only
                       //"If you not complete payment yet, please <a href='$url' >Click here to pay (MOLPay Malaysia Online Payment)</a> .",
-                      "If the customer has not complete a payment yet, please provide the customer the following link to advise them to reorder : '$url'  .",
+                      "If the customer has not complete a payment yet, please provide the customer the following link to use the following link :\m '$url'  .",
                       true );
             $order->save(); 
         }
