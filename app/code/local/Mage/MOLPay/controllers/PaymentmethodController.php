@@ -148,6 +148,102 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             return;
         }
     }
+	
+	public function notificationAction() { 
+        $P = $_REQUEST;
+
+        if($P['nbcb'] == 2) {
+            $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
+            $orderId = $order->getId();
+            if(!isset($orderId)){
+                Mage::throwException($this->__('Order identifier is not valid!'));
+                return false;
+            }
+            $N = Mage::getModel('molpay/paymentmethod');
+
+            // test the payment method
+            $payment = $order->getPayment();
+
+            if( $payment->getMethod() !=="molpay" ){
+                Mage::throwException($this->__('Payment Method is not MOLPay !'));
+                return false;              	
+            }
+            if( $P['status'] !=='00'  ){
+                if($P['status'] == '22')
+                {
+                    $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
+                    $order->setState(
+                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                        $notified = true );
+                    $order->save();
+                }
+                else
+                {
+                    $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
+                    $order->setState(
+                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                        $notified = true );
+                    $order->save();
+                }
+                 return;
+            }
+
+            if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
+                $etcAmt='';
+                $currency_code = $order->getOrderCurrencyCode();
+                if( $currency_code !=="MYR" ){
+                    $amount= $N->MYRtoXXX( $P['amount'] ,  $currency_code );
+                    $etcAmt = "  <b>( $currency_code $amount )</b>";
+                    if( $order->getBaseGrandTotal() > $amount ) {
+                        $order->addStatusToHistory($order->getStatus(), "Amount order is not valid!");
+                    }
+                } 
+
+                $order->addStatusToHistory(
+                        $order->getStatus(),
+                        $this->__('Customer successfully returned from MOLPay')
+                        . "\n<br>Payment Channel: " .$P['channel']
+                        . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
+                        . "\n<br>AppCode: " .$P['appcode']
+                        . "\n<br>Skey: " . $P['skey']
+                        . "\n<br>TransactionID: " . $P['tranID']
+                        . "\n<br>Status: " . $P['status']
+                        . "\n<br>PaidDate: " . $P['paydate'] );
+
+                $order->getPayment()->setTransactionId( $P['tranID'] );			   
+
+                if ( !$this->_createInvoice($order,$N)  ) {
+                    $order->addStatusToHistory($order->getStatus(), $this->__('Can\'t create invoice'));
+                    $order->save();
+                    return ;
+                }
+
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                    'Payment Success' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true );
+                $order->save();
+                $order->sendNewOrderEmail();  
+                return;
+
+            }
+            else {
+                $order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
+                $order->setState(
+                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                        $notified = true );
+                $order->save();
+                return;
+            }
+        }
+    }
   
     public function callbackAction() { 
         $P = $_REQUEST;

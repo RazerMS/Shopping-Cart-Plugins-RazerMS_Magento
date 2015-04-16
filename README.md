@@ -57,6 +57,8 @@ and MOLPay Verify Key and also change New order status to `pending`. Then save t
 
     `Return URL : http://www.yourdomain.com.my/index.php/molpay/paymentmethod/success/`
     
+	`Notification URL : http://www.yourdomain.com.my/index.php/molpay/paymentmethod/notification/`
+	
     `Callback URL : http://www.yourdomain.com.my/index.php/molpay/paymentmethod/callback/`
 
     **Kindly replace `www.yourdomain.com.my` with your online shop URL.
