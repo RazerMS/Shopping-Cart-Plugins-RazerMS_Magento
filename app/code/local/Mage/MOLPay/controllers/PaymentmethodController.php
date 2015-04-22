@@ -35,6 +35,23 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             return;
         }
         $P = $this->getRequest()->getPost();
+        $P['treq'] = 1;
+        while ( list($k,$v) = each($P) ) {
+          $postData[]= $k."=".$v;
+        }
+        $postdata   = implode("&",$postData);
+        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
+        $ch         = curl_init();
+        curl_setopt($ch, CURLOPT_POST           , 1     );
+        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
+        curl_setopt($ch, CURLOPT_URL            , $url );
+        curl_setopt($ch, CURLOPT_HEADER            , 1  );
+        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
+        $result = curl_exec( $ch );
+        curl_close( $ch );
+
         $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
         $orderId = $order->getId();
         if(!isset($orderId)){
@@ -151,6 +168,22 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
 	
 	public function notificationAction() { 
         $P = $_REQUEST;
+        $P['treq'] = 1;
+        while ( list($k,$v) = each($P) ) {
+          $postData[]= $k."=".$v;
+        }
+        $postdata   = implode("&",$postData);
+        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
+        $ch         = curl_init();
+        curl_setopt($ch, CURLOPT_POST           , 1     );
+        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
+        curl_setopt($ch, CURLOPT_URL            , $url );
+        curl_setopt($ch, CURLOPT_HEADER            , 1  );
+        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
+        $result = curl_exec( $ch );
+        curl_close( $ch );
 
         if($P['nbcb'] == 2) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
@@ -247,7 +280,23 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
   
     public function callbackAction() { 
         $P = $_REQUEST;
-
+        $P['treq'] = 1;
+        while ( list($k,$v) = each($P) ) {
+          $postData[]= $k."=".$v;
+        }
+        $postdata   = implode("&",$postData);
+        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
+        $ch         = curl_init();
+        curl_setopt($ch, CURLOPT_POST           , 1     );
+        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
+        curl_setopt($ch, CURLOPT_URL            , $url );
+        curl_setopt($ch, CURLOPT_HEADER            , 1  );
+        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
+        $result = curl_exec( $ch );
+        curl_close( $ch );
+        
         if($P['nbcb'] == 1) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
             $orderId = $order->getId();
@@ -338,6 +387,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 $order->save();
                 return;
             }
+
         }
     }
   
