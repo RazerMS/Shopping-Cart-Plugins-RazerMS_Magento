@@ -35,22 +35,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             return;
         }
         $P = $this->getRequest()->getPost();
-        $P['treq'] = 1;
-        while ( list($k,$v) = each($P) ) {
-          $postData[]= $k."=".$v;
-        }
-        $postdata   = implode("&",$postData);
-        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
-        $ch         = curl_init();
-        curl_setopt($ch, CURLOPT_POST           , 1     );
-        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
-        curl_setopt($ch, CURLOPT_URL            , $url );
-        curl_setopt($ch, CURLOPT_HEADER            , 1  );
-        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
-        $result = curl_exec( $ch );
-        curl_close( $ch );
+        $this->_ack($P);
 
         $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
         $orderId = $order->getId();
@@ -60,61 +45,31 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         }
         $N = Mage::getModel('molpay/paymentmethod');
 
-        if( !$N->isOwner_or_Admin( $order->getCustomerId()))
-            return false;
-        
-        // test the payment method
-        $payment = $order->getPayment();
-        if( $payment->getMethod() !== "molpay" ){
-            Mage::throwException($this->__('Payment Method is not MOLPay !'));
+        if(!$N->isOwner_or_Admin( $order->getCustomerId())) {
             return false;
         }
-        if( $P['status'] !== '00' ){
-            if($P['status'] == '22')
-            {
-                /*
-                $order->addStatusToHistory(
-                $order->getStatus(),
-                $this->__('Customer successfully returned from MOLPay. Awaiting Payment from customer.')
-                        . "\n<br>Payment Channel: " . $P['channel']
-                        . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
-                        . "\n<br>AppCode: " . $P['appcode']
-                        . "\n<br>Skey: " . $P['skey']
-                        . "\n<br>TransactionID: " . $P['tranID']
-                        . "\n<br>Status: " . $P['status']
-                        . "\n<br>Date: " . $P['paydate']
-                );
-                $order->setStatus('Pending');
-                $order->save();
-                $this->_redirect('customer/account/');
-                */
+        
+        if( $order->getPayment()->getMethod() !=="molpay" ) {
+            Mage::throwException($this->__('Payment Method is not MOLPay !'));
+            return false;               
+        }
 
-                $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
+        if( $P['status'] !== '00' ) {
+            if($P['status'] == '22') {
+               //$order->addStatusToHistory($order->getStatus(), $this->__('Pending for Payment'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_NEW,
                     Mage_Sales_Model_Order::STATE_NEW,
-                    'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    'Customer Redirect from MOLPAY - ReturnURL (PENDING)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
                 $order->save();
                 $this->_redirect('customer/account/');
-
-                //Mage_Core_Controller_Varien_Action::_redirect('checkout/onepage/failure', array('_secure'=>true));
-            }
-            else
-            {
-                /*
-                $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
-                $order->cancel();
-                $order->setStatus('canceled');
-                $order->save();
-                $this->_redirect('customer/account/');
-                */
-
-                $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
+            } else {
+                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment failed'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
-                    'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
                 $order->save();
                 $this->_redirect('customer/account/');
@@ -133,10 +88,11 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     //print_r( "Amount order is not valid!" );
                     $order->addStatusToHistory( $order->getStatus(), "Amount order is not valid!" );
                 }
-            } 
+            }
+            
             $order->addStatusToHistory(
                 $order->getStatus(),
-                $this->__('Customer successfully returned from MOLPay')
+                $this->__('Customer Redirect from MOLPAY - ReturnURL (CAPTURED)')
                         . "\n<br>Payment Channel: " . $P['channel']
                         . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
                         . "\n<br>AppCode: " . $P['appcode']
@@ -147,57 +103,33 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             );
 
             $order->getPayment()->setTransactionId( $P['tranID'] );
-            // $order->getPayment()->setAmountCharged(9);
-            // generate the invoice
-            if ( !$this->_createInvoice($order,$N)  ) {
-                $order->addStatusToHistory($order->getStatus(), $this->__('Cann\'t create invoice'));
-                //$this->_redirect('*/*/failure');
-                $order->save();
-                // print_r("can't create invoice");exit();
-                $this->_redirect('customer/account/');
-                return;
+
+            //generate invoice.
+            if($this->_createInvoice($order,$N,$P)) {
+                $order->sendNewOrderEmail();
             }
+            
+            $order->save();
+            $this->_redirect('checkout/onepage/success');
+            return;
+
+        } else {
+            //$order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
             $order->setState(
-                Mage_Sales_Model_Order::STATE_PROCESSING,
-                Mage_Sales_Model_Order::STATE_PROCESSING,
-                'Payment Success' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                Mage_Sales_Model_Order::STATUS_FRAUD,
+                Mage_Sales_Model_Order::STATUS_FRAUD,
+                'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                 $notified = true
             );
             $order->save();
-            $order->sendNewOrderEmail();
-            //print_r("<hr>Pass");
-            $this->_redirect('checkout/onepage/success' , array('_secure'=>true) );
-            return;
-        }
-        else {
-            //print("Key Fail");
-            //exit();
-            $order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
-            $order->save();
-            // $this->_redirect('*/*/failure');
             $this->_redirect('customer/account/');
             return;
         }
     }
-	
-	public function notificationAction() { 
+    
+    public function notificationAction() {
         $P = $_REQUEST;
-        $P['treq'] = 1;
-        while ( list($k,$v) = each($P) ) {
-          $postData[]= $k."=".$v;
-        }
-        $postdata   = implode("&",$postData);
-        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
-        $ch         = curl_init();
-        curl_setopt($ch, CURLOPT_POST           , 1     );
-        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
-        curl_setopt($ch, CURLOPT_URL            , $url );
-        curl_setopt($ch, CURLOPT_HEADER            , 1  );
-        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
-        $result = curl_exec( $ch );
-        curl_close( $ch );
+        $this->_ack($_REQUEST);
 
         if($P['nbcb'] == 2) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
@@ -208,84 +140,73 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             }
             $N = Mage::getModel('molpay/paymentmethod');
 
-            // test the payment method
-            $payment = $order->getPayment();
-
-            if( $payment->getMethod() !=="molpay" ){
+            if( $order->getPayment()->getMethod() !=="molpay" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPay !'));
-                return false;              	
+                return false;               
             }
-            if( $P['status'] !=='00'  ){
-                if($P['status'] == '22')
-                {
-                    $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
+
+            if( $P['status'] !== '00' ) {
+                if($P['status'] == '22') {
+                    //$order->addStatusToHistory($order->getStatus(), $this->__('Pending for Payment'));
                     $order->setState(
                         Mage_Sales_Model_Order::STATE_NEW,
                         Mage_Sales_Model_Order::STATE_NEW,
-                        'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
+                        'Customer Redirect from MOLPAY - Notification (PENDING)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                        $notified = true
+                    );
                     $order->save();
-                }
-                else
-                {
-                    $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
+                } else {
+                    //$order->addStatusToHistory($order->getStatus(), $this->__('Payment failed'));
                     $order->setState(
                         Mage_Sales_Model_Order::STATE_CANCELED,
                         Mage_Sales_Model_Order::STATE_CANCELED,
-                        'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
+                        'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                        $notified = true
+                    );
                     $order->save();
                 }
-                 return;
+                return;
             }
 
             if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
                 $etcAmt='';
                 $currency_code = $order->getOrderCurrencyCode();
-                if( $currency_code !=="MYR" ){
+                if($currency_code !=="MYR") {
                     $amount= $N->MYRtoXXX( $P['amount'] ,  $currency_code );
                     $etcAmt = "  <b>( $currency_code $amount )</b>";
                     if( $order->getBaseGrandTotal() > $amount ) {
                         $order->addStatusToHistory($order->getStatus(), "Amount order is not valid!");
                     }
-                } 
-
-                $order->addStatusToHistory(
-                        $order->getStatus(),
-                        $this->__('Customer successfully returned from MOLPay')
-                        . "\n<br>Payment Channel: " .$P['channel']
-                        . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
-                        . "\n<br>AppCode: " .$P['appcode']
-                        . "\n<br>Skey: " . $P['skey']
-                        . "\n<br>TransactionID: " . $P['tranID']
-                        . "\n<br>Status: " . $P['status']
-                        . "\n<br>PaidDate: " . $P['paydate'] );
-
-                $order->getPayment()->setTransactionId( $P['tranID'] );			   
-
-                if ( !$this->_createInvoice($order,$N)  ) {
-                    $order->addStatusToHistory($order->getStatus(), $this->__('Can\'t create invoice'));
-                    $order->save();
-                    return ;
                 }
 
-                $order->setState(
-                    Mage_Sales_Model_Order::STATE_PROCESSING,
-                    Mage_Sales_Model_Order::STATE_PROCESSING,
-                    'Payment Success' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                    $notified = true );
-                $order->save();
-                $order->sendNewOrderEmail();  
-                return;
+                $order->addStatusToHistory(
+                $order->getStatus(),
+                    $this->__('Response from MOLPAY - NotificationURL (CAPTURED)')
+                    . "\n<br>Payment Channel: " .$P['channel']
+                    . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
+                    . "\n<br>AppCode: " .$P['appcode']
+                    . "\n<br>Skey: " . $P['skey']
+                    . "\n<br>TransactionID: " . $P['tranID']
+                    . "\n<br>Status: " . $P['status']
+                    . "\n<br>PaidDate: " . $P['paydate']
+                );
 
-            }
-            else {
-                $order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
+                $order->getPayment()->setTransactionId( $P['tranID'] );   
+
+                if($this->_createInvoice($order,$N,$P)) {
+                    $order->sendNewOrderEmail();
+                }
+                
+                $order->save();
+                return;
+            } else {
+                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
                 $order->setState(
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
+                    Mage_Sales_Model_Order::STATUS_FRAUD,
+                    Mage_Sales_Model_Order::STATUS_FRAUD,
+                    'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true
+                );
                 $order->save();
                 return;
             }
@@ -294,22 +215,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
   
     public function callbackAction() { 
         $P = $_REQUEST;
-        $P['treq'] = 1;
-        while ( list($k,$v) = each($P) ) {
-          $postData[]= $k."=".$v;
-        }
-        $postdata   = implode("&",$postData);
-        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
-        $ch         = curl_init();
-        curl_setopt($ch, CURLOPT_POST           , 1     );
-        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
-        curl_setopt($ch, CURLOPT_URL            , $url );
-        curl_setopt($ch, CURLOPT_HEADER            , 1  );
-        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
-        $result = curl_exec( $ch );
-        curl_close( $ch );
+        $this->_ack($_REQUEST);
         
         if($P['nbcb'] == 1) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
@@ -320,36 +226,31 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             }
             $N = Mage::getModel('molpay/paymentmethod');
 
-            // test the payment method
-            $payment = $order->getPayment();
-
-            if( $payment->getMethod() !=="molpay" ){
+            if( $order->getPayment()->getMethod() !=="molpay" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPay !'));
-                return false;              	
+                return false;               
             }
-            if( $P['status'] !=='00'  ){
-                if($P['status'] == '22')
-                {
-                    $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
-                    $order->setState(
-                        Mage_Sales_Model_Order::STATE_NEW,
-                        Mage_Sales_Model_Order::STATE_NEW,
-                        'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
-                    $order->save();
-                }
-                else
-                {
-                    $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
-                    $order->setState(
-                        Mage_Sales_Model_Order::STATE_CANCELED,
-                        Mage_Sales_Model_Order::STATE_CANCELED,
-                        'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
-                    $order->save();
-                }
-                 return;
+
+       if( $P['status'] !== '00' ) {
+            if($P['status'] == '22') {
+                //$order->addStatusToHistory($order->getStatus(), $this->__('Pending for Payment'));
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_NEW,
+                    Mage_Sales_Model_Order::STATE_NEW,
+                    'Customer Redirect from MOLPAY - CallbackURL (PENDING)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true );
+                $order->save();
+            } else {
+                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment failed'));
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    'Customer Redirect from MOLPAY - CallbackURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true );
+                $order->save();
             }
+            return;
+        }
 
             if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
                 $etcAmt='';
@@ -364,38 +265,31 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
 
                 $order->addStatusToHistory(
                         $order->getStatus(),
-                        $this->__('Customer successfully returned from MOLPay')
+                        $this->__('Response from MOLPAY - CallbackURL (CAPTURED)')
                         . "\n<br>Payment Channel: " .$P['channel']
                         . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
                         . "\n<br>AppCode: " .$P['appcode']
                         . "\n<br>Skey: " . $P['skey']
                         . "\n<br>TransactionID: " . $P['tranID']
                         . "\n<br>Status: " . $P['status']
-                        . "\n<br>PaidDate: " . $P['paydate'] );
+                        . "\n<br>PaidDate: " . $P['paydate']
+                );
 
-                $order->getPayment()->setTransactionId( $P['tranID'] );			   
+                $order->getPayment()->setTransactionId( $P['tranID'] );            
 
-                if ( !$this->_createInvoice($order,$N)  ) {
-                    $order->addStatusToHistory($order->getStatus(), $this->__('Can\'t create invoice'));
-                    $order->save();
-                    return ;
+                if($this->_createInvoice($order,$N,$P)) {
+                    $order->sendNewOrderEmail();
                 }
 
-                $order->setState(
-                    Mage_Sales_Model_Order::STATE_PROCESSING,
-                    Mage_Sales_Model_Order::STATE_PROCESSING,
-                    'Payment Success' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                    $notified = true );
                 $order->save();
                 $order->sendNewOrderEmail();  
                 return;
 
-            }
-            else {
-                $order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
+            } else {
+                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
                 $order->setState(
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATUS_FRAUD,
+                        Mage_Sales_Model_Order::STATUS_FRAUD,
                         'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true );
                 $order->save();
@@ -406,7 +300,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     }
   
     protected function _matchkey( $entype, $merchantID , $vkey , $P ) {
-        $enf = ( $entype == "sha1" )? "sha1" : "md5";    	    
+        $enf = ( $entype == "sha1" )? "sha1" : "md5";           
         $skey = $enf( $P['tranID'].$P['orderid'].$P['status'].$merchantID.$P['amount'].$P['currency'] );
         $skey = $enf( $P['paydate'].$merchantID.$skey.$P['appcode'].$vkey   );
         return ( $skey === $P['skey'] )? 1 : 0;
@@ -418,10 +312,10 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
      * @param Mage_Sales_Model_Order $order
      * @return Boolean
      */
-    protected function _createInvoice(Mage_Sales_Model_Order $order,$N) {
+    protected function _createInvoice(Mage_Sales_Model_Order $order,$N,$P) {
         if( $order->canInvoice() && ($order->hasInvoices() < 1));
-        else 
-            return false;
+            else 
+        return false;
         //---------------------------------------------
         // convert order into invoice
         //---------------------------------------------
@@ -434,15 +328,45 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 ->addObject($invoice->getOrder())
                 ->save();
 
+        /*
         $newOrderStatus = $N->getConfigData('order_status', $order->getStoreId());
         if( empty($newOrderStatus) )
           $newOrderStatus = $order->getStatus();
+        */
 
-        $order->setState( Mage_Sales_Model_Order::STATE_PROCESSING, $newOrderStatus, $this->__('Invoice #%s created', $invoice->getIncrementId()), true );
+        $order->setState(
+            Mage_Sales_Model_Order::STATE_PROCESSING,
+            Mage_Sales_Model_Order::STATE_PROCESSING,
+            $this->__('Invoice #%s created', $invoice->getIncrementId()
+                . "\n<br>Amount: " .$P['currency']." ".$P['amount'].$etcAmt
+                . "\n<br>PaidDate: " . $P['paydate']
+                ),
+                true
+        );
         return true;               
     }
+
+    public function _ack($P) {
+        $P['treq'] = 1;
+        while ( list($k,$v) = each($P) ) {
+          $postData[]= $k."=".$v;
+        }
+        $postdata   = implode("&",$postData);
+        $url        = "https://www.onlinepayment.com.my/MOLPay/API/chkstat/returnipn.php";
+        $ch         = curl_init();
+        curl_setopt($ch, CURLOPT_POST           , 1     );
+        curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
+        curl_setopt($ch, CURLOPT_URL            , $url );
+        curl_setopt($ch, CURLOPT_HEADER            , 1  );
+        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
+        $result = curl_exec( $ch );
+        curl_close( $ch );
+        return;
+    }
   
-    public function failureAction() {    	
+    public function failureAction() {       
         $this->loadLayout();
         $this->renderLayout();
     }
@@ -452,7 +376,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         if( !$U->isLoggedIn() ) {
             $this->_redirect('customer/account/login');
             return false;
-        }		
+        }       
         return true;
     }
     
