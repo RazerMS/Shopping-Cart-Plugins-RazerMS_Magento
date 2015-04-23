@@ -134,7 +134,7 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
     }
 
     public function getMOLPayUrl() {
-        return 'https://www.onlinepayment.com.my/NBepay/pay/'.$this->getConfigData('login')."/";
+        return 'https://www.onlinepayment.com.my/MOLPay/pay/'.$this->getConfigData('login')."/";
     }
 
     /**
