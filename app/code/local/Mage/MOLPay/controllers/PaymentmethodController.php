@@ -72,7 +72,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         if( $P['status'] !== '00' ){
             if($P['status'] == '22')
             {
-                //print_r("Fail");exit();
+                /*
                 $order->addStatusToHistory(
                 $order->getStatus(),
                 $this->__('Customer successfully returned from MOLPay. Awaiting Payment from customer.')
@@ -84,26 +84,40 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                         . "\n<br>Status: " . $P['status']
                         . "\n<br>Date: " . $P['paydate']
                 );
-                //$order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
-                //$order->cancel();
                 $order->setStatus('Pending');
                 $order->save();
-                //$this->cancelAction();
-                //$this->_redirect('*/*/failure');
                 $this->_redirect('customer/account/');
+                */
+
+                $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_NEW,
+                    Mage_Sales_Model_Order::STATE_NEW,
+                    'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true );
+                $order->save();
+                $this->_redirect('customer/account/');
+
                 //Mage_Core_Controller_Varien_Action::_redirect('checkout/onepage/failure', array('_secure'=>true));
             }
             else
             {
-                //print_r("Fail");exit();
+                /*
                 $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
                 $order->cancel();
                 $order->setStatus('canceled');
                 $order->save();
-                //$this->cancelAction();
-                //$this->_redirect('*/*/failure');
                 $this->_redirect('customer/account/');
-                //Mage_Core_Controller_Varien_Action::_redirect('checkout/onepage/failure', array('_secure'=>true));
+                */
+
+                $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true );
+                $order->save();
+                $this->_redirect('customer/account/');
             }
             return;
         }
@@ -206,8 +220,8 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 {
                     $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
                     $order->setState(
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_NEW,
+                        Mage_Sales_Model_Order::STATE_NEW,
                         'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true );
                     $order->save();
@@ -216,8 +230,8 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 {
                     $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
                     $order->setState(
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_CANCELED,
+                        Mage_Sales_Model_Order::STATE_CANCELED,
                         'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true );
                     $order->save();
@@ -318,8 +332,8 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 {
                     $order->addStatusToHistory($order->getStatus(), $this->__('Awaiting Payment'));
                     $order->setState(
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_NEW,
+                        Mage_Sales_Model_Order::STATE_NEW,
                         'Awaiting Payment' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true );
                     $order->save();
@@ -328,8 +342,8 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 {
                     $order->addStatusToHistory($order->getStatus(), $this->__('Payment Fail'));
                     $order->setState(
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
-                        Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                        Mage_Sales_Model_Order::STATE_CANCELED,
+                        Mage_Sales_Model_Order::STATE_CANCELED,
                         'Payment Fail' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true );
                     $order->save();
