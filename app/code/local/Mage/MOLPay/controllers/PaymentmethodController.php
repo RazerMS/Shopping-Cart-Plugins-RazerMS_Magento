@@ -36,6 +36,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         }
         $P = $this->getRequest()->getPost();
         $this->_ack($P);
+        $TypeOfReturn = "ReturnURL";
 
         $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
         $orderId = $order->getId();
@@ -89,28 +90,16 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     $order->addStatusToHistory( $order->getStatus(), "Amount order is not valid!" );
                 }
             }
-            
-            $order->addStatusToHistory(
-                $order->getStatus(),
-                $this->__('Customer Redirect from MOLPAY - ReturnURL (CAPTURED)')
-                        . "\n<br>Payment Channel: " . $P['channel']
-                        . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
-                        . "\n<br>AppCode: " . $P['appcode']
-                        . "\n<br>Skey: " . $P['skey']
-                        . "\n<br>TransactionID: " . $P['tranID']
-                        . "\n<br>Status: " . $P['status']
-                        . "\n<br>PaidDate: " . $P['paydate']
-            );
 
             $order->getPayment()->setTransactionId( $P['tranID'] );
 
-            //generate invoice.
             if($this->_createInvoice($order,$N,$P)) {
                 $order->sendNewOrderEmail();
             }
             
             $order->save();
-            $this->_redirect('checkout/onepage/success');
+            //$this->_redirect('checkout/onepage/success');
+            $this->_redirect('customer/account/');
             return;
 
         } else {
@@ -130,6 +119,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     public function notificationAction() {
         $P = $_REQUEST;
         $this->_ack($_REQUEST);
+        $TypeOfReturn = "NotificationURL";
 
         if($P['nbcb'] == 2) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
@@ -179,21 +169,9 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     }
                 }
 
-                $order->addStatusToHistory(
-                $order->getStatus(),
-                    $this->__('Response from MOLPAY - NotificationURL (CAPTURED)')
-                    . "\n<br>Payment Channel: " .$P['channel']
-                    . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
-                    . "\n<br>AppCode: " .$P['appcode']
-                    . "\n<br>Skey: " . $P['skey']
-                    . "\n<br>TransactionID: " . $P['tranID']
-                    . "\n<br>Status: " . $P['status']
-                    . "\n<br>PaidDate: " . $P['paydate']
-                );
-
                 $order->getPayment()->setTransactionId( $P['tranID'] );   
 
-                if($this->_createInvoice($order,$N,$P)) {
+                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
                     $order->sendNewOrderEmail();
                 }
                 
@@ -216,6 +194,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     public function callbackAction() { 
         $P = $_REQUEST;
         $this->_ack($_REQUEST);
+        $TypeOfReturn = "CallbackURL";
         
         if($P['nbcb'] == 1) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
@@ -263,26 +242,13 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     }
                 } 
 
-                $order->addStatusToHistory(
-                        $order->getStatus(),
-                        $this->__('Response from MOLPAY - CallbackURL (CAPTURED)')
-                        . "\n<br>Payment Channel: " .$P['channel']
-                        . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
-                        . "\n<br>AppCode: " .$P['appcode']
-                        . "\n<br>Skey: " . $P['skey']
-                        . "\n<br>TransactionID: " . $P['tranID']
-                        . "\n<br>Status: " . $P['status']
-                        . "\n<br>PaidDate: " . $P['paydate']
-                );
-
                 $order->getPayment()->setTransactionId( $P['tranID'] );            
 
-                if($this->_createInvoice($order,$N,$P)) {
+                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
                     $order->sendNewOrderEmail();
                 }
 
                 $order->save();
-                $order->sendNewOrderEmail();  
                 return;
 
             } else {
@@ -312,7 +278,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
      * @param Mage_Sales_Model_Order $order
      * @return Boolean
      */
-    protected function _createInvoice(Mage_Sales_Model_Order $order,$N,$P) {
+    protected function _createInvoice(Mage_Sales_Model_Order $order,$N,$P,$TypeOfReturn) {
         if( $order->canInvoice() && ($order->hasInvoices() < 1));
             else 
         return false;
@@ -337,10 +303,15 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         $order->setState(
             Mage_Sales_Model_Order::STATE_PROCESSING,
             Mage_Sales_Model_Order::STATE_PROCESSING,
-            $this->__('Invoice #%s created', $invoice->getIncrementId()
-                . "\n<br>Amount: " .$P['currency']." ".$P['amount'].$etcAmt
+                "Response from MOLPAY - ".$TypeOfReturn." (CAPTURED)"
+                . "\n<br>Invoice #".$invoice->getIncrementId().""
+                . "\n<br>Amount: ".$P['currency']." ".$P['amount'].$etcAmt
+                . "\n<br>AppCode: " .$P['appcode']
+                . "\n<br>Skey: " . $P['skey']
+                . "\n<br>TransactionID: " . $P['tranID']
+                . "\n<br>Status: " . $P['status']
                 . "\n<br>PaidDate: " . $P['paydate']
-                ),
+                ,
                 true
         );
         return true;               
