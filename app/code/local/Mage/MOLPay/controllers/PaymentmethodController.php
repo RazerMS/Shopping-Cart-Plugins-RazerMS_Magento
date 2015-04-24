@@ -93,7 +93,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
 
             $order->getPayment()->setTransactionId( $P['tranID'] );
 
-            if($this->_createInvoice($order,$N,$P)) {
+            if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
                 $order->sendNewOrderEmail();
             }
             
