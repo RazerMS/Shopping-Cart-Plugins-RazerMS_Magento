@@ -16,8 +16,7 @@ class Mage_MOLPay_Block_PaymentMethod_Redirect extends Mage_Core_Block_Abstract 
     protected function _toHtml() { 
         $Params = $this->getRequest()->getParams();
         $orderid = isset( $Params['order_id'] )? $Params['order_id']*1 : 0;
-        //veridy customer login
-        if($this->isCustomer());
+        
         $pm = Mage::getModel('molpay/paymentmethod');
 
         $form = new Varien_Data_Form();
@@ -38,15 +37,6 @@ class Mage_MOLPay_Block_PaymentMethod_Redirect extends Mage_Core_Block_Abstract 
         $html .= '</body></html>';
 
         return $html;
-    }
-
-
-    public function isCustomer(){
-        
-        $redirect_url = Mage::getUrl('customer/account/login/');
-        if((!$this->helper('customer')->isLoggedIn())){
-            Mage::app()->getFrontController()->getResponse()->setRedirect($redirect_url);
-        }
     }
 }
 

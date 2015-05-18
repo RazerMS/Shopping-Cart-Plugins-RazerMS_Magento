@@ -20,7 +20,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
      * 
      */
     public function redirectAction() { 
-        //if( !$this->checklogin() ) return ;
         $this->getResponse()->setBody($this->getLayout()->createBlock('molpay/paymentmethod_redirect')->toHtml());
     }
   
@@ -45,10 +44,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             return false;
         }
         $N = Mage::getModel('molpay/paymentmethod');
-
-        if(!$N->isOwner_or_Admin( $order->getCustomerId())) {
-            return false;
-        }
         
         if( $order->getPayment()->getMethod() !=="molpay" ) {
             Mage::throwException($this->__('Payment Method is not MOLPay !'));
@@ -57,23 +52,21 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
 
         if( $P['status'] !== '00' ) {
             if($P['status'] == '22') {
-               //$order->addStatusToHistory($order->getStatus(), $this->__('Pending for Payment'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_NEW,
                     Mage_Sales_Model_Order::STATE_NEW,
                     'Customer Redirect from MOLPAY - ReturnURL (PENDING)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
                 $order->save();
-                $this->_redirect('customer/account/');
+                $this->_redirect('checkout/onepage/success');
             } else {
-                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment failed'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
                 $order->save();
-                $this->_redirect('customer/account/');
+                $this->_redirect('checkout/onepage/success');
             }
             return;
         }
@@ -83,10 +76,8 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             $currency_code = $order->getOrderCurrencyCode();
             if( $currency_code !=="MYR" ) {
                 $amount = $N->MYRtoXXX( $P['amount'] ,  $currency_code );
-                //print_r("<h1>MYR $P[amount] to $currency_code $amount </h1>");
                 $etcAmt = "  <b>( $currency_code $amount )</b>";
                 if( $order->getBaseGrandTotal() > $amount ) {
-                    //print_r( "Amount order is not valid!" );
                     $order->addStatusToHistory( $order->getStatus(), "Amount order is not valid!" );
                 }
             }
@@ -98,12 +89,10 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             }
             
             $order->save();
-            //$this->_redirect('checkout/onepage/success');
-            $this->_redirect('customer/account/');
+            $this->_redirect('checkout/onepage/success');
             return;
 
         } else {
-            //$order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
             $order->setState(
                 Mage_Sales_Model_Order::STATUS_FRAUD,
                 Mage_Sales_Model_Order::STATUS_FRAUD,
@@ -111,7 +100,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 $notified = true
             );
             $order->save();
-            $this->_redirect('customer/account/');
+            $this->_redirect('checkout/onepage/success');
             return;
         }
     }
@@ -137,7 +126,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
 
             if( $P['status'] !== '00' ) {
                 if($P['status'] == '22') {
-                    //$order->addStatusToHistory($order->getStatus(), $this->__('Pending for Payment'));
                     $order->setState(
                         Mage_Sales_Model_Order::STATE_NEW,
                         Mage_Sales_Model_Order::STATE_NEW,
@@ -146,7 +134,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     );
                     $order->save();
                 } else {
-                    //$order->addStatusToHistory($order->getStatus(), $this->__('Payment failed'));
                     $order->setState(
                         Mage_Sales_Model_Order::STATE_CANCELED,
                         Mage_Sales_Model_Order::STATE_CANCELED,
@@ -178,7 +165,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 $order->save();
                 return;
             } else {
-                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATUS_FRAUD,
                     Mage_Sales_Model_Order::STATUS_FRAUD,
@@ -212,7 +198,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
 
        if( $P['status'] !== '00' ) {
             if($P['status'] == '22') {
-                //$order->addStatusToHistory($order->getStatus(), $this->__('Pending for Payment'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_NEW,
                     Mage_Sales_Model_Order::STATE_NEW,
@@ -220,7 +205,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     $notified = true );
                 $order->save();
             } else {
-                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment failed'));
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
@@ -252,7 +236,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 return;
 
             } else {
-                //$order->addStatusToHistory($order->getStatus(), $this->__('Payment Error: Signature key not match'));
                 $order->setState(
                         Mage_Sales_Model_Order::STATUS_FRAUD,
                         Mage_Sales_Model_Order::STATUS_FRAUD,
@@ -294,12 +277,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 ->addObject($invoice->getOrder())
                 ->save();
 
-        /*
-        $newOrderStatus = $N->getConfigData('order_status', $order->getStoreId());
-        if( empty($newOrderStatus) )
-          $newOrderStatus = $order->getStatus();
-        */
-
+        
         $order->setState(
             Mage_Sales_Model_Order::STATE_PROCESSING,
             Mage_Sales_Model_Order::STATE_PROCESSING,
@@ -352,7 +330,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     }
     
     public function payAction() {
-        //if( !$this->checklogin() ) return ;
         $this->getResponse()->setBody( $this->getLayout()->createBlock('molpay/paymentmethod_redirect')->toHtml() );
     }
 }
