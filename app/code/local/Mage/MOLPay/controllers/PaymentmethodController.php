@@ -65,8 +65,12 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
+                foreach($order->getAllItems() as $item){
+    				$item->cancel();
+    				$item->save();
+    			}
                 $order->save();
-                $this->_redirect('checkout/onepage/success');
+                $this->_redirect('checkout/cart');
             }
             return;
         }
@@ -100,7 +104,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 $notified = true
             );
             $order->save();
-            $this->_redirect('checkout/onepage/success');
+            $this->_redirect('checkout/cart');
             return;
         }
     }
@@ -140,6 +144,10 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                         'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true
                     );
+                    foreach($order->getAllItems() as $item){
+        				$item->cancel();
+        				$item->save();
+        			}
                     $order->save();
                 }
                 return;
@@ -210,6 +218,10 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     'Customer Redirect from MOLPAY - CallbackURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
+                foreach($order->getAllItems() as $item){
+    				$item->cancel();
+    				$item->save();
+    			}
                 $order->save();
             }
             return;
