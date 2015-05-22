@@ -60,15 +60,17 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 $order->save();
                 $this->_redirect('checkout/onepage/success');
             } else {
+                if($order->canCancel()) {
+                    foreach($order->getAllItems() as $item){
+                        $item->cancel();
+                        $item->save();
+                    }
+                }
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
-                foreach($order->getAllItems() as $item){
-    				$item->cancel();
-    				$item->save();
-    			}
                 $order->save();
                 $this->_redirect('checkout/cart');
             }
@@ -138,16 +140,18 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     );
                     $order->save();
                 } else {
+                    if($order->canCancel()) {
+                        foreach($order->getAllItems() as $item){
+                            $item->cancel();
+                            $item->save();
+                        }
+                    }
                     $order->setState(
                         Mage_Sales_Model_Order::STATE_CANCELED,
                         Mage_Sales_Model_Order::STATE_CANCELED,
                         'Customer Redirect from MOLPAY - ReturnURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                         $notified = true
                     );
-                    foreach($order->getAllItems() as $item){
-        				$item->cancel();
-        				$item->save();
-        			}
                     $order->save();
                 }
                 return;
@@ -213,15 +217,17 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     $notified = true );
                 $order->save();
             } else {
+                if($order->canCancel()) {
+                    foreach($order->getAllItems() as $item){
+                        $item->cancel();
+                        $item->save();
+                    }
+                }
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     'Customer Redirect from MOLPAY - CallbackURL (FAILED)' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
                     $notified = true );
-                foreach($order->getAllItems() as $item){
-    				$item->cancel();
-    				$item->save();
-    			}
                 $order->save();
             }
             return;
@@ -318,10 +324,10 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         curl_setopt($ch, CURLOPT_POST           , 1     );
         curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
         curl_setopt($ch, CURLOPT_URL            , $url );
-        curl_setopt($ch, CURLOPT_HEADER            , 1  );
-        curl_setopt($ch, CURLINFO_HEADER_OUT           , TRUE   );
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER            , 1  );
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER            , FALSE);
+        curl_setopt($ch, CURLOPT_HEADER         , 1  );
+        curl_setopt($ch, CURLINFO_HEADER_OUT    , TRUE   );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER , 1  );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , FALSE);
         $result = curl_exec( $ch );
         curl_close( $ch );
         return;
