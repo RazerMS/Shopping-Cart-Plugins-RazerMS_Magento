@@ -60,12 +60,12 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                 $order->save();
                 $this->_redirect('checkout/onepage/success');
             } else {
-                if($order->canCancel()) {
-                    foreach($order->getAllItems() as $item){
-                        $item->cancel();
-                        $item->save();
-                    }
-                }
+                // if($order->canCancel()) {
+                    // foreach($order->getAllItems() as $item){
+                        // $item->cancel();
+                        // $item->save();
+                    // }
+                // }
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
@@ -140,12 +140,12 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     );
                     $order->save();
                 } else {
-                    if($order->canCancel()) {
-                        foreach($order->getAllItems() as $item){
-                            $item->cancel();
-                            $item->save();
-                        }
-                    }
+                    // if($order->canCancel()) {
+                        // foreach($order->getAllItems() as $item){
+                            // $item->cancel();
+                            // $item->save();
+                        // }
+                    // }
                     $order->setState(
                         Mage_Sales_Model_Order::STATE_CANCELED,
                         Mage_Sales_Model_Order::STATE_CANCELED,
@@ -217,12 +217,12 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     $notified = true );
                 $order->save();
             } else {
-                if($order->canCancel()) {
-                    foreach($order->getAllItems() as $item){
-                        $item->cancel();
-                        $item->save();
-                    }
-                }
+                // if($order->canCancel()) {
+                    // foreach($order->getAllItems() as $item){
+                        // $item->cancel();
+                        // $item->save();
+                    // }
+                // }
                 $order->setState(
                     Mage_Sales_Model_Order::STATE_CANCELED,
                     Mage_Sales_Model_Order::STATE_CANCELED,
