@@ -74,7 +74,7 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
         //getQuoteCurrencyCode
         $currency_code = $order->getBaseCurrencyCode();
         $amount = $order->getBaseGrandTotal();
-        $amount = $this->toMYR(  $amount ,  $currency_code );
+        //$amount = $this->toMYR(  $amount ,  $currency_code );
         $amount = number_format( round(  $amount, 2 ) , 2, '.', '');
 
         $email = $address->getEmail(); 
@@ -86,7 +86,7 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
             'returnurl' => Mage::getUrl( 'molpay/paymentmethod/success', array('_secure' => true)),
             'orderid' => $orderid, // $this->getOrder()->getRealOrderId()
             'amount' => $amount ,
-            'currency_code' => "MYR",
+            'currency' => $currency_code,
             'bill_name' => $address->getFirstname() . ' ' . $address->getLastname(),
             'bill_email' => $email,
             'bill_mobile' => $address->getTelephone(),
@@ -134,6 +134,16 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
     }
 
     public function getMOLPayUrl() {
+        if( !$orderid  ){
+            $orderid=$this->getCheckout()->getLastRealOrderId();        
+        }
+        $order = Mage::getModel('sales/order')->loadByIncrementId( $orderid );
+        $currency_code = $order->getBaseCurrencyCode();
+
+        if($currency_code=='USD')
+        {
+            return 'https://www.onlinepayment.com.my/MOLPay/pay/'.$this->getConfigData('login')."/indexH.php";
+        }
         return 'https://www.onlinepayment.com.my/MOLPay/pay/'.$this->getConfigData('login')."/";
     }
 
