@@ -4,9 +4,9 @@
  *
  * @package     MOLPay Magento Plugin
  * @author      netbuilder <code@netbuilder.com.my>
- * @copyright   Copyright (c) 2012 - 2014, MOLPay
+ * @copyright   Copyright (c) 2012 - 2016, MOLPay
  * @link        http://molpay.com
- * @since       Version 1.8.x.x
+ * @since       Version 1.9.x.x
  * @update      MOLPay <technical@molpay.com>
  * @filesource  https://github.com/MOLPay/Magento_Plugin
  */
@@ -66,8 +66,7 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
             Mage::throwException($this->__('Order identifier is not valid!'));
             return false;
         }
-        //if( !$this->isOwner_or_Admin( $order->getCustomerId()  )   )  return false;
-
+        
         $address = $order->getBillingAddress();
         $shippingaddress = $order->getShippingAddress();
 
@@ -84,7 +83,7 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
 
         $sArr = array(
             'returnurl' => Mage::getUrl( 'molpay/paymentmethod/success', array('_secure' => true)),
-            'orderid' => $orderid, // $this->getOrder()->getRealOrderId()
+            'orderid' => $orderid,  
             'amount' => $amount ,
             'currency_code' => "MYR",
             'bill_name' => $address->getFirstname() . ' ' . $address->getLastname(),
@@ -100,7 +99,6 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
         //print_r("<li>".$vk);exit();
         $sArr['vcode'] = ( $ven =="sha1" )? sha1( $vk ) : md5( $vk );
 
-        // $items = $this->getQuote()->getAllItems();
         $items = $order->getAllItems();
         if ($items) {
             $i = 1;
@@ -121,15 +119,21 @@ class Mage_MOLPay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
             /* quick fix only */
             /* update notification by farid 13th oct 2014 */
             $url = Mage::getUrl('sales/order/reorder/', array("order_id" => $order->getId() ));
-            //$url = Mage::getUrl( "*/*/pay",  array("order_id" => $order->getRealOrderId() )  );
             $order->addStatusToHistory(
                       $order->getStatus(),
-                      //quick fix for temporary only
-                      //"If you not complete payment yet, please <a href='$url' >Click here to pay (MOLPay Malaysia Online Payment)</a> .",
-                      "If the customer has not complete a payment yet, please provide the customer the following link to use the following link :\m '$url'  .",
+                      "If the customer has not complete a payment yet, please provide the customer the following link to use the following link :\n '$url'  .",
                       true );
             $order->save(); 
         }
+        
+        //remains cart items.
+        if(Mage::getSingleton('checkout/session')->getLastRealOrderId()){ 
+            if ($lastQuoteId = Mage::getSingleton('checkout/session')->getLastQuoteId()){
+                $quote = Mage::getModel('sales/quote')->load($lastQuoteId);
+                $quote->setIsActive(true)->save();
+            }
+        }
+        
         return $sArr;
     }
 
