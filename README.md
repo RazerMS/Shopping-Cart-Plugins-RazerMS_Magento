@@ -4,27 +4,39 @@ MOLPay Magento Plugin
 
 The MOLPay Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
 
-###### MOLPay Plugin for Magento Community Edition ######
+# Supported version
+- Magento 1.9.2.X
+- Magento 1.9.2.X with [One Page Checkout Module - IWD](https://www.magentocommerce.com/magento-connect/one-page-checkout.html)
 
-Prerequisites
--------------
+# Notes
+MOLPay Sdn. Bhd. is not responsible for any problems that might arise from the use of this module. Use at your own risk. Please backup any critical data before proceeding. For any query or assistance, please email support@molpay.com
 
-* PHP 5.2 or later.
-* MOLPay Production or Development [account](http://www.molpay.com/v3/contact/merchant-enquiry).
+# System Requirements
+- PHP (at least 5.2) 
+- Curl
 
-Documentation
--------------
+# Installations
+1. Download the plugin below. Copy all the file and paste it at your Magento root directory.
+<MAGENTO_DIR>/app/*
 
-* [Getting Started](https://github.com/MOLPay/Magento_Plugin/wiki#getting-started) - Everything you need to begin using this plugins.
-* [Contributing to the Plugin](https://github.com/MOLPay/Magento_Plugin/wiki/Contributing-to-the-Plugin)
+2. Login to Magento Administration, go to menu, System > Configuration > Advanced > Advanced. Make sure <b>Mage_MOLPay</b>  is Enable.
 
-General documentation regarding the MOLPay API and related payment flows can be found on the MOLPay Merchant Admin Site.
+3. In current page, go to submenu, Sales > Payments Method, You will see list of payment method available on your Magento. Click on <b>MOLPay</b> to set up your merchant account details. 
 
-Plugin Releases
----------------
-1. [Magento Seamless Plugin Version 2.X](https://github.com/MOLPay/Magento_Plugin/releases/tag/v2.0) 
-2. [Magento Seamless Plugin for Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.2.x)
-3. [Magento Plugin Version 1.8.0](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.8.0)
+4. Fill in your <b>MOLPay Merchant ID</b>  & <b>MOLPay Verify Key</b>  into the respective fields. Then, Select Payment Channel(s), that you want to use. Set New order status as Pending. Save Config! That's all for your Magento App's setting.
+
+5. Next, login to Merchant Account and go to Merchant Profile, update the following fill:
+
+ Return URL : http://xxxxxxxxxxxxxx/molpayseamless/paymentmethod/success
+
+ Notification URL : http://xxxxxxxxxxxxxx/molpayseamless/paymentmethod/notification
+
+ Callback URL : http://xxxxxxxxxxxxxx/molpayseamless/paymentmethod/callback
+
+ Replace xxxxxxxxxxxxxx with your shoppingcart domain
+
+6. Save the configuration and done.
+
 
 Support
 -------
