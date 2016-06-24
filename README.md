@@ -23,8 +23,8 @@ General documentation regarding the MOLPay API and related payment flows can be 
 Plugin Releases
 ---------------
 1. [Magento Seamless Plugin Version 2.X](https://github.com/MOLPay/Magento_Plugin/releases/tag/v2.0) 
-2. [Magento Seamless Plugin for Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.2.x)
-3. [Magento Plugin Version 1.8.0](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.8.0)
+2. [MOLPay Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
+3. [MOLPay Seamless Plugin for Magento Version 1.9.2.X ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
 
 Support
 -------
