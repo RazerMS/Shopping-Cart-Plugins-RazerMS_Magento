@@ -1,5 +1,5 @@
-MOLPay Magento Plugin
-=====================
+MOLPay Magento Plugin & Seamless Integration
+============================================
 ![MOLPay Technical Teams](https://github.com/MOLPay/Magento_Plugin/wiki/images/molpay-developer.jpg)
 
 The MOLPay Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
@@ -13,6 +13,10 @@ MOLPay Sdn. Bhd. is not responsible for any problems that might arise from the u
 # System Requirements
 - PHP (at least 5.2) 
 - Curl
+
+# Download
+- [MOLPay Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x/dist)
+- [MOLPay Seamless Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x/dist)
 
 # Installations & Configurations
 [Go to Wiki](https://github.com/MOLPay/Magento_Plugin/wiki/Installation)
