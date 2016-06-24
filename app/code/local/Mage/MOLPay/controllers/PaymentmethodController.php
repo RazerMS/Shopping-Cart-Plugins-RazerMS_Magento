@@ -80,6 +80,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                     $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
 					$order->save();
                     
+                    Mage::getSingleton('core/session')->getMessages(true);
                     $core_session->addError('Payment Failed. Please proceed with checkout to try again.');
                     Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
 
