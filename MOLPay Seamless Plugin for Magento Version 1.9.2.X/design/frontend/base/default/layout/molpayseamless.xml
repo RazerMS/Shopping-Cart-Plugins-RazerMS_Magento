@@ -44,7 +44,7 @@ Default layout, loads most of the pages
                 <action method="setText">
                     <text>
                     <![CDATA[
-                        <script type="text/javascript" src="http://www.onlinepayment.com.my/MOLPay/API/seamless/3.7/js/MOLPay_seamless.deco.js"></script>
+                        <script type="text/javascript" src="//www.onlinepayment.com.my/MOLPay/API/seamless/3.7/js/MOLPay_seamless.deco.js"></script>
                     ]]>
                     </text>
                 </action>
