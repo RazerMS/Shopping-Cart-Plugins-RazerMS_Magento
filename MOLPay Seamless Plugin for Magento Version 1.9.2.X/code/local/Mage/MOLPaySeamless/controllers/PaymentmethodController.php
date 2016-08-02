@@ -20,6 +20,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
      * FrontEnd Location: Onepage Checkout/Order Review Tab
      * Function: To create order before redirecting customer to payment gateway
     */
+		
     public function createOrderAction(){
         try {
             $quote = Mage::getSingleton('checkout/session')->getQuote();
@@ -120,6 +121,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
 
         $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
         $orderId = $order->getId();
+		$order_status = $order->getStatus();
         $N = Mage::getModel('molpayseamless/paymentmethod');
         $core_session = Mage::getSingleton('core/session');
         
@@ -129,11 +131,24 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
         }else if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
             $this->_redirect('checkout/cart');
 			return;                
-        }else if(ucfirst($order_status)=="Processing"){ 
+        }else if(ucfirst($order_status)=="Processing"){
+			$session = Mage::getSingleton('checkout/session');
+
+			$quoteid = $N->getQuote()->getId();
+			$session->setLastSuccessQuoteId($quoteid);
+			$session->setLastQuoteId($quoteid);
+			$session->setLastOrderId($orderId);
+
+			foreach( $session->getQuote()->getItemsCollection() as $item ){
+				Mage::getSingleton('checkout/cart')->removeItem( $item->getId() )->save();
+			}
+			
 			$this->_redirect('checkout/onepage/success');
             return;
 		}else if(ucfirst($order_status)=="Canceled"){
-			$this->_redirect('checkout/cart'); 
+			Mage::getSingleton('core/session')->getMessages(true);
+			$core_session->addError('Payment Failed. Please proceed with checkout to try again.');
+			Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
             return;
 		}else{
             if( $P['status'] !== '00' ) {
@@ -247,9 +262,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
                 return;
             }
         }
-        
-        $this->loadLayout(); 
-        $this->renderLayout();
+        exit;
     }
   
     public function callbackAction() { 
@@ -303,8 +316,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
             }
         }
         
-        $this->loadLayout(); 
-        $this->renderLayout();
+        exit;
     }
     
     public function failureAction() {       
@@ -385,8 +397,9 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
     // Update order status 
     public function updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, $status){
         
+		$status_update = "";
         if($status == "PENDING"){
-            $status_update = Mage_Sales_Model_Order::STATE_NEW;
+            $status_update = Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
         }elseif($status == "FAILED"){
             $status_update = Mage_Sales_Model_Order::STATE_CANCELED;
         }else{
@@ -408,6 +421,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
             return false;
         }       
         return true;
-    }  
+    }
+    
     
 }
