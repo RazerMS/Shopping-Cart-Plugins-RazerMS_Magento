@@ -15,8 +15,12 @@ MOLPay Sdn. Bhd. is not responsible for any problems that might arise from the u
 - Curl
 
 # Download
+**Normal Integration**
 - [MOLPay Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x/dist)
-- [MOLPay Seamless Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x/dist)
+
+**Seamless Integration**
+- [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Default Checkout](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x/dist)
+- [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Aheadworks Checkout v1.3.5](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x/dist) Go to [Aheadworks Checkout Plugin](https://ecommerce.aheadworks.com/magento-extensions/one-step-checkout.html)
 
 # Installations & Configurations
 [Go to Wiki](https://github.com/MOLPay/Magento_Plugin/wiki/Installation)
