@@ -108,8 +108,17 @@ class Mage_MOLPaySeamless_Model_PaymentMethod_Source_Channels {
 		  array('value'=>'polipayment', 	
                 'label'=>'POLi Payment',
                 'currency'=>array('AUD')),
-		  array('value'=>'cash', 			
+		  array('value'=>'cash-epay', 			
                 'label'=>'e-pay',
+                'currency'=>array('MYR')),
+		  array('value'=>'PEXPLUS', 			
+                'label'=>'PEx+',
+                'currency'=>array('MYR')),
+		  array('value'=>'jompay', 			
+                'label'=>'JOMPay',
+                'currency'=>array('MYR')),
+		  array('value'=>'Cash-Esapay', 			
+                'label'=>'Cash Esapay',
                 'currency'=>array('MYR'))
 		);
     }
