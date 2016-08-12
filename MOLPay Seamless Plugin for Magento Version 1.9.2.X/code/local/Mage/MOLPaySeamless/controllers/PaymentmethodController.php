@@ -216,51 +216,54 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
         if($P['nbcb'] == 2) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
             $orderId = $order->getId();
+			$order_status = $order->getStatus();
             $N = Mage::getModel('molpayseamless/paymentmethod');
             
             if(!isset($orderId)){
                 Mage::throwException($this->__('Order identifier is not valid!'));
                 return false;
-            }
-            
-            if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
+            }else if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPaySeamless !'));
                 return false;               
-            }
+            }else if(ucfirst($order_status)=="Processing"){
+				// Order has been placed. To avoid duplicate order
+				
+				return false; 
+			}else{ 
+				if( $P['status'] !== '00' ) {
+					if($P['status'] == '22') {
+						$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
+						$order->save();
+					} else {
+						$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
+						$order->save();
+					}
+					return;
+				} else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
 
-            if( $P['status'] !== '00' ) {
-                if($P['status'] == '22') {
-                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
-                    $order->save();
-                } else {
-                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
-                    $order->save();
-                }
-                return;
-            } else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
+					$order->getPayment()->setTransactionId( $P['tranID'] );
+					try{
+						if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+							$order->sendNewOrderEmail();
+						}
+					}catch (Mage_Core_Exception $e){
+						Mage::logException($e);
+					}
 
-                $order->getPayment()->setTransactionId( $P['tranID'] );
-                try{
-                    if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-                        $order->sendNewOrderEmail();
-                    }
-                }catch (Mage_Core_Exception $e){
-                    Mage::logException($e);
-                }
+					$order->save();
 
-                $order->save();
-
-                return;
-            } else {
-                $order->setState(
-                    Mage_Sales_Model_Order::STATUS_FRAUD,
-                    Mage_Sales_Model_Order::STATUS_FRAUD,
-                    'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                    $notified = true
-                );
-                $order->save();
-                return;
-            }
+					return;
+				} else {
+					$order->setState(
+						Mage_Sales_Model_Order::STATUS_FRAUD,
+						Mage_Sales_Model_Order::STATUS_FRAUD,
+						'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+						$notified = true
+					);
+					$order->save();
+					return;
+				}
+			}
         }
         exit;
     }
@@ -274,46 +277,51 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
         if($P['nbcb'] == 1) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
             $orderId = $order->getId();
-            if(!isset($orderId)){
+            $order_status = $order->getStatus();
+            $N = Mage::getModel('molpayseamless/paymentmethod');
+			
+			if(!isset($orderId)){
                 Mage::throwException($this->__('Order identifier is not valid!'));
                 return false;
-            }
-            $N = Mage::getModel('molpayseamless/paymentmethod');
-
-            if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
+            }else if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPaySeamless !'));
                 return false;               
             }
+			else if(ucfirst($order_status)=="Processing"){
+				// Order has been placed. To avoid duplicate order
+				return false;
+			}else{
 
-            if( $P['status'] !== '00' ) {
-                if($P['status'] == '22') {
-                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
-                    $order->save();
-                } else {
-                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
-                    $order->save();
-                }
-                return;
-            } else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
-                
-                $order->getPayment()->setTransactionId( $P['tranID'] );            
+				if( $P['status'] !== '00' ) {
+					if($P['status'] == '22') {
+						$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
+						$order->save();
+					} else {
+						$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
+						$order->save();
+					}
+					return;
+				} else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
+					
+					$order->getPayment()->setTransactionId( $P['tranID'] );            
 
-                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-                    $order->sendNewOrderEmail();
-                }
+					if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+						$order->sendNewOrderEmail();
+					}
 
-                $order->save();
-                return;
+					$order->save();
+					return;
 
-            } else {
-                $order->setState(
-                        Mage_Sales_Model_Order::STATUS_FRAUD,
-                        Mage_Sales_Model_Order::STATUS_FRAUD,
-                        'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
-                $order->save();
-                return;
-            }
+				} else {
+					$order->setState(
+							Mage_Sales_Model_Order::STATUS_FRAUD,
+							Mage_Sales_Model_Order::STATUS_FRAUD,
+							'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+							$notified = true );
+					$order->save();
+					return;
+				}
+			}
         }
         
         exit;
