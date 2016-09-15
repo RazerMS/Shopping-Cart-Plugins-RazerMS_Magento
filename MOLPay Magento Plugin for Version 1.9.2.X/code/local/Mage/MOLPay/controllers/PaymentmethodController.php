@@ -41,89 +41,91 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
         
         $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
         $orderId = $order->getId();
-		$order_status = $order->getStatus();
-		$N = Mage::getModel('molpay/paymentmethod');
+        $order_status = $order->getStatus();
+        $N = Mage::getModel('molpay/paymentmethod');
         $core_session = Mage::getSingleton('core/session');
-		
+        
         if(!isset($orderId)){
             //Mage::throwException($this->__('Order identifier is not valid!'));
             $this->_redirect('checkout/cart');
-			return;
+            return;
         }else if( $order->getPayment()->getMethod() !=="molpay" ) {
             //Mage::throwException($this->__('Payment Method is not MOLPay !'));
             $this->_redirect('checkout/cart');
-			return;                
+            return;                
         }else if(ucfirst($order_status)=="Processing"){ 
-			/* 16 Jun 2016
-			* check status. if status PROCESSING, we cancel the order(do Exception). 
-			* To avoid replacement status from processing to cancelled due the same Order ID.
-			* This happen maybe customer click 'Place Order' 2 times and 
-			* unfortunately their internet connection too slow.  
-			*/
-			//Mage::throwException($this->__('Order has been paid!'));
+            /* 16 Jun 2016
+            * check status. if status PROCESSING, we cancel the order(do Exception). 
+            * To avoid replacement status from processing to cancelled due the same Order ID.
+            * This happen maybe customer click 'Place Order' 2 times or 
+            * unfortunately their internet connection too slow.  
+            */
+            //Mage::throwException($this->__('Order has been paid!'));
             $this->removeCartItems();
-			$this->_redirect('checkout/onepage/success');
+            $this->_redirect('checkout/onepage/success');
             return;
-		}else if(ucfirst($order_status)=="Canceled"){
-			//Mage::throwException($this->__('Order has been canceled!')); 
-			$this->_redirect('checkout/cart'); 
+        }else if(ucfirst($order_status)=="Canceled"){
+            //Mage::throwException($this->__('Order has been canceled!')); 
+            Mage::getSingleton('core/session')->getMessages(true);
+            $core_session->addError('Payment Failed. Please proceed with checkout to try again.');
+            $this->_redirect('checkout/cart'); 
             return;
-		}else{  
-			if( $P['status'] !== '00' ) {
-				if($P['status'] == '22') { 
-					$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
-					$order->save();
+        }else{  
+            if( $P['status'] !== '00' ) {
+                if($P['status'] == '22') { 
+                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
+                    $order->save();
                     
                     $this->removeCartItems();
-					$this->_redirect('checkout/onepage/success'); 
-				} else {
+                    $this->_redirect('checkout/onepage/success'); 
+                } else {
                     $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
-					$order->save();
+                    $order->save();
                     
                     Mage::getSingleton('core/session')->getMessages(true);
                     $core_session->addError('Payment Failed. Please proceed with checkout to try again.');
                     Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
 
-				}
-				return;
-			}else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
-				$currency_code = $order->getOrderCurrencyCode(); 
-				if( $currency_code !=="MYR" ) {
-					$amount = $N->MYRtoXXX( $P['amount'] ,  $currency_code );
-					$etcAmt = "  <b>( $currency_code $amount )</b>";
-					if( $order->getBaseGrandTotal() > $amount ) {
-						$order->addStatusToHistory( $order->getStatus(), "Amount order is not valid!" );
-					}
-				} 
+                }
+                return;
+            }else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
+                $currency_code = $order->getOrderCurrencyCode(); 
+                if( $currency_code !=="MYR" ) {
+                    $amount = $N->MYRtoXXX( $P['amount'] ,  $currency_code );
+                    $etcAmt = "  <b>( $currency_code $amount )</b>";
+                    if( $order->getBaseGrandTotal() > $amount ) {
+                        $order->addStatusToHistory( $order->getStatus(), "Amount order is not valid!" );
+                    }
+                } 
 
-				$order->getPayment()->setTransactionId( $P['tranID'] );
+                $order->getPayment()->setTransactionId( $P['tranID'] );
 
-				if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-					$order->sendNewOrderEmail();
-				}
-				
-				$order->save();
+                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+                    $order->sendNewOrderEmail();
+                }
+                
+                $order->save();
                 $this->removeCartItems();
-				$this->_redirect('checkout/onepage/success');
-				return;
+                $this->_redirect('checkout/onepage/success');
+                return;
 
-			} else {
-				$order->setState(
-					Mage_Sales_Model_Order::STATUS_FRAUD,
-					Mage_Sales_Model_Order::STATUS_FRAUD,
-					'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-					$notified = true
-				);
-				$order->save();
-				$this->_redirect('checkout/cart');
-				return;
-			}
-		}  
+            } else {
+                $order->setState(
+                    Mage_Sales_Model_Order::STATUS_FRAUD,
+                    Mage_Sales_Model_Order::STATUS_FRAUD,
+                    'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                    $notified = true
+                );
+                $order->save();
+                $this->_redirect('checkout/cart');
+                return;
+            }
+        }  
     }
     
     public function notificationAction() {
         $P = $_REQUEST;
-		echo "CBTOKEN:MPSTATOK";
+        echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "NotificationURL";
         $etcAmt='';
         
@@ -136,59 +138,65 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             if(!isset($orderId)){
                 Mage::throwException($this->__('Order identifier is not valid!'));
                 return false;
-            }
-            
-            if( $order->getPayment()->getMethod() !=="molpay" ) {
+            }elseif( $order->getPayment()->getMethod() !=="molpay" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPay !'));
                 return false;               
-            }
-
-            if( $P['status'] !== '00' ) {
-                if($P['status'] == '22') {
-                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
-                    $order->save();
-                } else {
-                    $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
-                    $order->save();
-                }
-                return;
-            } else if ( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
-                $currency_code = $order->getOrderCurrencyCode();
-                if($currency_code !=="MYR") {
-                    $amount= $N->MYRtoXXX( $P['amount'] ,  $currency_code );
-                    $etcAmt = "  <b>( $currency_code $amount )</b>";
-                    if( $order->getBaseGrandTotal() > $amount ) {
-                        $order->addStatusToHistory($order->getStatus(), "Amount order is not valid!");
-                    }
-                }
-
-                $order->getPayment()->setTransactionId( $P['tranID'] );    
-
-                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-                    $order->sendNewOrderEmail();
-                }
+            }else if(ucfirst($order_status)=="Processing"){
+                // Order has been placed. To avoid overide PROCESSING to FAILED
                 
-                $order->save();
-                return;
-            } else {
-                $order->setState(
-                    Mage_Sales_Model_Order::STATUS_FRAUD,
-                    Mage_Sales_Model_Order::STATUS_FRAUD,
-                    'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                    $notified = true
-                );
-                $order->save();
-                return;
+                return false; 
+            }else{ 
+                if( $P['status'] !== '00' ) {
+                    if($P['status'] == '22') {
+                        $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
+                        $order->save();
+                    } else {
+                        $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
+                        $order->save();
+                    }
+                    return;
+                }else if ( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
+                    $currency_code = $order->getOrderCurrencyCode();
+                    if($currency_code !=="MYR") {
+                        $amount= $N->MYRtoXXX( $P['amount'] ,  $currency_code );
+                        $etcAmt = "  <b>( $currency_code $amount )</b>";
+                        if( $order->getBaseGrandTotal() > $amount ) {
+                            $order->addStatusToHistory($order->getStatus(), "Amount order is not valid!");
+                        }
+                    }
+
+                    $order->getPayment()->setTransactionId( $P['tranID'] );   
+                    try{
+                        if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+                            $order->sendNewOrderEmail();
+                        }
+                    }catch (Mage_Core_Exception $e){
+                        Mage::logException($e);
+                    }
+                    
+                    $order->save();
+                    return;
+                }else {  
+                    $order->setState(
+                            Mage_Sales_Model_Order::STATUS_FRAUD,
+                            Mage_Sales_Model_Order::STATUS_FRAUD,
+                            'Payment Error: Signature key not match'
+                            . "\n<br>TransactionID: " . $P['tranID']
+                            . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                            . "\n<br>PaidDate: " . $P['paydate'],
+                            $notified = true );
+                    $order->save();
+                    return;
+                }
             }
         }
-		
-		$this->loadLayout(); 
-        $this->renderLayout();
+        
+        exit;
     }
   
     public function callbackAction() { 
         $P = $_REQUEST;
-		echo "CBTOKEN:MPSTATOK";
+        echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "CallbackURL";
         $etcAmt='';
         
@@ -200,53 +208,59 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
             if(!isset($orderId)){
                 Mage::throwException($this->__('Order identifier is not valid!'));
                 return false;
-            }
-            
-            if( $order->getPayment()->getMethod() !=="molpay" ) {
+            }elseif( $order->getPayment()->getMethod() !=="molpay" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPay !'));
                 return false;               
-            }
+            }else if(ucfirst($order_status)=="Processing"){
+                // Order has been placed. To avoid overide PROCESSING to FAILED
+            }else{
 
-		    if( $P['status'] !== '00' ) {
-				if($P['status'] == '22') {
-					$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
-					$order->save();
-				} else {
-					$this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
-					$order->save();
-				}
-				return;
-			}else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
-                $currency_code = $order->getOrderCurrencyCode();
-                if( $currency_code !=="MYR" ){
-                    $amount= $N->MYRtoXXX( $P['amount'] ,  $currency_code );
-                    $etcAmt = "  <b>( $currency_code $amount )</b>";
-                    if( $order->getBaseGrandTotal() > $amount ) {
-                        $order->addStatusToHistory($order->getStatus(), "Amount order is not valid!");
+                if( $P['status'] !== '00' ) {
+                    if($P['status'] == '22') {
+                        $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
+                        $order->save();
+                    } else {
+                        $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
+                        $order->save();
                     }
-                } 
+                    return;
+                }else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
+                    $currency_code = $order->getOrderCurrencyCode();
+                    if( $currency_code !=="MYR" ){
+                        $amount= $N->MYRtoXXX( $P['amount'] ,  $currency_code );
+                        $etcAmt = "  <b>( $currency_code $amount )</b>";
+                        if( $order->getBaseGrandTotal() > $amount ) {
+                            $order->addStatusToHistory($order->getStatus(), "Amount order is not valid!");
+                        }
+                    } 
 
-                $order->getPayment()->setTransactionId( $P['tranID'] );            
+                    $order->getPayment()->setTransactionId( $P['tranID'] );            
+                    try{
+                        if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+                            $order->sendNewOrderEmail();
+                        }
+                    }catch (Mage_Core_Exception $e){
+                        Mage::logException($e);
+                    }
+                    
+                    $order->save();
+                    return;
 
-                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-                    $order->sendNewOrderEmail();
+                } else {  
+                    $order->setState(
+                            Mage_Sales_Model_Order::STATUS_FRAUD,
+                            Mage_Sales_Model_Order::STATUS_FRAUD,
+                            'Payment Error: Signature key not match'
+                            . "\n<br>TransactionID: " . $P['tranID']
+                            . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                            . "\n<br>PaidDate: " . $P['paydate'],
+                            $notified = true );
+                    $order->save();
+                    return;
                 }
-
-                $order->save();
-                return;
-
-            } else {
-                $order->setState(
-                        Mage_Sales_Model_Order::STATUS_FRAUD,
-                        Mage_Sales_Model_Order::STATUS_FRAUD,
-                        'Payment Error: Signature key not match' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
-                        $notified = true );
-                $order->save();
-                return;
             }
         }
-		$this->loadLayout();
-        $this->renderLayout();
+        exit;
     }
     
     public function failureAction() {       
@@ -275,18 +289,21 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
   
     // Creating Invoice : Convert order into invoice
     protected function _createInvoice(Mage_Sales_Model_Order $order,$N,$P,$TypeOfReturn) {
-        if( $order->canInvoice() && ($order->hasInvoices() < 1));
+        /*if( $order->canInvoice() && ($order->hasInvoices() < 1));
             else 
         return false;
+        */
         
-        $invoice = $order->prepareInvoice();
-        $invoice->register()->capture();
-        Mage::getModel('core/resource_transaction')
+        if($order->hasInvoices() < 1){
+            $invoice =  Mage::getModel('sales/service_order', $order)->prepareInvoice();
+            $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+            $invoice->register();
+            Mage::getModel('core/resource_transaction')
                 ->addObject($invoice)
                 ->addObject($invoice->getOrder())
                 ->save();
+        }
 
-        
         $order->setState(
             Mage_Sales_Model_Order::STATE_PROCESSING,
             Mage_Sales_Model_Order::STATE_PROCESSING,
@@ -340,19 +357,27 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     public function updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, $status){
         
         if($status == "PENDING"){
-            $status_update = Mage_Sales_Model_Order::STATE_NEW;
+            $status_update = Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
         }elseif($status == "FAILED"){
             $status_update = Mage_Sales_Model_Order::STATE_CANCELED;
         }else{
-            $status_update = "";
+            $status_update = Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
         }
         
-        $order->setState(
+        try{
+            $order->setState(
                 $status_update,
                 $status_update,
-                'Customer Redirect from MOLPAY - ' .$TypeOfReturn. ' (' .$status. ')' . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt . "\n<br>PaidDate: " . $P['paydate'],
+                'Response from MOLPAY - ' .$TypeOfReturn. ' (' .$status. ')'
+                . "\n<br>TransactionID: " . $P['tranID']
+                . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                . "\n<br>PaidDate: " . $P['paydate']
+                ,
                 $notified = true ); 
-        return;
+                
+        } catch (Mage_Core_Exception $e) {
+            Mage::logException($e);
+        }
     }
     
     public function checklogin() {
