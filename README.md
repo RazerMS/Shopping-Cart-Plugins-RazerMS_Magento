@@ -4,13 +4,15 @@ MOLPay Magento 1.9.3.x Plugin & Seamless Integration
 
 The MOLPay Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
 
-###### MOLPay Plugin for Magento Community Edition ######
+# Supported version
+- Magento 1.9.3.X
 
-Prerequisites
--------------
+# Notes
+MOLPay Sdn. Bhd. is not responsible for any problems that might arise from the use of this module. Use at your own risk. Please backup any critical data before proceeding. For any query or assistance, please email support@molpay.com
 
-* PHP 5.2 or later.
-* MOLPay Production or Development [account](http://www.molpay.com/v3/contact/merchant-enquiry).
+# System Requirements
+- PHP (at least 5.2) 
+- Curl
 
 Documentation
 -------------
