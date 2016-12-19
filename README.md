@@ -1,4 +1,4 @@
-MOLPay Magento Plugin & Seamless Integration
+MOLPay Magento 1.9.3.x Plugin & Seamless Integration
 =====================
 ![MOLPay Technical Teams](https://github.com/MOLPay/Magento_Plugin/wiki/images/molpay-developer.jpg)
 
