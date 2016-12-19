@@ -19,7 +19,7 @@ Documentation
 
 * [Getting Started](https://github.com/MOLPay/Magento_Plugin/wiki#getting-started) - Everything you need to begin using this plugins.
 * [Contributing to the Plugin](https://github.com/MOLPay/Magento_Plugin/wiki/Contributing-to-the-Plugin)
-* Plugin Releases(https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.3.x)
+* [Plugin Releases](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.3.x)
 
 Support
 -------
