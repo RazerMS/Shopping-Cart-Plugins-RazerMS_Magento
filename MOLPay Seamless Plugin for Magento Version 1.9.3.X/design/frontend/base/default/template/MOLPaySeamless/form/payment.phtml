@@ -1,0 +1,30 @@
+<div class="form-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+    <?php 
+    $currency_code = Mage::app()->getStore()->getCurrentCurrencyCode();
+    $preset_channels = Mage::getSingleton("molpayseamless/paymentmethod")->getConfigData('paychannels');
+    $preset_channels = explode(',', $preset_channels);
+    $source_channels = array();
+    $source_channels = Mage::getModel('molpayseamless/paymentmethod_source_channels')->toOptionArray();
+    //var_dump($source_channels);
+
+    $select = "<select name='payment[molpayseamless_payment_channel]' class='required-entry'>";
+    $select .= "<option value=''>Please Select</option>";
+    foreach($preset_channels as $preset_channel){
+        for($i=0;$i<count($source_channels);$i++){
+            foreach($source_channels[$i]['currency'] as $currency){
+                if($preset_channel == $source_channels[$i]['value'] && $currency == $currency_code){
+                    if($this->htmlEscape($this->getInfoData('molpayseamless_payment_channel'))){
+                        $select .= "<option selected='selected' value='".$preset_channel."'>".$source_channels[$i]['label']."</option>";
+                    }else{
+                        $select .= "<option value='".$preset_channel."'>".$source_channels[$i]['label']."</option>";
+                    }
+
+                }
+            }
+        }
+    }
+    $select .= "</select>"; 
+    echo $select;
+    ?>
+	
+</div>
