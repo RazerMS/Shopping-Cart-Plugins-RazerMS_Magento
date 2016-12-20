@@ -168,7 +168,8 @@ Mage::log($P, null, 'molpay.log');
             $service = Mage::getModel('sales/service_quote', $quote);
             $service->submitAll();
             $order = $service->getOrder();
-            $orderId = $order->getId();
+            //$orderId = $order->getId();
+            $orderId = $P['orderid'];
         }
         
         
