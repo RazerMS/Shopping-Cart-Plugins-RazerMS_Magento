@@ -11,6 +11,7 @@
  * @filesource  https://github.com/MOLPay/Magento_Seamless_Plugin
 */
 
+
 class Mage_MOLPaySeamless_Helper_Data extends Mage_Core_Helper_Abstract {
 
 }
