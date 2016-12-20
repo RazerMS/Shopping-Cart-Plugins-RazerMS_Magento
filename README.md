@@ -16,7 +16,7 @@ MOLPay Sdn. Bhd. is not responsible for any problems that might arise from the u
 
 # Download
 **Seamless Integration**
-* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Default Checkout](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.3.x)
+* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - Default Checkout](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.3.x)
 
 # Installations & Configurations
 [Go to Wiki](https://github.com/MOLPay/Magento_Plugin/wiki/Installation)
