@@ -1,0 +1,59 @@
+<?php
+/**
+ * MOLPay Sdn. Bhd.
+ *
+ * @package     MOLPay Magento Seamless Plugin
+ * @author      netbuilder <code@netbuilder.com.my>
+ * @copyright   Copyright (c) 2012 - 2014, MOLPaySeamless
+ * @link        http://molpay.com
+ * @since       Version 1.8.x.x
+ * @update      MOLPay <technical@molpay.com>
+ * @filesource  https://github.com/MOLPay/Magento_Seamless_Plugin
+*/
+
+
+
+/**
+ * To replace Place Order button when Molpayseamless plugin was enabled.
+ * Set the button according Payment Method selected.
+*/
+$session = Mage::getSingleton('checkout/session'); 
+$quote_id = $session->getQuoteId(); 
+
+$quote = Mage::getSingleton('sales/quote')->load($quote_id );
+$paymentcode = $quote->getPayment()->getMethod();  
+
+/*
+* Replace default place order button to Seamless action
+*/
+if($paymentcode == "molpayseamless"){ 
+    $create_order =  Mage::getUrl( 'molpayseamless/paymentmethod/createOrder', array('_secure' => true)); 
+
+?> 
+    <script type="text/javascript">
+        jQuery.noConflict();     
+        (function($) {
+            $(document).ready(function(){
+                $('#placeOrderSeamless').on('click', function(e){
+					e.preventDefault();
+                    $('#seamless-form').append("<input type='hidden' name='molpayseamless_payment_channel' value='"+$("select[name='payment[molpayseamless_payment_channel]']").val()+"' />")
+                    //$j('#seamless-form').submit();
+                    //var Checkout = "";
+                    //checkout.setLoadWaiting('review');
+					$('#seamless-form').submit();
+					checkout.setLoadWaiting(false, this.isSuccess);
+                }); 
+            });
+        })(jQuery);
+    </script> 
+
+    <button type="button" id="placeOrderSeamless" class="button" >Place Order</button>
+    <form method="POST" id="seamless-form" action="<?php echo $create_order; ?>" role="molpayseamless"></form>
+	
+
+    
+<?php }else{ ?>
+    <button type="submit" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Place Order')) ?>" class="button btn-checkout" onclick="review.save();"><span><span><?php echo $this->__('Place Order') ?></span></span></button>
+<?php } ?>
+    
+   
