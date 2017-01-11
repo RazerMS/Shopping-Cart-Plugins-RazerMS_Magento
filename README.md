@@ -17,7 +17,7 @@ MOLPay Sdn. Bhd. is not responsible for any problems that might arise from the u
 # Download
 **Seamless Integration**
 * [MOLPay Seamless Plugin for Magento Version 1.9.3.X - Default Checkout](https://github.com/MOLPay/Magento_Plugin/releases/tag/v1.9.3.x)
-* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - IWD One Page Checkout](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x/dist)
+* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - IWD One Page Checkout](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x/dist) Go to [IWD One Page Checkout Plugin](https://www.magentocommerce.com/magento-connect/checkout-suite-one-page-checkout.html)
 
 # Installations & Configurations
 [Go to Wiki](https://github.com/MOLPay/Magento_Plugin/wiki/Installation)
