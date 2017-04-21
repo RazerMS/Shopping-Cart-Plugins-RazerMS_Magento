@@ -297,38 +297,37 @@ class Index extends \Magento\Framework\App\Action\Action
 
         //$checkoutSession = $om->create('\Magento\Checkout\Model\Session');
         //$checkoutSession->getData();
-        
-        $file = 'log.log';
+
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByAttribute('increment_id', $order_id);
 
         if ($order->canInvoice()) {
-            file_put_contents($file, "\nCan Invoice! ".$order_id."\n", FILE_APPEND);
+            
             // Create invoice for this order
             $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\InvoiceService')->prepareInvoice($order);
-            file_put_contents($file, "Step 1!\n", FILE_APPEND);
+            
             // Make sure there is a qty on the invoice
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                             __('You can\'t create an invoice without products.')
                         );
             }
-            file_put_contents($file, "Step 2!\n", FILE_APPEND);
+            
             // Register as invoice item
             $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-            file_put_contents($file, "Step 3!\n", FILE_APPEND);
+            
             //$invoice->setTransactionId($txn_id_gateway);
             $invoice->register();
-            file_put_contents($file, "Step 4!\n", FILE_APPEND);
+            
             //$invoice->save();
-	    file_put_contents($file, "Step 5!\n", FILE_APPEND);		
+	    
             // Save the invoice to the order
             $transaction = $this->_objectManager->create('Magento\Framework\DB\Transaction')
                  ->addObject($invoice)
                  ->addObject($invoice->getOrder());
-            file_put_contents($file, "Step 6!\n", FILE_APPEND);
+            
 
             $transaction->save();
-            file_put_contents($file, "Step 7!\n", FILE_APPEND);
+            
             // Magento\Sales\Model\Order\Email\Sender\InvoiceSender
             $this->invoiceSender = $this->_objectManager->create('Magento\Sales\Model\Order\Email\Sender\InvoiceSender');
             $this->invoiceSender->send($invoice);
