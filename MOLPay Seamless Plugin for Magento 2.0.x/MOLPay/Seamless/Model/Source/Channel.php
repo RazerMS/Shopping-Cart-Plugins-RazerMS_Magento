@@ -23,7 +23,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "maybank2u" , 'label' => "Maybank(Maybank2u)"  ];
 		$option[] = [ 'value' => "pbb" , 'label' => "PublicBank (PBB Online)"  ];
 		$option[] = [ 'value' => "rhb" , 'label' => "RHB Bank(RHB Now)"  ];
-		$option[] = [ 'value' => "fpx" , 'label' => "MyClear FPX B2C (Maybank2u, CIMB Clicks, HLB Connect, RHB Now, PBB Online, Bank Islam)"  ];
+		$option[] = [ 'value' => "fpx" , 'label' => "MyClear FPX Online Banking"  ];
 		$option[] = [ 'value' => "fpx_amb" , 'label' => "FPX Am Bank (Am Online)"  ];
 		$option[] = [ 'value' => "fpx_bimb" , 'label' => "FPX Bank Islam"  ];
 		$option[] = [ 'value' => "fpx_cimbclicks" , 'label' => "FPX CIMB Bank(CIMB Clicks)"  ];
@@ -127,7 +127,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "maybank2u" => "Maybank(Maybank2u)",
 "pbb" => "PublicBank (PBB Online)",
 "rhb" => "RHB Bank(RHB Now)",
-"fpx" => "MyClear FPX B2C (Maybank2u, CIMB Clicks, HLB Connect, RHB Now, PBB Online, Bank Islam)",
+"fpx" => "MyClear FPX Online Banking",
 "fpx_amb" => "FPX Am Bank (Am Online)",
 "fpx_bimb" => "FPX Bank Islam",
 "fpx_cimbclicks" => "FPX CIMB Bank(CIMB Clicks)",
