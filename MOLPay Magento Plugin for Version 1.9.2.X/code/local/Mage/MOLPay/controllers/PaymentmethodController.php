@@ -125,7 +125,6 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     
     public function notificationAction() {
         $P = $_REQUEST;
-        echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "NotificationURL";
         $etcAmt='';
         
