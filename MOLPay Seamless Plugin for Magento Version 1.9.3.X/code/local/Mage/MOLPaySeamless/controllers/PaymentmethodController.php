@@ -230,7 +230,7 @@ Mage::log($P, null, 'molpay.log');
     
     
     public function notificationAction() {
-        $P = $_REQUEST;
+        $P = $this->getRequest()->getPost();
         echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "NotificationURL";
         $etcAmt = '';
@@ -294,7 +294,7 @@ Mage::log($P, null, 'molpay.log');
   
     public function callbackAction() { 
         
-        $P = $_REQUEST;
+        $P = $this->getRequest()->getPost();
         echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "CallbackURL";
         $etcAmt = '';
