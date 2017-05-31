@@ -208,7 +208,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
     
     
     public function notificationAction() {
-        $P = $_REQUEST;
+        $P = $this->getRequest()->getPost();
         echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "NotificationURL";
         $etcAmt = '';
@@ -269,7 +269,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
     }
   
     public function callbackAction() { 
-        $P = $_REQUEST;
+        $P = $this->getRequest()->getPost();
         echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "CallbackURL";
         $etcAmt = '';
