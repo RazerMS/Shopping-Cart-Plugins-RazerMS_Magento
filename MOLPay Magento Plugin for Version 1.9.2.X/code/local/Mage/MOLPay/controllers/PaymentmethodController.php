@@ -124,7 +124,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     }
     
     public function notificationAction() {
-        $P = $_REQUEST;
+        $P = $this->getRequest()->getPost();
         $TypeOfReturn = "NotificationURL";
         $etcAmt='';
         
@@ -194,7 +194,7 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
     }
   
     public function callbackAction() { 
-        $P = $_REQUEST;
+        $P = $this->getRequest()->getPost();
         echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "CallbackURL";
         $etcAmt='';
