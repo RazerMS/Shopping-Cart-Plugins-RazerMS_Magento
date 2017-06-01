@@ -66,7 +66,7 @@ class Mage_MOLPaySeamless_Model_PaymentMethod_Source_Channels {
 		  array('value'=>'molwallet', 		
                 'label'=>'MOLWallet	Wallet',
                 'currency'=>array('MYR')),
-		  array('value'=>'cash', 			
+		  array('value'=>'cash-711', 			
                 'label'=>'711	7-Eleven(MOLPay Cash)',
                 'currency'=>array('MYR')),
 		  array('value'=>'credit',
