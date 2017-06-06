@@ -168,6 +168,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
             }else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
 
                 $order->getPayment()->setTransactionId( $P['tranID'] );
+		$order->setTotalPaid($P['amount']);
                 try{
                     if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
                         $order->sendNewOrderEmail();
@@ -242,6 +243,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
 				} else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
 
 					$order->getPayment()->setTransactionId( $P['tranID'] );
+					$order->setTotalPaid($P['amount']);
 					try{
 						if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
 							$order->sendNewOrderEmail();
@@ -304,7 +306,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
 				} else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
 					
 					$order->getPayment()->setTransactionId( $P['tranID'] );            
-
+					$order->setTotalPaid($P['amount']);
 					if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
 						$order->sendNewOrderEmail();
 					}
