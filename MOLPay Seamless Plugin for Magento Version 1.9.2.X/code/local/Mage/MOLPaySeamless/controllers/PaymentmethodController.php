@@ -165,7 +165,7 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
                     foreach( $session->getQuote()->getItemsCollection() as $item ){
                         Mage::getSingleton('checkout/cart')->removeItem( $item->getId() )->save();
                     }
-                    $core_session->addSuccess('Your Payment is PENDING. Kindly Make Your Payment Before the Transaction Due Date.');
+                    
                     $this->_redirect('checkout/onepage/success');
                 } else {
                     $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
