@@ -37,6 +37,9 @@
                     <source_model>MOLPay\Seamless\Model\Source\Installment</source_model>
                     <can_be_empty>0</can_be_empty>
                 </field>
+                <field id="merchant_gateway_settimer" translate="label" type="text" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="0">
+                     <label>Duration of Payment (in minute)</label>
+                </field>
 
             </group>
         </section>

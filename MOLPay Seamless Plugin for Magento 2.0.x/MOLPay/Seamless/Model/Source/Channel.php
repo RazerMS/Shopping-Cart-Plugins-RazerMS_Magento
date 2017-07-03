@@ -23,7 +23,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "maybank2u" , 'label' => "Maybank(Maybank2u)"  ];
 		$option[] = [ 'value' => "pbb" , 'label' => "PublicBank (PBB Online)"  ];
 		$option[] = [ 'value' => "rhb" , 'label' => "RHB Bank(RHB Now)"  ];
-		$option[] = [ 'value' => "fpx" , 'label' => "MyClear FPX Online Banking"  ];
+		$option[] = [ 'value' => "fpx" , 'label' => "MyClear FPX B2C (Maybank2u, CIMB Clicks, HLB Connect, RHB Now, PBB Online, Bank Islam)"  ];
 		$option[] = [ 'value' => "fpx_amb" , 'label' => "FPX Am Bank (Am Online)"  ];
 		$option[] = [ 'value' => "fpx_bimb" , 'label' => "FPX Bank Islam"  ];
 		$option[] = [ 'value' => "fpx_cimbclicks" , 'label' => "FPX CIMB Bank(CIMB Clicks)"  ];
@@ -37,7 +37,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Ban"  ];
 		$option[] = [ 'value' => "FPX_SCB" , 'label' => "FPX Standard Chartered Bank"  ];
 		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berha"  ];
-		$option[] = [ 'value' => "FPX_B2B" , 'label' => "MyClear FPX Corporate Banking"  ];
+		$option[] = [ 'value' => "FPX_B2B" , 'label' => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam"  ];
 		$option[] = [ 'value' => "FPX_B2B_ABB" , 'label' => "FPX B2B Affin Bank"  ];
 		$option[] = [ 'value' => "FPX_B2B_AMB" , 'label' => "FPX B2B Ambank Berhad"  ];
 		$option[] = [ 'value' => "FPX_B2B_BIMB" , 'label' => "FPX B2B Bank Islam Malaysia Berhad (BIMB)"  ];
@@ -127,7 +127,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "maybank2u" => "Maybank(Maybank2u)",
 "pbb" => "PublicBank (PBB Online)",
 "rhb" => "RHB Bank(RHB Now)",
-"fpx" => "MyClear FPX Online Banking",
+"fpx" => "MyClear FPX B2C (Maybank2u, CIMB Clicks, HLB Connect, RHB Now, PBB Online, Bank Islam)",
 "fpx_amb" => "FPX Am Bank (Am Online)",
 "fpx_bimb" => "FPX Bank Islam",
 "fpx_cimbclicks" => "FPX CIMB Bank(CIMB Clicks)",
@@ -141,7 +141,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "FPX_OCBC" => "FPX OCBC Ban",
 "FPX_SCB" => "FPX Standard Chartered Bank",
 "FPX_ABB" => "FPX Affin Bank Berha",
-"FPX_B2B" => "MyClear FPX Corporate Banking",
+"FPX_B2B" => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam",
 "FPX_B2B_ABB" => "FPX B2B Affin Bank",
 "FPX_B2B_AMB" => "FPX B2B Ambank Berhad",
 "FPX_B2B_BIMB" => "FPX B2B Bank Islam Malaysia Berhad (BIMB)",

@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            molpayseamlessdeco: 'https://www.onlinepayment.com.my/MOLPay/API/seamless/3.13/js/MOLPay_seamless.deco.js'
+            molpayseamlessdeco: 'https://www.onlinepayment.com.my/MOLPay/API/seamless/latest/js/MOLPay_seamless.deco.js'
         }
     }
 };
