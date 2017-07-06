@@ -159,6 +159,12 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "FPX_B2B_RHB" => "FPX B2B RHB Reflex",
 "FPX_B2B_UOB" => "FPX B2B United Overseas Bank",
 "FPX_M2E" => "FPX Maybank2e",
+"FPX_B2B_KFH" => "FPX B2B Kuwait Finance House Overseas Bank",	   
+"FPX_B2B_DEUTSCHE" => "FPX B2B Deutsche Bank",
+"FPX_B2B_ABMB" => "FPX B2B Alliance Bank"  ];
+"FPX_B2B_SCB" => "FPX B2B Standard Chartered Bank",
+"FPX_B2B_OCBC" => "FPX B2B OCBC Bank",
+"FPX_B2B_BMMB" => "FPX B2B Bank Muamalat",
 "molwallet" => "MOLWallet",
 "cash-711" => "7-Eleven(MOLPay Cash)",
 "credit" => "Credit Card/ Debit Card",
