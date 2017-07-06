@@ -34,6 +34,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "fpx_abmb" , 'label' => "FPX Alliance Bank (Alliance Online)"  ];
 		$option[] = [ 'value' => "fpx_uob" , 'label' => "FPX United Overseas Bank (UOB)"  ];
 		$option[] = [ 'value' => "fpx_bsn" , 'label' => "FPX Bank Simpanan Nasional (myBSN)"  ];
+	        $option[] = [ 'value' => "fpx_hsbc" , 'label' => "FPX Hongkong and Shanghai Banking Corporation"  ];
 		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Ban"  ];
 		$option[] = [ 'value' => "FPX_SCB" , 'label' => "FPX Standard Chartered Bank"  ];
 		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berha"  ];
@@ -48,6 +49,12 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "FPX_B2B_RHB" , 'label' => "FPX B2B RHB Reflex"  ];
 		$option[] = [ 'value' => "FPX_B2B_UOB" , 'label' => "FPX B2B United Overseas Bank"  ];
 		$option[] = [ 'value' => "FPX_M2E" , 'label' => "FPX Maybank2e"  ];
+	        $option[] = [ 'value' => "FPX_B2B_KFH" , 'label' => "FPX B2B Kuwait Finance House Overseas Bank"  ];
+		$option[] = [ 'value' => "FPX_B2B_DEUTSCHE" , 'label' => "FPX B2B Deutsche Bank"  ];
+		$option[] = [ 'value' => "FPX_B2B_ABMB" , 'label' => "FPX B2B Alliance Bank"  ];
+		$option[] = [ 'value' => "FPX_B2B_SCB" , 'label' => "FPX B2B Standard Chartered Bank"  ];
+		$option[] = [ 'value' => "FPX_B2B_OCBC" , 'label' => "FPX B2B OCBC Bank"  ];
+		$option[] = [ 'value' => "FPX_B2B_BMMB" , 'label' => "FPX B2B Bank Muamalat"  ];
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
 		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
 		$option[] = [ 'value' => "credit" , 'label' => "Credit Card/ Debit Card"  ];
