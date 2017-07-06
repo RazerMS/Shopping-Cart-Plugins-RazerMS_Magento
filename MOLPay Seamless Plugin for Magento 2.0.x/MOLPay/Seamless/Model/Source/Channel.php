@@ -145,6 +145,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "fpx_abmb" => "FPX Alliance Bank (Alliance Online)",
 "fpx_uob" => "FPX United Overseas Bank (UOB)",
 "fpx_bsn" => "FPX Bank Simpanan Nasional (myBSN)",
+"fpx_hsbc"=> "FPX Hongkong and Shanghai Banking Corporation (HSBC)"
 "FPX_OCBC" => "FPX OCBC Ban",
 "FPX_SCB" => "FPX Standard Chartered Bank",
 "FPX_ABB" => "FPX Affin Bank Berha",
