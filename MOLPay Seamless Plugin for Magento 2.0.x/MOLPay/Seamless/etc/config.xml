@@ -14,7 +14,8 @@
                 <model>SeamlessFacade</model>
                 <merchant_gateway_id />
                 <merchant_gateway_key />
-                <merchant_gateway_secretkey/>                                                 
+                <merchant_gateway_secretkey/> 
+                <merchant_gateway_settimer>0</merchant_gateway_settimer>                                                
                 <order_status>pending_payment</order_status>
                 <title>MOLPay Online Payment</title>
                 <currency>MYR</currency>

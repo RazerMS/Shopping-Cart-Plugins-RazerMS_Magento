@@ -8,6 +8,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const MER_GATE_ID = 'payment/molpay_seamless/merchant_gateway_id';
     const MER_GATE_KEY = 'payment/molpay_seamless/merchant_gateway_key';
     const MER_GATE_SECRETKEY ='payment/molpay_seamless/merchant_gateway_secretkey';
+    const MER_GATE_SETTIMER ='payment/molpay_seamless/merchant_gateway_settimer';
     const MOLPAY_CHANNELS ='payment/molpay_seamless/channels_payment';
     const MOLPAY_INSTALLMENT ='payment/molpay_seamless/installment_payment';
     
@@ -34,6 +35,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
+    
+    public function getTimerPayment()
+    {
+        return $this->scopeConfig->getValue(
+            self::MER_GATE_SETTIMER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 
     public function getActiveChannels(){
         return $this->scopeConfig->getValue(
@@ -48,6 +57,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
+    
+    
 
     
     

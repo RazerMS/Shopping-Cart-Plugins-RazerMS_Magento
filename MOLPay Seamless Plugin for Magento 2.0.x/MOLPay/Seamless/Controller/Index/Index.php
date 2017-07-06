@@ -123,6 +123,8 @@ class Index extends \Magento\Framework\App\Action\Action
             } 
             $merchantid = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getMerchantID();
             $vkey = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getVerifyKey();
+            $settimer = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getTimerPayment();
+            if( !$settimer ) $settimer = 0;
             
             $base_url = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getBaseUrl();
             
@@ -158,14 +160,37 @@ class Index extends \Magento\Framework\App\Action\Action
                 'mpscurrency'     => $order->getOrderCurrencyCode(),
                 'mpslangcode'     => "en",
                 'mpsreturnurl'    => $base_url.'seamless',
-                'mpsapiversion'   => "3.13",
-		'mpsinstallmonth' => $installmonth
+                'mpstimer'	  => $settimer,
+                'mpstimerbox'	  => "#counter",
+                'mpscancelurl'	  => $base_url.'seamless',
+        		'mpsinstallmonth' => $installmonth
             );
 
             $this->getResponse()->setBody(json_encode($params));
 
         } 
-        else if( isset($_REQUEST) && $_REQUEST != "" ) {   // Get the return from MOLPay
+        else if( isset($_REQUEST) && $_REQUEST != "" ) { 
+           //incase timer timeups return here
+    	   if( isset($_REQUEST['mpsorderid']) ){
+	        $order_id = $_REQUEST['mpsorderid'];
+                $om =   \Magento\Framework\App\ObjectManager::getInstance();
+            
+                $order = $om->create('Magento\Sales\Api\Data\OrderInterface');
+                $order->loadByIncrementId($order_id);
+                            
+
+		$this->messageManager->addError('Fail to complete payment.');
+                               
+                $order->setState('canceled',true);
+                $order->setStatus('canceled',true);
+                $order->save();
+                                
+                $url_checkoutredirection = 'sales/order/reorder/order_id/'.$order_id.'/';
+  
+            	$this->_redirect($url_checkoutredirection);
+	   }
+           else //response from MOLPay 
+	   { 
 
             $this->_ack($_REQUEST);
             $status = $_REQUEST['status'];
@@ -238,12 +263,14 @@ class Index extends \Magento\Framework\App\Action\Action
                     $this->messageManager->addError('Fail to complete payment.');
 		    		if( $nbcb == "1" )
 		    		{
+                        ////$order->addStatusToHistory('canceled', 'MOLPay Callback Status');
                     	$order->setState('canceled',true);
                     	$order->setStatus('canceled',true);
                     	$order->save();
 		    		}
 
-                    $url_checkoutredirection = 'checkout/cart';
+                    //$url_checkoutredirection = 'checkout/cart';
+                    $url_checkoutredirection = 'sales/order/reorder/order_id/'.$order_id.'/';
                 }
             } else {
 
@@ -263,10 +290,10 @@ class Index extends \Magento\Framework\App\Action\Action
                 //$this->_redirect('sales/order/history/');
                 $this->_redirect($url_checkoutredirection);
             }
-
-        } else {
+          }
+        } /**else { 
             echo 'Required parameter not exist';
-        }
+        }**/
         
     }
 
@@ -297,37 +324,33 @@ class Index extends \Magento\Framework\App\Action\Action
 
         //$checkoutSession = $om->create('\Magento\Checkout\Model\Session');
         //$checkoutSession->getData();
-
+        
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByAttribute('increment_id', $order_id);
 
         if ($order->canInvoice()) {
-            
             // Create invoice for this order
             $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\InvoiceService')->prepareInvoice($order);
-            
+
             // Make sure there is a qty on the invoice
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                             __('You can\'t create an invoice without products.')
                         );
             }
-            
+
             // Register as invoice item
             $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-            
+
             //$invoice->setTransactionId($txn_id_gateway);
             $invoice->register();
-            
-            //$invoice->save();
-	    
+
             // Save the invoice to the order
             $transaction = $this->_objectManager->create('Magento\Framework\DB\Transaction')
                  ->addObject($invoice)
                  ->addObject($invoice->getOrder());
-            
 
             $transaction->save();
-            
+
             // Magento\Sales\Model\Order\Email\Sender\InvoiceSender
             $this->invoiceSender = $this->_objectManager->create('Magento\Sales\Model\Order\Email\Sender\InvoiceSender');
             $this->invoiceSender->send($invoice);
