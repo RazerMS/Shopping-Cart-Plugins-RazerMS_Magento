@@ -145,7 +145,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "fpx_abmb" => "FPX Alliance Bank (Alliance Online)",
 "fpx_uob" => "FPX United Overseas Bank (UOB)",
 "fpx_bsn" => "FPX Bank Simpanan Nasional (myBSN)",
-"fpx_hsbc"=> "FPX Hongkong and Shanghai Banking Corporation (HSBC)"
+"fpx_hsbc"=> "FPX Hongkong and Shanghai Banking Corporation (HSBC)",
 "FPX_OCBC" => "FPX OCBC Ban",
 "FPX_SCB" => "FPX Standard Chartered Bank",
 "FPX_ABB" => "FPX Affin Bank Berha",
@@ -162,7 +162,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "FPX_M2E" => "FPX Maybank2e",
 "FPX_B2B_KFH" => "FPX B2B Kuwait Finance House Overseas Bank",	   
 "FPX_B2B_DEUTSCHE" => "FPX B2B Deutsche Bank",
-"FPX_B2B_ABMB" => "FPX B2B Alliance Bank"  ];
+"FPX_B2B_ABMB" => "FPX B2B Alliance Bank",
 "FPX_B2B_SCB" => "FPX B2B Standard Chartered Bank",
 "FPX_B2B_OCBC" => "FPX B2B OCBC Bank",
 "FPX_B2B_BMMB" => "FPX B2B Bank Muamalat",
