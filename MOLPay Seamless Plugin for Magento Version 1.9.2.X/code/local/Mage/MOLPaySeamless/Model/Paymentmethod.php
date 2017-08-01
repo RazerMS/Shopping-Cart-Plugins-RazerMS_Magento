@@ -19,22 +19,22 @@ class Mage_MOLPaySeamless_Model_PaymentMethod extends Mage_Payment_Model_Method_
 
     // AVAILABILITY OPTIONS
     // Is this payment method a gateway (online auth/charge) ?
-     protected $_isGateway               = true;
+    protected $_isGateway               = true;
     // Can authorize online?
-    // protected $_canAuthorize            = false;
+    protected $_canAuthorize            = false;
     // Can capture funds online?
-    // protected $_canCapture              = true; // true
-    // protected $_canCapturePartial       = false;
+    protected $_canCapture              = true; // true
+    protected $_canCapturePartial       = false;
     // Can refund online?
-    // protected $_canRefund               = false;
+    protected $_canRefund               = false;
     // Can void transactions online?
-    // protected $_canVoid                 = false;
+    protected $_canVoid                 = false;
     // Can use this payment method in administration panel?
-    // protected $_canUseInternal          = true;
+    protected $_canUseInternal          = true;
     // Can show this payment method as an option on checkout payment page?
-    // protected $_canUseCheckout          = true;
+    protected $_canUseCheckout          = true;
     // Is this payment method suitable for multi-shipping checkout?
-    // protected $_canUseForMultishipping  = false;
+    protected $_canUseForMultishipping  = false;
 
      protected $_quote;
      protected $_order;
