@@ -27,7 +27,7 @@ Plugin Releases
 
 **Seamless Integration**
 * [MOLPay Seamless Plugin for Magento Version 2.1.X](https://github.com/MOLPay/Magento_Plugin/releases/tag/v2.1.x)
-* [MOLPay Seamless Plugin for Magento Version 2.X](https://github.com/MOLPay/Magento_Plugin/releases/tag/v2.0)
+* [MOLPay Seamless Plugin for Magento Version 2.0.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-2.0.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.3.X - Default Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.3.X - IWD One Page Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Default Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
