@@ -173,6 +173,13 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                         Mage::logException($e);
                     }
                     
+                    if($order->hasInvoices() && ($order->getStatus() === Mage_Sales_Model_Order::STATUS_FRAUD)){
+                        $order->setState(
+                                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                                    Mage_Sales_Model_Order::STATE_PROCESSING
+                                );
+                    }
+
                     $order->save();
                     return;
                 }else {  
@@ -240,6 +247,13 @@ class Mage_MOLPay_PaymentMethodController extends Mage_Core_Controller_Front_Act
                         }
                     }catch (Mage_Core_Exception $e){
                         Mage::logException($e);
+                    }
+                    
+                    if($order->hasInvoices() && ($order->getStatus() === Mage_Sales_Model_Order::STATUS_FRAUD)){
+                        $order->setState(
+                                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                                    Mage_Sales_Model_Order::STATE_PROCESSING
+                                );
                     }
                     
                     $order->save();
