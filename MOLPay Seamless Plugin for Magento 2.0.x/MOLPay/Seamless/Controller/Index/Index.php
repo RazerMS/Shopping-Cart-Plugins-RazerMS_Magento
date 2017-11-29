@@ -189,7 +189,7 @@ class Index extends \Magento\Framework\App\Action\Action
   
             	$this->_redirect($url_checkoutredirection);
 	   }
-           else //response from MOLPay 
+           elseeif( isset($_REQUEST['status'] ) ) //response from MOLPay 
 	   { 
 
             $this->_ack($_REQUEST);
