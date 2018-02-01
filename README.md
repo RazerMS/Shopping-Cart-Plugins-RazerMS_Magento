@@ -20,6 +20,8 @@ Documentation
 
 General documentation regarding the MOLPay API and related payment flows can be found on the MOLPay Merchant Admin Site.
 
+**Disclaimer : Any amendment by your end is at your own risk.**
+
 Plugin Releases
 ---------------
 **Normal Integration**
