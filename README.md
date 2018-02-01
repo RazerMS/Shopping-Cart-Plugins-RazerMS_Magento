@@ -44,3 +44,7 @@ Channel/Partner Enquiry : channel@molpay.com <br>
 Media Contact : media@molpay.com <br>
 R&D and Tech-related Suggestion : technical@molpay.com <br>
 Abuse Reporting : abuse@molpay.com
+
+Disclaimer
+----------
+Any amendment by your end is at your own risk.
