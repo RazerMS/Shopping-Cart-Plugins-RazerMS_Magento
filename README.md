@@ -35,6 +35,8 @@ Plugin Releases
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Firecheckout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - SuperTheme ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
 
+* [MOLPay Sandbox Seamless Plugin for Magento Version 2.1.x - 2.2.x](https://github.com/MOLPay/Magento_Plugin/releases/tag/sbv1.0.0)
+
 Support
 -------
 
