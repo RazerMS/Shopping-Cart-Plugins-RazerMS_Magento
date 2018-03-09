@@ -58,13 +58,13 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
 		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
 		$option[] = [ 'value' => "credit" , 'label' => "Credit Card/ Debit Card"  ];
-		$option[] = [ 'value' => "cash-epay" , 'label' => "e-pa"  ];
+		$option[] = [ 'value' => "cash-epay" , 'label' => "e-Pay"  ];
 		$option[] = [ 'value' => "WEBCASH" , 'label' => "WEBCASH"  ];
 		$option[] = [ 'value' => "PEXPLUS" , 'label' => "PEx"  ];
 		$option[] = [ 'value' => "jompay" , 'label' => "JOMPay"  ];
 		$option[] = [ 'value' => "ATMVA" , 'label' => "ATM Transfer via Permata Bank"  ];
 		$option[] = [ 'value' => "dragonpay" , 'label' => "Dragonpay"  ];
-		$option[] = [ 'value' => "paysbuy" , 'label' => "PaysBuy"  ];
+	        $option[] = [ 'value' => "paysbuy" , 'label' => "PaysBuy"  ];
 		$option[] = [ 'value' => "Point-BCard" , 'label' => "Bcard points"  ];
 		$option[] = [ 'value' => "NGANLUONG" , 'label' => "NGANLUONG"  ];
 		$option[] = [ 'value' => "crossborder" , 'label' => "Credit Card/ Debit Card"  ];
@@ -73,11 +73,11 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "UPOP" , 'label' => "China Union pay"  ];
 		$option[] = [ 'value' => "alipay" , 'label' => "Alipay.com "  ];
 		$option[] = [ 'value' => "polipayment" , 'label' => "POLi Payment"  ];
-		$option[] = [ 'value' => "TH_PB_SCBPN" , 'label' => "Paysbuy SCBPN"  ];
-		$option[] = [ 'value' => "TH_PB_KTBPN" , 'label' => "Paysbuy KTBPN"  ];
-		$option[] = [ 'value' => "TH_PB_BBLPN" , 'label' => "Paysbuy BBLPN"  ];
-		$option[] = [ 'value' => "TH_PB_BAYPN" , 'label' => "Paysbuy BAYPN"  ];
-		$option[] = [ 'value' => "TH_PB_CASH" , 'label' => "Paysbuy CASH"  ];
+		$option[] = [ 'value' => "TH_PB_SCBPN" , 'label' => "SCB Easy Net"  ];
+		$option[] = [ 'value' => "TH_PB_KTBPN" , 'label' => "KTB Netbank"  ];
+		$option[] = [ 'value' => "TH_PB_BBLPN" , 'label' => "BuaLuang iBanking"  ];
+		$option[] = [ 'value' => "TH_PB_BAYPN" , 'label' => "Krungsri Online"  ];
+		$option[] = [ 'value' => "OMISE_TL" , 'label' => "Cash via Tesco Lotus"  ];
 		$option[] = [ 'value' => "vtcpay-ewallet" , 'label' => "VTC Pay Channels (E-Wallet)"  ];
 		$option[] = [ 'value' => "vtcpay-bank" , 'label' => "VTC Pay Channels (Banks)"  ];
 		$option[] = [ 'value' => "vtcpay-credit" , 'label' => "VTC Pay Channels (Credit Card)"  ];
@@ -169,7 +169,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "molwallet" => "MOLWallet",
 "cash-711" => "7-Eleven(MOLPay Cash)",
 "credit" => "Credit Card/ Debit Card",
-"cash-epay" => "e-pa",
+"cash-epay" => "e-Pay",
 "WEBCASH" => "WEBCASH",
 "PEXPLUS" => "PEx",
 "jompay" => "JOMPay",
@@ -184,11 +184,11 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "UPOP" => "China Union pay",
 "alipay" => "Alipay.com ",
 "polipayment" => "POLi Payment",
-"TH_PB_SCBPN" => "Paysbuy SCBPN",
-"TH_PB_KTBPN" => "Paysbuy KTBPN",
-"TH_PB_BBLPN" => "Paysbuy BBLPN",
-"TH_PB_BAYPN" => "Paysbuy BAYPN",
-"TH_PB_CASH" => "Paysbuy CASH",
+"TH_PB_SCBPN" => "SCB Easy Net",
+"TH_PB_KTBPN" => "KTB Netbank",
+"TH_PB_BBLPN" => "BuaLuang iBanking",
+"TH_PB_BAYPN" => "Krungsri Online",
+"OMISE_TL" => "Cash via Tesco Lotus",
 "vtcpay-ewallet" => "VTC Pay Channels (E-Wallet)",
 "vtcpay-bank" => "VTC Pay Channels (Banks)",
 "vtcpay-credit" => "VTC Pay Channels (Credit Card)",
