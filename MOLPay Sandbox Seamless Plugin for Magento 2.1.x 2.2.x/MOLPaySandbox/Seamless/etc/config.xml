@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <molpaysandbox_seamless>
+                <debug>1</debug>
+                <active>0</active>
+                <model>SandboxSeamlessFacade</model>
+                <mpsb_merchant_gateway_id />
+                <mpsb_merchant_gateway_key />
+                <mpsb_merchant_gateway_secretkey />
+                <order_status>pending_payment</order_status>
+                <title>MOLPay Online Payment (Seamless - Sandbox)</title>
+                <currency>USD</currency>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_void>1</can_void>
+                <can_use_checkout>1</can_use_checkout>
+                <is_gateway>1</is_gateway>
+                <sort_order>99</sort_order>
+                <debugReplaceKeys>MERCHANT_KEY</debugReplaceKeys>
+                <paymentInfoKeys>FRAUD_MSG_LIST</paymentInfoKeys>
+                <privateInfoKeys>FRAUD_MSG_LIST</privateInfoKeys>
+            </molpaysandbox_seamless>
+        </payment>
+    </default>
+</config>
