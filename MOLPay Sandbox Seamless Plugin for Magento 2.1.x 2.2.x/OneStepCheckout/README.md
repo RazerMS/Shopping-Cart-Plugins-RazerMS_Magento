@@ -1,4 +1,4 @@
-Compatibality
+Compatibility
 -------------
 
 This plugin was developed for below plugin compatibility
