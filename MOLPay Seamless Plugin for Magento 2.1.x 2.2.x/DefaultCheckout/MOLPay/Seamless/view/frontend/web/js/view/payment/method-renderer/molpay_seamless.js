@@ -46,17 +46,6 @@ define(
             getCurrentCartId: function(){
                 return payloadmps.cartId;
             },
-
-            getCurrentCustomerEmail: function(){
-                var customerEmail = '';
-                if(quote.guestEmail) customerEmail = quote.guestEmail;
-                else customerEmail = window.checkoutConfig.customerData.email;
-                return customerEmail;
-            },
-            
-            getCurrentCustomerCountryId: function() {
-                return quote.billingAddress().countryId;
-            },
             
             getActiveChannels: function(){
                 return window.checkoutConfig.payment.molpay_seamless.channels_payment;            
