@@ -61,10 +61,8 @@ class Index extends \Magento\Framework\App\Action\Action
             $customerSess = $om->create('\Magento\Customer\Model\Session');
             $checkoutHelperData = $om->create('\Magento\Checkout\Helper\Data');
 
-            if( $_POST['current_email'] == ''){
-                $quote_extra = $this->quoteRepository->getActive($cartData->getId());
-                $_POST['current_email'] = $quote_extra->getBillingAddress()->getEmail();
-            }            
+            //Get customer email
+            $current_customer_email = $quote->getBillingAddress()->getEmail();
             
             $customerType = '';
             if ($customerSess->isLoggedIn()) {
@@ -83,7 +81,7 @@ class Index extends \Magento\Framework\App\Action\Action
             if ( $customerType == \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST) {
 
                 $quote->setCustomerId(null)
-                    ->setCustomerEmail($_POST['current_email'])
+                    ->setCustomerEmail($current_customer_email)
                     ->setCustomerIsGuest(true)
                     ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
             }
@@ -147,8 +145,14 @@ class Index extends \Magento\Framework\App\Action\Action
 
             }
             
-            $customer_countryid =  $_POST['current_countryid'];
-            
+            //Get customer country id
+            if( $quote->getShippingAddress()->getCountryId() === null ){
+                $customer_countryid = ''; //leave empty for Collect at Store
+            }
+            else{
+                $customer_countryid = $quote->getShippingAddress()->getCountryId();
+            }
+
             $merchantid = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getMerchantID();
             $vkey = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getVerifyKey();
 
@@ -168,7 +172,7 @@ class Index extends \Magento\Framework\App\Action\Action
                 'mpsbill_email'   => $order->getCustomerEmail(),
                 'mpsbill_mobile'  => $order->getBillingAddress()->getTelephone(),    // To Do - Change to customer mobile number
                 'mpsbill_desc'    => "Payment for Order #".$order->getIncrementId(),
-                'mpscountry'      => $customer_countryid,
+                'mpscountry'      => $customer_countryid, //tested and passed when empty value
                 'mpsvcode'        => md5($order_amount.$merchantid.$order->getIncrementId().$vkey),
                 'mpscurrency'     => $order->getOrderCurrencyCode(),
                 'mpslangcode'     => "en",
