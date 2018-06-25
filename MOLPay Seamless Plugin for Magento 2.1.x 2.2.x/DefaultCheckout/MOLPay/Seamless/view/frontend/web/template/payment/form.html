@@ -17,10 +17,7 @@
 
     <div class="payment-method-content">
         <div class="payment-method-billing-address">
-         
-
         <form method="POST" action="../seamless" id="seamless" role="molpayseamless">
-
             <table style="border:none;padding: 2px" data-bind="foreach:
             getActiveChannels()">
                 <tr>
@@ -29,28 +26,20 @@
                     <td  data-bind="text: label"></td>
                 </tr>
             </table>
-
             <input type="hidden" name="cart_id" data-bind="value : getCurrentCartId()" />
+            <input type="hidden" name="current_email" data-bind="value : getCurrentCustomerEmail()" />
             <button class="action primary checkout"
-        type="button"
-        data-bind="
-        click: placeOrder,
-        attr: {title: $t('Place Order')},
-        css: {disabled: !isPlaceOrderActionAllowed()},
-        enable: (getCode() == isChecked())
-        "
-        disabled>
-    <span data-bind="i18n: 'Place Order'"></span>
-</button>
-        
+               type="button"
+               data-bind="
+                   click: placeOrder,
+                   attr: {title: $t('Place Order')},
+                   css: {disabled: !isPlaceOrderActionAllowed()},
+                   enable: (getCode() == isChecked())
+               "
+            disabled>
+            <span data-bind="i18n: 'Place Order'"></span>
+            </button>
         </form>
-
-
-    <!-- <span data-bind="foreach: getActiveChannels()">
-    	<span data-bind="text: label"></span>
-    	<span data-bind="text: value"></span> 
-    </span>
-    -->
     </div>
 </div>
 <div id="counter"></div>
