@@ -62,7 +62,10 @@ class Index extends \Magento\Framework\App\Action\Action
             $checkoutHelperData = $om->create('\Magento\Checkout\Helper\Data');
 
             //Get customer email
-            $current_customer_email = $quote->getBillingAddress()->getEmail();
+            if( $_POST['current_email'] == ''){
+                $quote_extra = $this->quoteRepository->getActive($cartData->getId());
+                $_POST['current_email'] = $quote_extra->getBillingAddress()->getEmail();
+            }
             
             $customerType = '';
             if ($customerSess->isLoggedIn()) {
@@ -81,7 +84,7 @@ class Index extends \Magento\Framework\App\Action\Action
             if ( $customerType == \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST) {
 
                 $quote->setCustomerId(null)
-                    ->setCustomerEmail($current_customer_email)
+                    ->setCustomerEmail($_POST['current_email'])
                     ->setCustomerIsGuest(true)
                     ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
             }
