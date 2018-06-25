@@ -47,6 +47,13 @@ define(
                 return payloadmps.cartId;
             },
             
+            getCurrentCustomerEmail: function(){
+                var customerEmail = '';
+                if(quote.guestEmail) customerEmail = quote.guestEmail;
+                else customerEmail = window.checkoutConfig.customerData.email;
+                return customerEmail;
+            },
+            
             getActiveChannels: function(){
                 return window.checkoutConfig.payment.molpay_seamless.channels_payment;            
             },
