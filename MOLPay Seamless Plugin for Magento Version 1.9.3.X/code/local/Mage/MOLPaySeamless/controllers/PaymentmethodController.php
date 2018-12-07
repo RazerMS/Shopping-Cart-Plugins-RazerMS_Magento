@@ -19,20 +19,17 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
      * FrontEnd Location: Onepage Checkout/Order Review Tab
      * Function: To create order before redirecting customer to payment gateway
     */
-    public function createOrderAction(){        
-        
+    public function createOrderAction(){
+
 
         $P['payment']['molpayseamless_payment_channel'] = $this->getRequest()->getPost('molpayseamless_payment_channel');
-        //$P['payment']['molpayseamless_payment_channel'] = Mage::app()->getRequest()->getParams('molpayseamless_payment_channel');
 
-        
-        
         $error = false;
         $error_msg = "";
         $is_order_success = false;
-        
+
         $pm = Mage::getModel('molpayseamless/paymentmethod');
-        
+
         $paymentMethod = 'molpayseamless';
         Mage::getSingleton('checkout/type_onepage')->savePayment( array('method' => $paymentMethod) );
         $quote = Mage::getSingleton('checkout/type_onepage')->getQuote();
@@ -44,20 +41,14 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
         //getQuoteCurrencyCode
         $currency_code = $quote->getQuoteCurrencyCode();
         $amount = $quote->getGrandTotal();
-        
-        /* 
-        * No need to convert to MYR as we already accept multicurrency
-        */
-        //$currency_code = $quote->getBaseCurrencyCode();
-        //$amount = $quote->getBaseGrandTotal();
-        //$amount = $pm->toMYR(  $amount ,  $currency_code ); 
+
         $amount = number_format( round(  $amount, 2 ) , 2, '.', '');
 
-        $email = $address->getEmail(); 
+        $email = $address->getEmail();
         if( $email == '' ) {
             $email = $quote->getCustomerEmail();
         }
-        
+
         // Exception Handler -----------------------------------------------------------------------
         if(!isset($quoteid)){
             $error = true;
@@ -100,124 +91,188 @@ class Mage_MOLPaySeamless_PaymentMethodController extends Mage_Core_Controller_F
             );
 
             $ven = $pm->getConfigData('encrytype');
-            $vk = $sArr['mpsamount'] . $pm->getConfigData('login') . $quote->getReservedOrderId() . $pm->getConfigData('transkey'); 
+            $vk = $sArr['mpsamount'] . $pm->getConfigData('login') . $quote->getReservedOrderId() . $pm->getConfigData('transkey');
 
             $sArr['mpsvcode'] = ( $ven =="sha1" )? sha1( $vk ) : md5( $vk );
 
             $items = $quote->getAllItems();
-            if ($items) { 
+            if ($items) {
                 $i = 1;
                 foreach($items as $item) {
                     if ($item->getParentItem()) {
-                        continue;          
+                        continue;
                     }
                     $sArr['mpsbill_desc'] .= "\n$i. Name: ".$item->getName() . '  Sku: '.$item->getSku() . ' Qty: ' . $item->getQty() * 1;
                     $i++;
-                }   
+                }
             }
+
+            //Order ID created in Sales_Servie_Quote
+            $quote_pre = Mage::getModel('sales/quote')->load($quote->getReservedOrderId(), 'reserved_order_id');
+            $quote_pre->setTotalsCollectedFlag(true);
+
+            $service = Mage::getModel('sales/service_quote', $quote);
+            $service->submitAll();
+
         }
-        
-        
+
         if($error){
-            
+
             if($is_order_success){
                 $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "FAILED");
                 $order->save();
-                
+
                 $core_session = Mage::getSingleton('core/session');
                 Mage::getSingleton('core/session')->getMessages(true);
                 $core_session->addError('Payment Failed. Please proceed with checkout to try again.');
             }
-            
+
             $sArr = array(
                 'status'          => false,      // Set False to show an error message.
                 'error_code'      => 'Error:',
                 'error_desc'      => $error_msg,
                 'failureurl'      => Mage::getUrl('checkout/cart')
             );
-        } 
-        
-        $jsonData = json_encode($sArr);  
+        }
+
+        $jsonData = json_encode($sArr);
         $this->getResponse()->setHeader('Content-type', 'application/json');
         $this->getResponse()->setBody($jsonData);
     }
-    
+
     /**
     * When MOLPaySeamless return the order information at this point is in POST variables
-    * 
+    *
     * @return boolean
     */
     public function successAction() {
 
-        
         $P = $this->getRequest()->getPost();
+
         $this->_ack($P);
         $TypeOfReturn = "ReturnURL";
         $etcAmt = '';
+
         $N = Mage::getModel('molpayseamless/paymentmethod');
         $core_session = Mage::getSingleton('core/session');
 
-Mage::log('Input bellow', null, 'molpay.log');
-Mage::log($P, null, 'molpay.log');
-        
-        if($P['status'] === '00' || $P['status'] === '22'){
-            $quote = Mage::getModel('sales/quote')->load($P['orderid'], 'reserved_order_id');
-            $quote->setTotalsCollectedFlag(true);
-            //Mage::getSingleton('checkout/type_onepage')->setQuote( $quote );
-            //Mage::getSingleton('checkout/type_onepage')->saveOrder();
-            $service = Mage::getModel('sales/service_quote', $quote);
-            $service->submitAll();
-            $order = $service->getOrder();
-            //$orderId = $order->getId();
-            $orderId = $P['orderid'];
-        }
-        
-        
+        Mage::log('Input bellow', null, 'molpay.log');
+        Mage::log($P, null, 'molpay.log');
+
+        $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
+        $orderId = $order->getId();
+        $order_status = $order->getStatus();
+
+        $orderId = $P['orderid'];
+
         if( $P['status'] !== '00' ) {
             if($P['status'] == '22') {
                 $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
                 $order->save();
+
+                $session = Mage::getSingleton('checkout/session');
+
+                $quoteid = $N->getQuote()->getId();
+                $session->setLastSuccessQuoteId($quoteid);
+                $session->setLastQuoteId($quoteid);
+                $session->setLastOrderId($orderId);
+
                 $this->_redirect('checkout/onepage/success');
-            } else {
-                Mage::getSingleton('core/session')->getMessages(true);
-                $core_session->addError('Payment Failed. Please proceed with checkout to try again.'); //<br/><pre>'.json_encode($P).'</pre>'
-                Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
+            }
+            if($P['status'] == '11') {
+                /*User Case: Buyer redirect to merchant website (return URL)*/
+                /*
+                *   Case 1: After buyer cancal payment at online banking, MOLPay get direct result of payment from Bank, and will
+                *   send status 11 to merchant website(Normal Case)
+                *
+                *   Case 2: Buyer successfully makes payment on onlinebanking, but bank has late to return the result 
+                *   of payment to MOLPay and at the same time MOLPay has to bring buyer redirect 
+                *   to merchant website with status 11 ( this status does not mean actual failed payment )
+                *   - In buyer view, buyer will see page as "Order has been placed"
+                *   - MOLPay will send lastest status of payment to merchant website through callbakc URL.
+                *
+                *   To identify this is actual failed payment or pending status from Bank site, solution is below:
+                *   Added function query API to MOLPay to get actual status of transaction at MOLPay site.
+                *   query resulting :
+                *   1- StatCode = 11, means transaction is absolutely failed payment at bank
+                *   2- StatCode = 22, means transaction is pending and waiting for latest result from bank
+                */
+
+                //Query status at MOLPay thru API
+                $qtxn = $this->queryStatusTransaction($P);
+
+                if( !empty($qtxn) ){
+                    if( !empty($qtxn) && $qtxn['StatCode'] === "11") {
+
+                        Mage::getSingleton('core/session')->getMessages(true);
+                        $core_session->addError('Payment Failed. Please proceed with checkout to try again.');
+                        Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'));
+
+                    }
+                    elseif(!empty($qtxn) && $qtxn['StatCode'] === "22") {
+
+                        $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
+                        $order->save();
+
+                        $session = Mage::getSingleton('checkout/session');
+
+                        $quoteid = $N->getQuote()->getId();
+                        $session->setLastSuccessQuoteId($quoteid);
+                        $session->setLastQuoteId($quoteid);
+                        $session->setLastOrderId($P['orderid']);
+
+                        $this->_redirect('checkout/onepage/success');
+                    }
+                }
+
             }
             return;
-        }else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
 
-            $order->getPayment()->setTransactionId( $P['tranID'] );
-            try{
-                if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-                    $order->sendNewOrderEmail();
+        }else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P ) ) {
+
+            //If order status is not set to processing yet
+            if(ucfirst($order_status)!="Processing") {
+                $order->getPayment()->setTransactionId( $P['tranID'] );
+                try{
+                    if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+                        $order->sendNewOrderEmail();
+                    }
+                }catch (Mage_Core_Exception $e){
+                    Mage::logException($e);
                 }
-            }catch (Mage_Core_Exception $e){
-                Mage::logException($e);
+
+                $order->save();
+
+                $session = Mage::getSingleton('checkout/session');
+
+                $quoteid = $N->getQuote()->getId();
+                $session->setLastSuccessQuoteId($quoteid);
+                $session->setLastQuoteId($quoteid);
+                $session->setLastOrderId($orderId);
+
+                foreach( $session->getQuote()->getItemsCollection() as $item ){
+                    Mage::getSingleton('checkout/cart')->removeItem( $item->getId() )->save();
+                }
             }
-        
-            $order->save();
+            //otherwise, skip to this (as order status already set to processiong during notification)
+            else{
+               $session = Mage::getSingleton('checkout/session');
 
-            $session = Mage::getSingleton('checkout/session');
-
-            $quoteid = $N->getQuote()->getId();
-            $session->setLastSuccessQuoteId($quoteid);
-            $session->setLastQuoteId($quoteid);
-            $session->setLastOrderId($orderId);
-
-            foreach( $session->getQuote()->getItemsCollection() as $item ){
-                Mage::getSingleton('checkout/cart')->removeItem( $item->getId() )->save();
+               $quoteid = $N->getQuote()->getId();
+               $session->setLastSuccessQuoteId($quoteid);
+               $session->setLastQuoteId($quoteid);
+               $session->setLastOrderId($P['orderid']);
             }
 
             $this->_redirect('checkout/onepage/success');
             return;
-
         } else {
             $order->setState(
                 Mage_Sales_Model_Order::STATUS_FRAUD,
                 Mage_Sales_Model_Order::STATUS_FRAUD,
                 'Payment Error: Signature key not match'
                 . "\n<br>TransactionID: " . $P['tranID']
-                . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
                 . "\n<br>PaidDate: " . $P['paydate'],
                 $notified = true
             );
@@ -225,13 +280,11 @@ Mage::log($P, null, 'molpay.log');
             $this->_redirect('checkout/cart');
             return;
         }
-        
     }
-    
-    
+
     public function notificationAction() {
         $P = $this->getRequest()->getPost();
-        echo "CBTOKEN:MPSTATOK";
+
         $TypeOfReturn = "NotificationURL";
         $etcAmt = '';
 
@@ -240,18 +293,17 @@ Mage::log($P, null, 'molpay.log');
             $orderId = $order->getId();
             $order_status = $order->getStatus();
             $N = Mage::getModel('molpayseamless/paymentmethod');
-            
+
             if(!isset($orderId)){
                 Mage::throwException($this->__('Order identifier is not valid!'));
                 return false;
             }else if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPaySeamless !'));
-                return false;               
+                return false;
             }else if(ucfirst($order_status)=="Processing"){
                 // Order has been placed. To avoid duplicate order
-                
-                return false; 
-            }else{ 
+                return false;
+            }else{
                 if( $P['status'] !== '00' ) {
                     if($P['status'] == '22') {
                         $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
@@ -262,17 +314,19 @@ Mage::log($P, null, 'molpay.log');
                     }
                     return;
                 } else if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) {
-
-                    $order->getPayment()->setTransactionId( $P['tranID'] );
-                    try{
-                        if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
-                            $order->sendNewOrderEmail();
+                    if(ucfirst($order_status)!="Processing") { 
+                        $order->getPayment()->setTransactionId( $P['tranID'] );
+                        try{
+                            if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+                                $order->sendNewOrderEmail();
+                            }
                         }
-                    }catch (Mage_Core_Exception $e){
-                        Mage::logException($e);
-                    }
+                        catch (Mage_Core_Exception $e){
+                            Mage::logException($e);
+                        }
 
-                    $order->save();
+                        $order->save();
+                    }
 
                     return;
                 } else {
@@ -281,7 +335,7 @@ Mage::log($P, null, 'molpay.log');
                             Mage_Sales_Model_Order::STATUS_FRAUD,
                             'Payment Error: Signature key not match'
                             . "\n<br>TransactionID: " . $P['tranID']
-                            . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                            . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
                             . "\n<br>PaidDate: " . $P['paydate'],
                             $notified = true );
                     $order->save();
@@ -291,37 +345,46 @@ Mage::log($P, null, 'molpay.log');
         }
         exit;
     }
-  
-    public function callbackAction() { 
-        
+
+    public function callbackAction() {
+
         $P = $this->getRequest()->getPost();
+
+        Mage::log($P, null, 'molpay_callback.log');
+
         echo "CBTOKEN:MPSTATOK";
         $TypeOfReturn = "CallbackURL";
         $etcAmt = '';
-        
+
         if($P['nbcb'] == 1) {
             $order = Mage::getModel('sales/order')->loadByIncrementId( $P['orderid'] );
             $orderId = $order->getId();
             $order_status = $order->getStatus();
             $N = Mage::getModel('molpayseamless/paymentmethod');
-            
+
             if(!isset($orderId)){
                 Mage::throwException($this->__('Order identifier is not valid!'));
                 return false;
-            }else if( $order->getPayment()->getMethod() !=="molpayseamless" ) {           
+            }else if( $order->getPayment()->getMethod() !=="molpayseamless" ) {
                 Mage::throwException($this->__('Payment Method is not MOLPaySeamless !'));
-                return false;               
+                return false;
             }
             else if(ucfirst($order_status)=="Processing"){
                 // Order has been placed. To avoid duplicate order
                 return false;
-            }else{
-                if( $P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) 
+            }
+            else{
+                if( ($P['status'] === '00' && $this->_matchkey( $N->getConfigData('encrytype') , $N->getConfigData('login') , $N->getConfigData('transkey'), $P )) && ucfirst($order_status)!="Processing")
                 {
-                    
-                    $order->getPayment()->setTransactionId( $P['tranID'] );            
+                    $order->getPayment()->setTransactionId( $P['tranID'] );
 
-                    if($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
+                    if($order->hasInvoices() && ($order->getStatus() === Mage_Sales_Model_Order::STATUS_FRAUD)){
+                        $order->setState(
+                                    Mage_Sales_Model_Order::STATE_PROCESSING,
+                                    Mage_Sales_Model_Order::STATE_PROCESSING
+                                );
+                    }
+                    elseif($this->_createInvoice($order,$N,$P,$TypeOfReturn)) {
                         $order->sendNewOrderEmail();
                     }
 
@@ -329,7 +392,7 @@ Mage::log($P, null, 'molpay.log');
                     return;
 
                 } else if( $P['status'] !== '00' ) {
-                    
+
                     if($P['status'] == '22') {
                         $this->updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, "PENDING");
                         $order->save();
@@ -345,7 +408,7 @@ Mage::log($P, null, 'molpay.log');
                             Mage_Sales_Model_Order::STATUS_FRAUD,
                             'Payment Error: Signature key not match'
                             . "\n<br>TransactionID: " . $P['tranID']
-                            . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                            . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
                             . "\n<br>PaidDate: " . $P['paydate'],
                             $notified = true );
                     $order->save();
@@ -354,35 +417,34 @@ Mage::log($P, null, 'molpay.log');
 
             }
         }
-        
         exit;
     }
-    
-    public function failureAction() {       
+
+    public function failureAction() {
         $this->loadLayout();
         $this->renderLayout();
     }
-    
+
     public function payAction() {
         $this->getResponse()->setBody( $this->getLayout()->createBlock('molpayseamless/paymentmethod_redirect')->toHtml() );
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     /* Function -------------------------------------------------------------------------------------------------------- */
     protected function _matchkey( $entype, $merchantID , $vkey , $P ) {
-        $enf = ( $entype == "sha1" )? "sha1" : "md5";           
+        $enf = ( $entype == "sha1" )? "sha1" : "md5";
         $skey = $enf( $P['tranID'].$P['orderid'].$P['status'].$merchantID.$P['amount'].$P['currency'] );
         $skey = $enf( $P['paydate'].$merchantID.$skey.$P['appcode'].$vkey   );
         return ( $skey === $P['skey'] )? 1 : 0;
     }
-  
+
     // Creating Invoice : Convert order into invoice
     protected function _createInvoice(Mage_Sales_Model_Order $order,$N,$P,$TypeOfReturn) {
-        
+
         if($order->hasInvoices() < 1){
             $invoice =  Mage::getModel('sales/service_order', $order)->prepareInvoice();
             $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
@@ -393,7 +455,7 @@ Mage::log($P, null, 'molpay.log');
                 ->save();
         }
 
-        
+
         $order->setState(
             Mage_Sales_Model_Order::STATE_PROCESSING,
             Mage_Sales_Model_Order::STATE_PROCESSING,
@@ -408,9 +470,9 @@ Mage::log($P, null, 'molpay.log');
                 ,
                 true
         );
-        return true;               
+        return true;
     }
-    
+
     // Send acknowlodge to MOLPay server
     public function _ack($P) {
         $P['treq'] = 1;
@@ -431,10 +493,10 @@ Mage::log($P, null, 'molpay.log');
         curl_close( $ch );
         return;
     }
-    
-    // Update order status 
+
+    // Update order status
     public function updateOrderStatus($order, $P, $etcAmt, $TypeOfReturn, $status){
-        
+
         $status_update = "";
         if($status == "PENDING"){
             $status_update = Mage_Sales_Model_Order::STATE_PENDING_PAYMENT;
@@ -443,27 +505,74 @@ Mage::log($P, null, 'molpay.log');
         }else{
             $status_update = "";
         }
-        
+
         $order->setState(
                 $status_update,
                 $status_update,
                 'Customer Redirect from MOLPAY - ' .$TypeOfReturn. ' (' .$status. ')'
                 . "\n<br>TransactionID: " . $P['tranID']
-                . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt 
+                . "\n<br>Amount: " . $P['currency'] . " " . $P['amount'] . $etcAmt
                 . "\n<br>PaidDate: " . $P['paydate']
                 ,
-                $notified = true ); 
-        return; 
+                $notified = true );
+        return;
     }
-  
+
     public function checklogin() {
         $U = Mage::getSingleton('customer/session');
         if( !$U->isLoggedIn() ) {
             $this->_redirect('customer/account/login');
             return false;
-        }       
+        }
         return true;
     }
-    
-    
+
+    protected function queryStatusTransaction($P){
+        $result  = '';
+        $res     = array();
+
+        //get merchant verify key
+        $pm2     = Mage::getModel('molpayseamless/paymentmethod');
+        $mpverifykey  =  $pm2->getConfigData('transkey');
+
+        //skey formula : skey = md5( txID & domain & verify_key & amount )
+        $rawkey  = $P['tranID'].$P['domain'].$mpverifykey.$P['amount'];
+        $skey    = md5($rawkey);
+
+        $dataq   = array(
+                       "amount" => $P['amount'],
+                       "txID"   => $P['tranID'],
+                       "domain" => $P['domain'],
+                       "skey"   => $skey,
+                       "type"   => "0"
+                 );
+        $postdata = http_build_query($dataq);
+
+        try{
+            $url        = "https://api.molpay.com/MOLPay/q_by_tid.php";
+            $ch         = curl_init();
+            curl_setopt($ch, CURLOPT_POST           , 1     );
+            curl_setopt($ch, CURLOPT_POSTFIELDS     , $postdata );
+            curl_setopt($ch, CURLOPT_URL            , $url );
+            curl_setopt($ch, CURLOPT_HEADER         , 1  );
+            curl_setopt($ch, CURLINFO_HEADER_OUT    , TRUE   );
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER , 1  );
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , FALSE);
+            $result     = curl_exec( $ch );
+            curl_close( $ch );
+
+            $dataRes    = trim(strstr($result,"StatCode"));
+            $dataRes    = explode("\n",$dataRes);
+
+            $res = array();
+            foreach($dataRes as $dt){
+                list($k,$v) = explode(': ',$dt);
+                $res[$k]    = $v;
+            }
+        }catch (Exception $e) {
+            //$res = array('error' => $e->getMessage(), 'code' => $e->getCode());
+            $res ='';
+        }
+        return $res;
+    }
 }
