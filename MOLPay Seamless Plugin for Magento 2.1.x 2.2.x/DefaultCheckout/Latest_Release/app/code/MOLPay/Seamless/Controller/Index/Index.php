@@ -154,11 +154,11 @@ class Index extends \Magento\Framework\App\Action\Action
             }
             
             //Get customer country id
-            if( $quote->getShippingAddress()->getCountryId() === null ){
+            if( $quote->getBillingAddress()->getCountryId() === null ){
                 $customer_countryid = ''; //leave empty for Collect at Store
             }
             else{
-                $customer_countryid = $quote->getShippingAddress()->getCountryId();
+                $customer_countryid = $quote->getBillingAddress()->getCountryId();
             }
 
             $merchantid = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getMerchantID();
