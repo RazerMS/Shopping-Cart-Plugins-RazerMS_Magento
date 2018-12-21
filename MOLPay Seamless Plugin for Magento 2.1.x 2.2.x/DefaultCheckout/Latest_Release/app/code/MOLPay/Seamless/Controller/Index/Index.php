@@ -331,7 +331,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
                                     $url_checkoutredirection = 'checkout/cart';
                                 }
-                                elseif( (!empty($qtxn) && $qtxn['StatCode'] === "22") || empty($qtxn) ) { //Statname = pending
+                                elseif( (!empty($qtxn) && $qtxn['StatCode'] === "22") ) { //Statname = pending
                                     if ( $order->getId() && $order->getState() != 'pending' ) {
                                         //Buyer will see this page as Order Being Placed
                                         $this->messageManager->addSuccess('Order has been successfully placed!');
