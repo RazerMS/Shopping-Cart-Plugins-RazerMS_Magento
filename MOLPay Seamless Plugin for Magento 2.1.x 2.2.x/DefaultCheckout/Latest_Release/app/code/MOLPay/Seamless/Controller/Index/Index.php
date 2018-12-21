@@ -91,15 +91,9 @@ class Index extends \Magento\Framework\App\Action\Action
 
             
             if( $quote ){
-                $orderData = [];
-                $orderDate = [
-                    'is_send_email' => null,
-                    'is_email_sent' => null
-                ];
                 $cartManagement = $om->create('\Magento\Quote\Model\QuoteManagement');
-                $order = $cartManagement->submit($quote,$orderData);
+                $order = $cartManagement->submit($quote);
 
-                
                 if( $order ){
                     $orderArr = [];
                     $orderArr = [
