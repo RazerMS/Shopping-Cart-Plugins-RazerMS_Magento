@@ -11,3 +11,8 @@ On 2018/12/21
 
 - etc/events.xml and Helper/Observer.php
   - add event after click Place Order to avoid Order Confirmation Email being sent out before payment made
+
+On 2018/12/24
+- Controller/Index/Index.php
+  - revised coding logic on "failed" status payment
+  - revised message display on pending payment
