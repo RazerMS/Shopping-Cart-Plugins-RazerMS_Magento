@@ -271,14 +271,13 @@ class Index extends \Magento\Framework\App\Action\Action
 
                 } else if($status == '22') {    // Pending Payment
                     
-                    if ( $order->getId() && $order->getState() != 'pending' ) {
-                        $this->messageManager->addSuccess('Order has been successfully placed!');
-                        $order->setState('pending',true);
-                        $order->setStatus('pending',true);
+                    $this->messageManager->addSuccess('Order has been placed but please make the payment to complete the order'); //Frontend will display this
+                    
+                    $order->setState('pending',true);
+                    $order->setStatus('pending',true);
 
-                        $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : PENDING)'))
-                              ->setIsCustomerNotified(false);
-                    }
+                    $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : PENDING)'))
+                          ->setIsCustomerNotified(false);
 
                     $quoteId = $order->getQuoteId();
                     $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
@@ -326,9 +325,9 @@ class Index extends \Magento\Framework\App\Action\Action
                                     $url_checkoutredirection = 'checkout/cart';
                                 }
                                 elseif( (!empty($qtxn) && $qtxn['StatCode'] === "22") ) { //Statname = pending
+                                    
+                                    // if notification comes first and update order state to pending , no need to update this part. otherwise, update the order                            
                                     if ( $order->getId() && $order->getState() != 'pending' ) {
-                                        //Buyer will see this page as Order Being Placed
-                                        $this->messageManager->addSuccess('Order has been successfully placed!');
                                         //advisable to not change order status to canceled due to Magento business flow
                                         $order->setState('pending',true);
                                         $order->setStatus('pending',true);
@@ -336,13 +335,18 @@ class Index extends \Magento\Framework\App\Action\Action
                                         $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : FAILED). <br>Note: Possible status change. Waiting callback response'))
                                               ->setIsCustomerNotified(false);
                                         $order->save();
-
-                                        $quoteId = $order->getQuoteId();
-                                        $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
-                                        $this->checkoutSession->setLastOrderId($order->getId());
-
-                                        $url_checkoutredirection = 'checkout/onepage/success';
                                     }
+                            
+                                    //Redirect to merchant page
+                                    //Buyer will see this page as Order Being Placed
+                                    $this->messageManager->addSuccess('Order has been placed but please make the payment to complete the order');
+
+                                    $quoteId = $order->getQuoteId();
+                                    $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
+                                    $this->checkoutSession->setLastOrderId($order->getId());
+
+                                    $url_checkoutredirection = 'checkout/onepage/success';
+                                
                                 }
                             }
                         }
