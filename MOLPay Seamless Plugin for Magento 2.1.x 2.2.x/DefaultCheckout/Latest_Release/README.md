@@ -1,8 +1,14 @@
 ## Magento 2.2.6 - MOLPay Seamless Integration Plugin
 - Tested Magento Community Edition 2.2.6
-- Fix on Order Confirmation Email sent before payment made
-- Add MOLPay Requery API function to get payment status on realtime during buyer return to merchant site 
+- Fixed on Order Confirmation Email sent before payment made
+- Added MOLPay Requery API function to get payment status on realtime during buyer return to merchant site 
 - Supported on Magento from 2.1.x till 2.2.6 
+(As updated 24/12/2018)
+- Fixed on coding logic for case return to merchant site as payment status "failed". Case where at MOLPay site, status for that payment is Pending as waiting for payment from customer. 
+- Update the zip file based on update
+
+
+## Support and Technical Inquiry
 - If you want to apply on higher version from Magento 2.2.6, you may test it first and please backup the previous plugin if applicable.
   You may send to support@molpay.com to issue any problem face during payment integration. 
 - Kindly to provide information of your website such as:
