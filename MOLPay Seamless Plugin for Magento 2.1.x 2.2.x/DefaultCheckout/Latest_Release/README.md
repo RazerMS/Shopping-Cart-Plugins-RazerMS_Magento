@@ -3,6 +3,7 @@
 - Fixed on Order Confirmation Email sent before payment made
 - Added MOLPay Requery API function to get payment status on realtime during buyer return to merchant site 
 - Supported on Magento from 2.1.x till 2.2.6 
+
 (As updated 24/12/2018)
 - Fixed on coding logic for case return to merchant site as payment status "failed". Case where at MOLPay site, status for that payment is Pending as waiting for payment from customer. 
 - Update the zip file based on update
