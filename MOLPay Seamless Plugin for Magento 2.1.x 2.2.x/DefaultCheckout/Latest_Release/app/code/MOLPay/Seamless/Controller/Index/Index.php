@@ -271,7 +271,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
                 } else if($status == '22') {    // Pending Payment
                     
-                    $this->messageManager->addSuccess('Order has been placed but please make the payment to complete the order'); //Frontend will display this
+                    $this->messageManager->addSuccess('Order has been placed but we are waiting for payment'); //Frontend will display this
                     
                     $order->setState('pending',true);
                     $order->setStatus('pending',true);
@@ -339,7 +339,7 @@ class Index extends \Magento\Framework\App\Action\Action
                             
                                     //Redirect to merchant page
                                     //Buyer will see this page as Order Being Placed
-                                    $this->messageManager->addSuccess('Order has been placed but please make the payment to complete the order');
+                                    $this->messageManager->addSuccess('Order has been placed but we are waiting for payment');
 
                                     $quoteId = $order->getQuoteId();
                                     $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
