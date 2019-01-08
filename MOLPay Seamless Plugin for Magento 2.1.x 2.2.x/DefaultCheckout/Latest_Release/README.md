@@ -8,6 +8,10 @@
 - Fixed on coding logic for case return to merchant site as payment status "failed". Case where at MOLPay site, status for that payment is Pending as waiting for payment from customer. 
 - Update the zip file based on update
 
+(As updated 08/01/2019)
+- Revise coding to update order accordingly bases on cases
+- Update the zip file
+
 
 ## Support and Technical Inquiry
 - If you want to apply on higher version from Magento 2.2.6, you may test it first and please backup the previous plugin if applicable.
