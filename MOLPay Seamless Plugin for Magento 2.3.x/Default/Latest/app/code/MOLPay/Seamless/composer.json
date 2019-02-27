@@ -1,0 +1,24 @@
+{
+    "name": "molpay/seamless",
+    "description": "MOLPay Seamless Integration for Magento 2.3.0",
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/module-sales": "100.0.*|101.0.*",
+        "magento/module-checkout": "100.0.*|100.2.*",
+        "magento/module-payment": "100.0.*|100.2.*",
+        "magento/framework": "100.0.*|101.0.*",
+        "magento/magento-composer-installer": ">=0.1.11"
+    },
+    "type": "magento2-module",
+    "version": "100.0.3",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "MOLPay\\Seamless\\": ""
+        }
+    }
+}
