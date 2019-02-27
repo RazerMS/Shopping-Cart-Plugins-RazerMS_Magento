@@ -1,6 +1,6 @@
 ## Updates Information
 - Adding new features in current latest plugin for Magento 2.3.0
-  - Option "Sandbox Environment" which merchant can test payment by using MOLPay Sandbox - Seamless Integration
+  - Option Sandbox Environment at Payment Method setting which merchant can test payment by using MOLPay Sandbox - Seamless Integration
   - add log function to track MOLPay Response into Magento system
 - To get Sandbox account, please request first by sending email to support@molpay.com. 
 - Current plugin does not support for Virtual Product checkout payment. Our developer team still in finding solution for this feature.
