@@ -1,5 +1,5 @@
-Magento Version 2.3.0
-----------------------
+Magento Version 2.3.0 - Fast Fix
+---------------------------------
 
 How to place the file 
 ---------------------
