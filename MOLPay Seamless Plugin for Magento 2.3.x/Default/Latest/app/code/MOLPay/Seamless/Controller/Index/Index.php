@@ -430,6 +430,22 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
                         $url_checkoutredirection = 'checkout/cart';
                     }
                 }
+
+                if ($nbcb  == 1) {
+
+                    echo 'CBTOKEN:MPSTATOK';
+
+                } else if ($nbcb == '') {
+
+                     if ($status=='00' || $status=='22') {
+
+                         //page redirect in frontend
+                         $url_checkoutredirection = 'checkout/onepage/success';
+
+                         $this->messageManager->addSuccess('Order has been successfully placed!');
+                     }
+
+                }   
             } else {
                 
                 $mp_logger->info( "LOG".$order_id." Step2 FRAUD $nbcb_type: Unmatch skey be cause of wrong calculated");
@@ -451,26 +467,13 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
 
             $order->save(); //save the updated order info based on condition above
 
-            if ($nbcb  == 1) {
+            if ($url_checkoutredirection) {
+                $quoteId = $order->getQuoteId();
+                $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
+                $this->checkoutSession->setLastOrderId($order->getId());
 
-                echo 'CBTOKEN:MPSTATOK';
-
-            } else if ($nbcb == '') {
-
-                 if ($status=='00' || $status=='22') {
-
-                     //page redirect in frontend
-                     $url_checkoutredirection = 'checkout/onepage/success';
-
-                     $this->messageManager->addSuccess('Order has been successfully placed!');
-                 }
-
-                 $quoteId = $order->getQuoteId();
-                 $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
-                 $this->checkoutSession->setLastOrderId($order->getId());
-
-                 $this->_redirect($url_checkoutredirection);
-            }		
+                $this->_redirect($url_checkoutredirection);
+            }	
         }
 
         else if( empty($_POST) ){
