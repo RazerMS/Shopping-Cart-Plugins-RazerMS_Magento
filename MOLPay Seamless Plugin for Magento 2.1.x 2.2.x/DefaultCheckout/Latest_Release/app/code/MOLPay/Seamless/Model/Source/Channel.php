@@ -55,7 +55,6 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "WEBCASH" , 'label' => "WEBCASH"  ];
 		$option[] = [ 'value' => "PEXPLUS" , 'label' => "PEx"  ];
 		$option[] = [ 'value' => "jompay" , 'label' => "JOMPay"  ];
-	        $option[] = [ 'value' => "BOOST" , 'label' => "Boost"  ];
 		$option[] = [ 'value' => "ATMVA" , 'label' => "ATM Transfer via Permata Bank"  ];
 		$option[] = [ 'value' => "dragonpay" , 'label' => "Dragonpay"  ];
 		$option[] = [ 'value' => "paysbuy" , 'label' => "PaysBuy"  ];
@@ -160,7 +159,6 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "WEBCASH" => "WEBCASH",
 "PEXPLUS" => "PEx",
 "jompay" => "JOMPay",
-"BOOST" => "Boost",
 "ATMVA" => "ATM Transfer via Permata Bank",
 "dragonpay" => "Dragonpay",
 "paysbuy" => "PaysBuy",

@@ -40,7 +40,8 @@ final class ConfigProvider implements ConfigProviderInterface
                     'transactionResults' => [
                         ClientMock::SUCCESS => __('Success')
                     ],
-		    'channels_payment' => $this->getActiveChannels()
+		    'channels_payment' => $this->getActiveChannels(),
+		    'sandbox_environment' => $this->isSandBoxEnvironment()
                 ]
             ]
         ];
@@ -60,5 +61,11 @@ final class ConfigProvider implements ConfigProviderInterface
             }
         }
         return $activeChannel;
+    }
+    
+    //Get Sandbox Environment
+    protected function isSandBoxEnvironment()
+    {
+       return $this->method->getSandboxEnvironment();
     }	
 }

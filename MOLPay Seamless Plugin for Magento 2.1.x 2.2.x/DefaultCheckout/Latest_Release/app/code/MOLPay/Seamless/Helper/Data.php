@@ -9,6 +9,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const MER_GATE_KEY = 'payment/molpay_seamless/merchant_gateway_key';
     const MER_GATE_SECRETKEY ='payment/molpay_seamless/merchant_gateway_secretkey';
     const MOLPAY_CHANNELS ='payment/molpay_seamless/channels_payment';
+    const MOLPAY_ENV = "payment/molpay_seamless/sandbox_environment";
  
     public function getMerchantID()
     {
@@ -37,6 +38,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getActiveChannels(){
         return $this->scopeConfig->getValue(
             self::MOLPAY_CHANNELS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+    
+     public function getSandboxEnvironment(){
+        return $this->scopeConfig->getValue(
+            self::MOLPAY_ENV,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }

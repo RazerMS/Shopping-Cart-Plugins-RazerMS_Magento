@@ -6,24 +6,37 @@
 /*global define*/
 define(
     [
-        'jquery',
-        'molpayseamlessdeco',
         'uiComponent',
         'Magento_Checkout/js/model/payment/renderer-list'
     ],
     function (
-        $,
-        ms,
         Component,
         rendererList
     ) {
         'use strict';
-        rendererList.push(
-            {
-                type: 'molpay_seamless',
-                component: 'MOLPay_Seamless/js/view/payment/method-renderer/molpay_seamless'
-            }
-        );
+        
+        var payment_method_select = 'molpay_seamless';
+        var config = window.checkoutConfig.payment,
+            molpayType = payment_method_select;
+        
+        if ( config[molpayType].sandbox_environment == "1" ) {
+            rendererList.push(
+                {
+                    type: payment_method_select,
+                    component: 'MOLPay_Seamless/js/view/payment/method-renderer/molpay_seamless_sandbox'
+                }
+            );
+        }
+
+        if ( config[molpayType].sandbox_environment == "0" ) {
+            rendererList.push(
+                {
+                    type: payment_method_select,
+                    component: 'MOLPay_Seamless/js/view/payment/method-renderer/molpay_seamless'
+                }
+            );
+        }
+        
         /** Add view logic here if needed */
         return Component.extend({});
     }

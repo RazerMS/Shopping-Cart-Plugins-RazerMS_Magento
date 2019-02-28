@@ -7,7 +7,7 @@
 define(
     [
         'jquery',
-        'molpayseamlessdeco',
+        'molpayseamlessdecosandbox',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Checkout/js/model/full-screen-loader',
@@ -16,7 +16,7 @@ define(
         'Magento_Checkout/js/action/place-order'
 
     ],
-    function ( $, ms, Component, additionalValidators, fullScreenLoader, quote, customer, placeOrderAction){
+    function ( $, mssand, Component, additionalValidators, fullScreenLoader, quote, customer, placeOrderAction){
 
             var payloadmps;
 
