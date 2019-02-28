@@ -7,7 +7,7 @@
 (As updated 28/02/2019)
 - Modified coding on certain files
 - Added log for track order status after receive payment status
-- Added "Sandbox Environment" option on Store > Configuration > Sales > Payment Methods > MOLPay Seamless Integration 
+- Added "Sandbox Environment" option on Stores > Configuration > Sales > Payment Methods > MOLPay Seamless Integration 
 - Update the zip file
 
 (As updated 08/01/2019)
