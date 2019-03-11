@@ -553,6 +553,12 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
     }
 
     protected function queryStatusTransaction($P){
+ 
+	$is_sandboxEnv = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getSandboxEnvironment();
+        if ( $is_sandboxEnv ) {
+            return array('StatCode' => '11');
+        }
+        
         $result  = '';
         $res     = array();
 
