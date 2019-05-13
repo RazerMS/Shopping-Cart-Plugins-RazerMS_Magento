@@ -269,13 +269,14 @@ class Index extends \Magento\Framework\App\Action\Action
 
                 if($status == '00') {   // Success Payment
                    $quoteId = $order->getQuoteId();
-                   if ($order->getId() && $order->getState() != 'processing') {
+                   if ($order->getId() && ($order->getState() != 'processing' && $order->getStatus() != 'processing')) {
 
 		        $mp_logger->info( "LOG".$order_id." Step2 00 $nbcb_code: Expecting order state change ".$order->getState()." to processing" );
 
                         //change the way for order status update to processing
                         $order_upd = $this->orderRepository->get($order_id);
                         $order_upd->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+			$order_upd->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
                         $this->orderRepository->save($order_upd);
 
                         $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : CAPTURED).<br/>You have confirmed the order to the customer via email.' ))
