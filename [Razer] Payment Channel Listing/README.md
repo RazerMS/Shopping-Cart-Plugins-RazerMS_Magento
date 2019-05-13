@@ -1,4 +1,4 @@
-[Razer] Latest List of Payment Channels
+Latest List of Payment Channels
 ----------------------------------------
 
 - Channels.php file is located web_magento2/app/code/MOLPay/Seamless/Model/Source
