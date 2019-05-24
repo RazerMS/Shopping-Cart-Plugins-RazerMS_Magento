@@ -18,7 +18,7 @@ On 2018/12/24
   - revised message display on pending payment
 
 ## Installation Guide
-1. **Download** file [here](https://github.com/MOLPay/Magento_Plugin/blob/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/DefaultCheckout/Latest_Release/Magento2.2.6_MOLPaySeamlessPlugin.zip) for Magento 2.2.6 Extract/Unzip the files. You will get the * _**`app/code/MOLPay`**_ folder that consist plugin file.
+1. **Download** file [here](https://github.com/MOLPay/Magento_Plugin/blob/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/DefaultCheckout/Latest_Release/Magento2.2.x_RazerMSPlugin_20190524.zip) for Magento 2.2.x Extract/Unzip the files. You will get the * _**`app/code/MOLPay`**_ folder that consist plugin file.
 
 2. Upload or copy those file and folder into Magento root directory (installed folder) <br>
   <i>This won't replace any of your Magento system core file</i>
