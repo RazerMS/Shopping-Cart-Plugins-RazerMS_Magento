@@ -7,7 +7,6 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -22,11 +21,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @var OrderSender
      */
     protected $orderSender;
-    
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
+
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -35,8 +30,7 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         OrderSender $orderSender,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        OrderRepositoryInterface $orderRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
 
     )
     {
@@ -47,7 +41,6 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->checkoutSession    = $checkoutSession;
         $this->orderSender        = $orderSender;
         $this->quoteRepository    = $quoteRepository;
-        $this->orderRepository    = $orderRepository;
     }
 
     public function execute()
@@ -195,136 +188,148 @@ class Index extends \Magento\Framework\App\Action\Action
             $this->getResponse()->setBody(json_encode($params));
 
         }
-        else if( isset($_POST[ 'mpsorderid' ]) && $_POST != "" ) {
-                // Get the return from MOLPay ; case using timer on payment page
-                // Case: usually used on credit card payment form (pop up window) and no transaction Id created if buyer not click 'Pay Now'
+        else{ //Reponse from MOLPay
+             //check orderid is valid
+             $get_orderid = '';
+             if ( isset( $_POST['mpsorderid'] ) )
+                 $get_orderid = $_POST['mpsorderid'];
+             if ( isset( $_POST['orderid'] ) )
+                 $get_orderid = $_POST['orderid'];
 
-                $order_id = $_POST['mpsorderid'];
-                $om =   \Magento\Framework\App\ObjectManager::getInstance();
+             if ( $get_orderid == '' ) {
+                echo "Information not found";
+                $this->_redirect('/');
+                exit;
+             }
 
-                $order = $om->create('Magento\Sales\Api\Data\OrderInterface');
-                $order->loadByIncrementId($order_id);
+             $objm = \Magento\Framework\App\ObjectManager::getInstance();
+             $order_check = $objm->create('Magento\Sales\Model\Order')->loadByIncrementId($get_orderid);
+             if ( !$order_check->getId() ) {
+                echo "Order ID does not found!";
+                exit;
+             }
 
-                $commentMsg = 'Fail to complete payment. ';
-                $this->messageManager->addError($commentMsg); //front-end display
+             if( isset($_POST[ 'mpsorderid' ]) && $_POST != "" ) {
+                 // Get the return from MOLPay ; case where use timer on payment page
+                 // Case: usually used on credit card payment form (pop up window) and no transaction Id created if buyer not click 'Pay Now'
 
-                //$order->registerCancellation($commentMsg)->save(); //back-end cancel process
-                $order->cancel();
-                $order->setStatus('canceled',true);
-                $order->save();
-                
-                $this->checkoutSession->restoreQuote(); //get back the quote
-                
-                $url_checkoutredirection = "checkout/cart";
+                 $order_id = $_POST['mpsorderid'];
+                 $om =   \Magento\Framework\App\ObjectManager::getInstance();
 
-                $this->_redirect($url_checkoutredirection);
-        }
-        else if( isset($_POST['status'] ) ) //response from MOLPay
-        {
-           
-            $status = $_POST['status'];
-            $order_id = $_POST['orderid'];
-            $skey = $_POST['skey'];
+                 $order = $om->create('Magento\Sales\Api\Data\OrderInterface');
+                 $order->loadByIncrementId($order_id);
 
-            if(isset($_POST['nbcb']))
-            {
-                $nbcb = $_POST['nbcb'];
-            }
-            else
-            {
-                $nbcb = 0;
-            }
+                 $commentMsg = 'Fail to complete payment. ';
+                 $this->messageManager->addError($commentMsg); //front-end display
 
-            $nbcb_type = 'Return';
-            $nbcb_code = 'R';
-            if ($nbcb == 1) {
-                $nbcb_type = 'Callback';
-                $nbcb_code = 'C';
-            } elseif ($nbcb == 2) {
-                $nbcb_type = 'Notification';
-                $nbcb_code = 'N';
-            }    
+                 //$order->registerCancellation($commentMsg)->save(); //back-end cancel process
+                 $order->cancel();
+                 $order->setStatus('canceled',true);
+                 $order->save();
 
-            $gate_response = $_POST;
+                 $this->checkoutSession->restoreQuote(); //get back the quote
 
-            $om = \Magento\Framework\App\ObjectManager::getInstance();
+                 $url_checkoutredirection = "checkout/cart";
 
-            $order = $om->create('Magento\Sales\Api\Data\OrderInterface');
-            $order->loadByIncrementId($order_id);
+                 $this->_redirect($url_checkoutredirection);
+              }
+              else if( isset($_POST['status'] ) ) //response from MOLPay
+              {
 
-            $vkey = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getSecretKey();
+                  $status = $_POST['status'];
+                  $order_id = $_POST['orderid'];
+                  $skey = $_POST['skey'];
 
-            $key0 = md5($_POST['tranID'].$order_id.$status.$_POST['domain'].$_POST['amount'].$_POST['currency']);
-            $key1 = md5($_POST['paydate'].$_POST['domain'].$key0.$_POST['appcode'].$vkey);
+                  $om = \Magento\Framework\App\ObjectManager::getInstance();
 
-            //log MOLPay Response
-            $mp_writer = new \Zend\Log\Writer\Stream(BP . '/var/log/molpaylog.log');
-            $mp_logger = new \Zend\Log\Logger();
-            $mp_logger->addWriter($mp_writer);
-            
-            //log MOLPay Response
-            $mp_logger->info( "LOG".$order_id." Step1 RESP:", $gate_response );
+                  $order = $om->create('Magento\Sales\Api\Data\OrderInterface');
+                  $order->loadByIncrementId($order_id);
 
-            if($skey == $key1) {
+                  if(isset($_POST['nbcb']))
+                  {
+                      $nbcb = $_POST['nbcb'];
+                  }
+                  else
+                  {
+                      $nbcb = 0;
+                  }
 
-                if($status == '00') {   // Success Payment
-                   $quoteId = $order->getQuoteId();
-                   if ($order->getId() && ($order->getState() != 'processing' && $order->getStatus() != 'processing')) {
+                  $nbcb_type = 'Return';
+                  $nbcb_code = 'R';
+                  if ($nbcb == 1) {
+                      $nbcb_type = 'Callback';
+                      $nbcb_code = 'C';
+                  } elseif ($nbcb == 2) {
+                      $nbcb_type = 'Notification';
+                      $nbcb_code = 'N';
+                  }
 
-		        $mp_logger->info( "LOG".$order_id." Step2 00 $nbcb_code: Expecting order state change ".$order->getState()." to processing" );
+                  $gate_response = $_POST;
 
-                        //change the way for order status update to processing
-                        $order_upd = $this->orderRepository->get($order_id);
-                        $order_upd->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
-			$order_upd->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
-                        $this->orderRepository->save($order_upd);
+                  $vkey = $this->_objectManager->create('MOLPay\Seamless\Helper\Data')->getSecretKey();
 
-                        $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : CAPTURED).<br/>You have confirmed the order to the customer via email.' ))
-                              ->setIsCustomerNotified(true);
+                  $key0 = md5($_POST['tranID'].$order_id.$status.$_POST['domain'].$_POST['amount'].$_POST['currency']);
+                  $key1 = md5($_POST['paydate'].$_POST['domain'].$key0.$_POST['appcode'].$vkey);
 
-                        $payment = $order->getPayment();
-                        $mp_amount = $_POST['amount'];
-                        $mp_txnid = $_POST['tranID'];
-                        
-                        //acknowledge status payment (00 = captured) received and status order change to processing
-                        $this->_ack($_POST);
+                  $this->resp_log(BP, "LOG".$order_id." Step1 RESP:", $gate_response);
 
-                        //Create New Invoice and Transaction functions
-                        $this->update_invoice_transaction( $order, $payment, $mp_txnid );
-                    }
-                    
-                } else if($status == '22') {    // Pending Payment
+                  if($skey == $key1) {
 
-                    $order->setState('pending_payment',true);
-                    $order->setStatus('pending',true);
+                      if($status == '00') {   // Success Payment
+                          $quoteId = $order->getQuoteId();
+                          if ($order->getId() && ($order->getState() != 'processing' && $order->getStatus() != 'processing')) {
 
-                    $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : PENDING)'))
-                          ->setIsCustomerNotified(false);
+                              $this->resp_log(BP, "LOG".$order_id." Step2 00 $nbcb_code: Expecting order state change ".$order->getState()." to processing", []);
 
-                }
-                else { // Fail Payment
-                    if ($order->getId() && $order->getState() != 'canceled') {
-                        
-                        $mp_logger->info( "LOG".$order_id." Step2 11 $nbcb_code: Expecting order state change to canceled." );
+                              $order->setState('processing',true);
+                              $order->setStatus('processing',true);
 
-                        if( $nbcb == "1" || $nbcb == "2" ) //Callback; nbcb=1 : possible differ update from return URL status / Notification; nbcb=2 : confirm status from bank
-                        {                            
-                            ///$order->registerCancellation("Fail to complete payment")->save(); //back-end cancel process
-                            $order->cancel();
-                            $order->setStatus('canceled',true);
-                                                        
-                            /*$order->setState('canceled',true);
-                            $order->setStatus('canceled',true);
-                            */
+                              $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : CAPTURED).<br/>You have confirmed the order to the customer via email.' ))
+                                  ->setIsCustomerNotified(true);
 
-                            $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : FAILED)'))
-                                  ->setIsCustomerNotified(false);
+                              $payment = $order->getPayment();
+                              $mp_amount = $_POST['amount'];
+                              $mp_txnid = $_POST['tranID'];
 
-                            //acknowledge status payment (11 = failed) received and status order change to canceled
-                            $this->_ack($_POST);
-                        }
-                        else //During buyer return to merchant site; nbcb empty
-                        {
+                              //acknowledge status payment (00 = captured) received and status order change to processing
+                              $this->_ack($_POST);
+
+                              //Create New Invoice and Transaction functions
+                              $this->update_invoice_transaction( $order, $payment, $mp_txnid );
+                          }
+
+                      } else if($status == '22') {    // Pending Payment
+
+                          $order->setState('pending_payment',true);
+                          $order->setStatus('pending',true);
+
+                          $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : PENDING)'))
+                              ->setIsCustomerNotified(false);
+
+                      }
+                      else { // Fail Payment
+                          if ($order->getId() && $order->getStatus() != 'canceled') {
+
+                              $this->resp_log(BP, "LOG".$order_id." Step2 11 $nbcb_code: Expecting order state change to canceled.", [] );
+
+                              if( $nbcb == "1" || $nbcb == "2" ) //Callback; nbcb=1 : possible differ update from return URL status / Notification; nbcb=2 : confirm status from bank
+                              {
+                                   ///$order->registerCancellation("Fail to complete payment")->save(); //back-end cancel process
+                                   $order->cancel();
+                                   $order->setStatus('canceled',true);
+
+                                   /*$order->setState('canceled',true);
+                                    $order->setStatus('canceled',true);
+                                   */
+
+                                   $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : FAILED)'))
+                                      ->setIsCustomerNotified(false);
+
+                                   //acknowledge status payment (11 = failed) received and status order change to canceled
+                                   $this->_ack($_POST);
+                          }
+                          else //During buyer return to merchant site; nbcb empty
+                          {
                             /************************************************************************************************************************************************
 
                                Case: Buyer return to merchant website (MOLPay to merchant in Return URL)
@@ -339,11 +344,11 @@ class Index extends \Magento\Framework\App\Action\Action
                             $qtxn = $this->queryStatusTransaction($gate_response);
 
                             if( !empty($qtxn) ){
-                                                                
+
                                 if($qtxn['StatCode'] === "11") { //StatName = Failure
-                                
-                                    $mp_logger->info( "LOG".$order_id." Step2 Q11 $nbcb_code: Expecting order state change to canceled" );
-                                
+
+                                    $this->resp_log(BP, "LOG".$order_id." Step2 Q11 $nbcb_code: Expecting order state change to canceled", [] );
+
                                     $commentMsg = 'Fail to complete payment';
 
                                     $this->messageManager->addError($commentMsg); //front-end display
@@ -351,7 +356,7 @@ class Index extends \Magento\Framework\App\Action\Action
                                     //$order->registerCancellation($commentMsg)->save(); //back-end cancel process
                                     $order->cancel();
                                     $order->setStatus('canceled',true);
-                                    
+
                                     $order->addStatusHistoryComment(__('Response from MOLPay - '. $nbcb_type . ' (Transaction Status : FAILED)'))
                                           ->setIsCustomerNotified(false);
 
@@ -363,9 +368,9 @@ class Index extends \Magento\Framework\App\Action\Action
                                     $url_checkoutredirection = 'checkout/cart';
                                 }
                                 elseif($qtxn['StatCode'] === "22") { //Statname = pending
-                                
-                                    $mp_logger->info( "LOG".$order_id." Step2 Q22 $nbcb_type: Expecting order state remain pending_payment");
-                                    
+
+                                    $this->resp_log(BP,"LOG".$order_id." Step2 Q22 $nbcb_type: Expecting order state remain pending_payment", []);
+
                                     // if notification comes first and update order state to pending , no need to update this part. otherwise, update the order
                                     if ( $order->getId() && $order->getState() != 'pending_payment' ) {
 
@@ -390,9 +395,9 @@ class Index extends \Magento\Framework\App\Action\Action
 
                                 }
                                 elseif($qtxn['StatCode'] === "00") { //Statname = Success
-                                    
-                                    $mp_logger->info( "LOG".$order_id." Step2 Q00 $nbcb_type: Expecting order state change to processing");
-                                    
+
+                                    $this->resp_log(BP, "LOG".$order_id." Step2 Q00 $nbcb_type: Expecting order state change to processing", []);
+
                                     if ($order->getId() && $order->getState() != 'processing') {
                                         $order->setState('processing',true);
                                         $order->setStatus('processing',true);
@@ -403,7 +408,7 @@ class Index extends \Magento\Framework\App\Action\Action
                                         $payment = $order->getPayment();
                                         $mp_amount = $_POST['amount'];
                                         $mp_txnid = $_POST['tranID'];
-                                        
+
                                         //acknowledge status payment (00 = captured) received and status order change to processing
                                         $this->_ack($_POST);
 
@@ -411,7 +416,7 @@ class Index extends \Magento\Framework\App\Action\Action
                                         $this->update_invoice_transaction( $order, $payment, $mp_txnid );
                                     }
 
-                                   
+
                                     $this->messageManager->addSuccess('Order has been successfully placed!');
 
                                     $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
@@ -434,53 +439,54 @@ class Index extends \Magento\Framework\App\Action\Action
                         $url_checkoutredirection = 'checkout/cart';
                     }
                 }
-            
-                if ($nbcb  == 1) {
-                    echo 'CBTOKEN:MPSTATOK';
-                } else if ($nbcb == '') {
-                    if ($status=='00' || $status=='22') {
-                         //page redirect in frontend
-                         $url_checkoutredirection = 'checkout/onepage/success';
 
-                         $this->messageManager->addSuccess('Order has been successfully placed!');
-                    }
-                 }
-                             
-            } else {
-                
-                $mp_logger->info( "LOG".$order_id." Step2 FRAUD $nbcb_type: Unmatch skey be cause of wrong calculated");
-                  
-                $this->messageManager->addError('Key is not valid.');
-                $order->setState('fraud',true);
-                $order->setStatus('fraud',true);
+                    if ($nbcb  == 1) {
+                        echo 'CBTOKEN:MPSTATOK';
+                    } else if ($nbcb == '') {
+                        if ($status=='00' || $status=='22') {
+                             //page redirect in frontend
+                             $url_checkoutredirection = 'checkout/onepage/success';
 
-                $history_msg = '';
-                $history_msg = 'Payment Error: Signature key not match';
+                             $this->messageManager->addSuccess('Order has been successfully placed!');
+                        }
+                     }
 
-                $order->addStatusHistoryComment(__( $history_msg ))
-                      ->setIsCustomerNotified(false);
+                } else {
 
-                $this->checkoutSession->restoreQuote();
+                    $this->resp_log(BP, "LOG".$order_id." Step2 FRAUD $nbcb_type: Unmatch skey be cause of wrong calculated", []);
 
-                $url_checkoutredirection = 'checkout/cart';
-            }
+                    $this->messageManager->addError('Key is not valid.');
+                    $order->setState('fraud',true);
+                    $order->setStatus('fraud',true);
 
-            $order->save(); //save the updated order info based on condition above
+                    $history_msg = '';
+                    $history_msg = 'Payment Error: Signature key not match';
 
-            if (!empty($url_checkoutredirection)){
-                $quoteId = $order->getQuoteId();
-                $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
-                $this->checkoutSession->setLastOrderId($order->getId());
+                    $order->addStatusHistoryComment(__( $history_msg ))
+                          ->setIsCustomerNotified(false);
 
-                $this->_redirect($url_checkoutredirection);		
+                    $this->checkoutSession->restoreQuote();
+
+                    $url_checkoutredirection = 'checkout/cart';
+                }
+
+                $order->save(); //save the updated order info based on condition above
+
+                if (!empty($url_checkoutredirection)){
+                    $quoteId = $order->getQuoteId();
+                    $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
+                    $this->checkoutSession->setLastOrderId($order->getId());
+
+                    $this->_redirect($url_checkoutredirection);
+                }
             }
         }
 
-        else if( empty($_POST) ){
+        /*if( empty($_POST) ){
            $this->_redirect('/');
-        }
+        }*/
     }
-    
+
     public function _ack($P) {
 
         $P['treq'] = 1;
@@ -499,19 +505,16 @@ class Index extends \Magento\Framework\App\Action\Action
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , FALSE);
         $result = curl_exec( $ch );
         curl_close( $ch );
-        
+
         if ( $result ) {
             //log MOLPay ACK
-            $mp_writer = new \Zend\Log\Writer\Stream(BP . '/var/log/molpaylog.log');
-            $mp_logger = new \Zend\Log\Logger();
-            $mp_logger->addWriter($mp_writer);
-            $mp_logger->info( "LOG".$P['orderid']." Step3 ACK2MOLPay: status payment (".$P['status'].") received" );        
-        }        
+            $this->resp_log(BP,  "LOG".$P['orderid']." Step3 ACK2MOLPay: status payment (".$P['status'].") received", [] );
+        }
 
         return;
     }
 
-    public function update_invoice_transaction($order, $payment, $e){ //$a:$order_id, $b:$order, $c:$payment, $d:$mp_amount, $e:$mp_txnid
+    public function update_invoice_transaction($order, $payment, $e){
         if($order->canInvoice()) {
             $payment
                     ->setTransactionId($e)
@@ -588,6 +591,13 @@ class Index extends \Magento\Framework\App\Action\Action
         }
 
         return $res;
+    }
+
+    protected function resp_log($basedpath,$trace_msg,$params){
+        $mp_writer = new \Zend\Log\Writer\Stream($basedpath . '/var/log/molpaylog.log');
+        $mp_logger = new \Zend\Log\Logger();
+        $mp_logger->addWriter($mp_writer);
+        $mp_logger->info( $trace_msg , $params  );
     }
 
 }
