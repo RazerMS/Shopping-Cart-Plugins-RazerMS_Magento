@@ -34,10 +34,10 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "fpx_abmb" , 'label' => "FPX Alliance Bank (Alliance Online)"  ];
 		$option[] = [ 'value' => "fpx_uob" , 'label' => "FPX United Overseas Bank (UOB)"  ];
 		$option[] = [ 'value' => "fpx_bsn" , 'label' => "FPX Bank Simpanan Nasional (myBSN)"  ];
-		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Ban"  ];
+		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Bank"  ];
 		$option[] = [ 'value' => "FPX_SCB" , 'label' => "FPX Standard Chartered Bank"  ];
-		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berha"  ];
-		$option[] = [ 'value' => "FPX_B2B" , 'label' => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam"  ];
+		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berhad"  ];
+		$option[] = [ 'value' => "FPX_B2B" , 'label' => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam)"  ];
 		$option[] = [ 'value' => "FPX_B2B_ABB" , 'label' => "FPX B2B Affin Bank"  ];
 		$option[] = [ 'value' => "FPX_B2B_AMB" , 'label' => "FPX B2B Ambank Berhad"  ];
 		$option[] = [ 'value' => "FPX_B2B_BIMB" , 'label' => "FPX B2B Bank Islam Malaysia Berhad (BIMB)"  ];
@@ -108,6 +108,8 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "vtcpay-lienvietpostbank" , 'label' => "VTC Pay Channels (Lienviet Bank)"  ];
 		$option[] = [ 'value' => "vtcpay-bvb" , 'label' => "VTC Pay Channels (Baoviet Bank)"  ];
 		$option[] = [ 'value' => "singpost" , 'label' => "Cash-SAM"  ];
+	        $option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
+	    
 		
 	return $option;
     }
@@ -139,10 +141,10 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "fpx_abmb" => "FPX Alliance Bank (Alliance Online)",
 "fpx_uob" => "FPX United Overseas Bank (UOB)",
 "fpx_bsn" => "FPX Bank Simpanan Nasional (myBSN)",
-"FPX_OCBC" => "FPX OCBC Ban",
+"FPX_OCBC" => "FPX OCBC Bank",
 "FPX_SCB" => "FPX Standard Chartered Bank",
 "FPX_ABB" => "FPX Affin Bank Berha",
-"FPX_B2B" => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam",
+"FPX_B2B" => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam)",
 "FPX_B2B_ABB" => "FPX B2B Affin Bank",
 "FPX_B2B_AMB" => "FPX B2B Ambank Berhad",
 "FPX_B2B_BIMB" => "FPX B2B Bank Islam Malaysia Berhad (BIMB)",
@@ -212,7 +214,9 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "vtcpay-abbank" => "VTC Pay Channels (AB Bank)",
 "vtcpay-lienvietpostbank" => "VTC Pay Channels (Lienviet Bank)",
 "vtcpay-bvb" => "VTC Pay Channels (Baoviet Bank)",
-"singpost" => "Cash-SAM" ];
+"singpost" => "Cash-SAM",
+"WeChatPay" => "WeChatPay"
+	   ];
            
            return $choose;
        }
