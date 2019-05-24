@@ -34,9 +34,9 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "fpx_abmb" , 'label' => "FPX Alliance Bank (Alliance Online)"  ];
 		$option[] = [ 'value' => "fpx_uob" , 'label' => "FPX United Overseas Bank (UOB)"  ];
 		$option[] = [ 'value' => "fpx_bsn" , 'label' => "FPX Bank Simpanan Nasional (myBSN)"  ];
-		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Ban"  ];
+		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Bank"  ];
 		$option[] = [ 'value' => "FPX_SCB" , 'label' => "FPX Standard Chartered Bank"  ];
-		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berha"  ];
+		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berhad"  ];
 		$option[] = [ 'value' => "FPX_B2B" , 'label' => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam"  ];
 		$option[] = [ 'value' => "FPX_B2B_ABB" , 'label' => "FPX B2B Affin Bank"  ];
 		$option[] = [ 'value' => "FPX_B2B_AMB" , 'label' => "FPX B2B Ambank Berhad"  ];
