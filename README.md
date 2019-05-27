@@ -9,7 +9,8 @@ The MOLPay Magento Plugin makes it easy to add MOLPay payment gateway to your Ma
 Prerequisites
 -------------
 
-* PHP 5.2 or later.
+* PHP 5.2 or later. 
+* For Magento 2.2.x and above , recommend to use PHP 7.0 and above
 * MOLPay Production or Development [account](http://www.molpay.com/v3/contact/merchant-enquiry).
 
 Documentation
@@ -24,13 +25,13 @@ General documentation regarding the MOLPay API and related payment flows can be 
 
 Plugin Releases
 ---------------
+
+*Version Magento 1.x.x*
+
 **Normal Integration**
 * [MOLPay Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
 
 **Seamless Integration**
-* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (Default Checkout)](https://github.com/MOLPay/Magento_Plugin/tree/Version-2.2.x/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/DefaultCheckout)
-* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (OneStepCheckout)](https://github.com/MOLPay/Magento_Plugin/tree/Version-2.2.x/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/OneStepCheckout)
-* [MOLPay Seamless Plugin for Magento Version 2.0.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-2.0.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.3.X - Default Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.3.X - IWD One Page Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Default Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
@@ -38,7 +39,14 @@ Plugin Releases
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Firecheckout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - SuperTheme ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
 
-* [MOLPay Sandbox Seamless Plugin for Magento Version 2.1.x - 2.2.x](https://github.com/MOLPay/Magento_Plugin/releases/tag/sbv1.0.0)
+
+*Version Magento 2.x.x*
+
+* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (Default Checkout)](https://github.com/MOLPay/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/DefaultCheckout/Latest_Release)
+* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (OneStepCheckout)](https://github.com/MOLPay/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/OneStepCheckout)
+* [MOLPay Seamless Plugin for Magento Version 2.0.X](https://github.com/MOLPay/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.0.x)
+
+
 
 Support
 -------
