@@ -20,7 +20,7 @@
 
 ## Support and Technical Inquiry
 - If you want to apply on higher version from Magento 2.2.6, you may test it first and please backup the previous plugin if applicable.
-  You may send to support@molpay.com to issue any problem face during payment integration. 
+  You may send to support-sa@razer.com to issue any problem face during payment integration. 
 - Kindly to provide information of your website such as:
   - Full version of your Magento ( eg. Magento Enterprise Edition 2.2.7 )
   - Give link which plugin you have applied on your site.
