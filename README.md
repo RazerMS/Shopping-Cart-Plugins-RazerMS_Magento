@@ -1,7 +1,7 @@
 Razer Merchant Services Magento Plugin
 =====================
 
-<img src="https://user-images.githubusercontent.com/38641542/74150431-e0217e80-4c44-11ea-9f73-a18c82975341.jpg">
+<img src="https://user-images.githubusercontent.com/38641542/74420751-e99a2900-4e86-11ea-99e6-904e4eba1574.jpg">
 
 The Razer Merchant Services Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
 
@@ -17,8 +17,8 @@ Prerequisites
 Documentation
 -------------
 
-* [Getting Started](https://github.com/MOLPay/Magento_Plugin/wiki#getting-started) - Everything you need to begin using this plugins.
-* [Contributing to the Plugin](https://github.com/MOLPay/Magento_Plugin/wiki/Contributing-to-the-Plugin)
+* [Getting Started](https://github.com/RazerMS/Magento_Plugin/wiki#getting-started) - Everything you need to begin using this plugins.
+* [Contributing to the Plugin](https://github.com/RazerMS/Magento_Plugin/wiki/Contributing-to-the-Plugin)
 
 General documentation regarding the MOLPay API and related payment flows can be found on the MOLPay Merchant Admin Site.
 
@@ -30,22 +30,22 @@ Plugin Releases
 *Version Magento 1.x.x*
 
 **Normal Integration**
-* [MOLPay Plugin for Magento Version 1.9.2.X](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
+* [MOLPay Plugin for Magento Version 1.9.2.X](https://github.com/RazerMS/Magento_Plugin/tree/Version-1.9.2.x)
 
 **Seamless Integration**
-* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - Default Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x)
-* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - IWD One Page Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.3.x)
-* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Default Checkout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
+* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - Default Checkout ](https://github.com/RazerMS/Magento_Plugin/tree/Version-1.9.3.x)
+* [MOLPay Seamless Plugin for Magento Version 1.9.3.X - IWD One Page Checkout ](https://github.com/RazerMS/Magento_Plugin/tree/Version-1.9.3.x)
+* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Default Checkout ](https://github.com/RazerMS/Magento_Plugin/tree/Version-1.9.2.x)
 * [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Aheadworks Checkout v1.3.5 ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
-* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Firecheckout ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
-* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - SuperTheme ](https://github.com/MOLPay/Magento_Plugin/tree/Version-1.9.2.x)
+* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - Firecheckout ](https://github.com/RazerMS/Magento_Plugin/tree/Version-1.9.2.x)
+* [MOLPay Seamless Plugin for Magento Version 1.9.2.X - SuperTheme ](https://github.com/RazerMS/Magento_Plugin/tree/Version-1.9.2.x)
 
 
 *Version Magento 2.x.x*
 
-* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (Default Checkout)](https://github.com/MOLPay/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/DefaultCheckout/Latest_Release)
-* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (OneStepCheckout)](https://github.com/MOLPay/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/OneStepCheckout)
-* [MOLPay Seamless Plugin for Magento Version 2.0.X](https://github.com/MOLPay/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.0.x)
+* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (Default Checkout)](https://github.com/RazerMS/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/DefaultCheckout/Latest_Release)
+* [MOLPay Seamless Plugin for Magento Version 2.1.X & 2.2.X (OneStepCheckout)](https://github.com/RazerMS/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.1.x%202.2.x/OneStepCheckout)
+* [MOLPay Seamless Plugin for Magento Version 2.0.X](https://github.com/RazerMS/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.0.x)
 
 
 
