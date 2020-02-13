@@ -1,8 +1,9 @@
-MOLPay Magento Plugin
+Razer Merchant Services Magento Plugin
 =====================
-![MOLPay Technical Teams](https://github.com/MOLPay/Magento_Plugin/wiki/images/molpay-developer.jpg)
 
-The MOLPay Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
+<img src="https://user-images.githubusercontent.com/38641542/74150431-e0217e80-4c44-11ea-9f73-a18c82975341.jpg">
+
+The Razer Merchant Services Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
 
 ###### MOLPay Plugin for Magento Community Edition ######
 
@@ -11,7 +12,7 @@ Prerequisites
 
 * PHP 5.2 or later. 
 * For Magento 2.2.x and above , recommend to use PHP 7.0 and above
-* MOLPay Production or Development [account](http://www.molpay.com/v3/contact/merchant-enquiry).
+* MOLPay Production or Development [account](https://merchant.razer.com/v3/enrol-with-us/).
 
 Documentation
 -------------
@@ -51,12 +52,12 @@ Plugin Releases
 Support
 -------
 
-Merchant Technical Support / Customer Care : support@molpay.com <br>
-Marketing Campaign : marketing@molpay.com <br>
-Channel/Partner Enquiry : channel@molpay.com <br>
-Media Contact : media@molpay.com <br>
-R&D and Tech-related Suggestion : technical@molpay.com <br>
-Abuse Reporting : abuse@molpay.com
+Merchant Technical Support / Customer Care : support-sa@razer.com <br>
+Marketing Campaign : marketing-sa@razer.com <br>
+Channel/Partner Enquiry : channel-sa@razer.com <br>
+Media Contact : media-sa@razer.com <br>
+R&D and Tech-related Suggestion : technical-sa@razer.com <br>
+Abuse Reporting : abuse-sa@razer.com
 
 Disclaimer
 ----------
