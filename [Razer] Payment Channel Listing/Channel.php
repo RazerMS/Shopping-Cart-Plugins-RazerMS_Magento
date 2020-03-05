@@ -114,6 +114,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "singpost" , 'label' => "Cash-SAM"  ];
 	        $option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
 	        $option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
+	        $option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
 	    
 		
 	return $option;
@@ -225,7 +226,8 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 "vtcpay-bvb" => "VTC Pay Channels (Baoviet Bank)",
 "singpost" => "Cash-SAM",
 "WeChatPay" => "WeChatPay",
-"GrabPay" => "GrabPay"
+"GrabPay" => "GrabPay",
+"TNG-EWALLET" => "Touch 'n Go eWallet"		   
 	   ];
            
            return $choose;
