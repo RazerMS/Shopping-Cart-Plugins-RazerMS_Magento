@@ -23,6 +23,8 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "maybank2u" , 'label' => "Maybank(Maybank2u)"  ];
 		$option[] = [ 'value' => "pbb" , 'label' => "PublicBank (PBB Online)"  ];
 		$option[] = [ 'value' => "rhb" , 'label' => "RHB Bank(RHB Now)"  ];
+
+		//Paynet (FPX) B2C
 		$option[] = [ 'value' => "fpx_amb" , 'label' => "FPX Am Bank (Am Online)"  ];
 		$option[] = [ 'value' => "fpx_bimb" , 'label' => "FPX Bank Islam"  ];
 		$option[] = [ 'value' => "fpx_cimbclicks" , 'label' => "FPX CIMB Bank(CIMB Clicks)"  ];
@@ -33,14 +35,11 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "fpx_abmb" , 'label' => "FPX Alliance Bank (Alliance Online)"  ];
 		$option[] = [ 'value' => "fpx_uob" , 'label' => "FPX United Overseas Bank (UOB)"  ];
 		$option[] = [ 'value' => "fpx_bsn" , 'label' => "FPX Bank Simpanan Nasional (myBSN)"  ];
-		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Bank"  ];
+		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Ban"  ];
 		$option[] = [ 'value' => "FPX_SCB" , 'label' => "FPX Standard Chartered Bank"  ];
-		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berhad"  ];
-	        $option[] = [ 'value' => "fpx_kfh" , 'label' => "FPX Kuwait Finance House"  ];
-	        $option[] = [ 'value' => "fpx_bkrm" , 'label' => "FPX Bank Kerjasama Rakyat Malaysia"  ];
-	        $option[] = [ 'value' => "fpx_bmmb" , 'label' => "FPX Bank Muamalat"  ];
-	        $option[] = [ 'value' => "fpx_hsbc" , 'label' => "FPX Hongkong and Shanghai Banking Corporation"  ];
-		$option[] = [ 'value' => "FPX_B2B" , 'label' => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam)"  ];
+		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berha"  ];
+
+		//Paynet (FPX) B2B
 		$option[] = [ 'value' => "FPX_B2B_ABB" , 'label' => "FPX B2B Affin Bank"  ];
 		$option[] = [ 'value' => "FPX_B2B_AMB" , 'label' => "FPX B2B Ambank Berhad"  ];
 		$option[] = [ 'value' => "FPX_B2B_BIMB" , 'label' => "FPX B2B Bank Islam Malaysia Berhad (BIMB)"  ];
@@ -51,7 +50,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "FPX_B2B_RHB" , 'label' => "FPX B2B RHB Reflex"  ];
 		$option[] = [ 'value' => "FPX_B2B_UOB" , 'label' => "FPX B2B United Overseas Bank"  ];
 		$option[] = [ 'value' => "FPX_M2E" , 'label' => "FPX Maybank2e"  ];
-		$option[] = [ 'value' => "BOOST" , 'label' => "Boost"  ];
+
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
 		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
 		$option[] = [ 'value' => "credit" , 'label' => "Credit Card/ Debit Card"  ];
@@ -111,10 +110,9 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "vtcpay-lienvietpostbank" , 'label' => "VTC Pay Channels (Lienviet Bank)"  ];
 		$option[] = [ 'value' => "vtcpay-bvb" , 'label' => "VTC Pay Channels (Baoviet Bank)"  ];
 		$option[] = [ 'value' => "singpost" , 'label' => "Cash-SAM"  ];
-	        $option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
-	        $option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
-	        $option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
-	    
+		$option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
+		$option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
+		$option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
 		
 	return $option;
     }
@@ -122,112 +120,111 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
     
     /*
      * Get options in "key-value" format
-      * @return array
-       */
-       public function toArray()
-       {
-           $choose = [
-"affinonline" => "Affin Bank(Affin Online)",
-"amb" => "Am Bank (Am Online)",
-"bankislam" => "Bank Islam",
-"cimbclicks" => "CIMB Bank(CIMB Clicks)",
-"hlb" => "Hong Leong Bank(HLB Connect)",
-"maybank2u" => "Maybank(Maybank2u)",
-"pbb" => "PublicBank (PBB Online)",
-"rhb" => "RHB Bank(RHB Now)",
-"fpx_amb" => "FPX Am Bank (Am Online)",
-"fpx_bimb" => "FPX Bank Islam",
-"fpx_cimbclicks" => "FPX CIMB Bank(CIMB Clicks)",
-"fpx_hlb" => "FPX Hong Leong Bank(HLB Connect)",
-"fpx_mb2u" => "FPX Maybank(Maybank2u)",
-"fpx_pbb" => "FPX PublicBank (PBB Online)",
-"fpx_rhb" => "FPX RHB Bank(RHB Now)",
-"fpx_abmb" => "FPX Alliance Bank (Alliance Online)",
-"fpx_uob" => "FPX United Overseas Bank (UOB)",
-"fpx_bsn" => "FPX Bank Simpanan Nasional (myBSN)",
-"FPX_OCBC" => "FPX OCBC Bank",
-"FPX_SCB" => "FPX Standard Chartered Bank",
-"FPX_ABB" => "FPX Affin Bank Berhad",
-"fpx_kfh" => "FPX Kuwait Finance House",
-"fpx_bkrm" => "FPX Bank Kerjasama Rakyat Malaysia",
-"fpx_bmmb" => "FPX Bank Muamalat",
-"fpx_hsbc" => "FPX Hongkong and Shanghai Banking Corporation",		   
-"FPX_B2B" => "MyClear FPX B2B (Maybank2e, BizChannel@CIMB, RHB Reflex, BizSmart, Bank Islam)",
-"FPX_B2B_ABB" => "FPX B2B Affin Bank",
-"FPX_B2B_AMB" => "FPX B2B Ambank Berhad",
-"FPX_B2B_BIMB" => "FPX B2B Bank Islam Malaysia Berhad (BIMB)",
-"FPX_B2B_CIMB" => "FPX B2B BizChannel@CIMB (CIMB)",
-"FPX_B2B_HLB" => "FPX B2B HongLeong Connect",
-"FPX_B2B_HSBC" => "FPX B2B HSBC",
-"FPX_B2B_PBB" => "FPX B2B Public Bank",
-"FPX_B2B_RHB" => "FPX B2B RHB Reflex",
-"FPX_B2B_UOB" => "FPX B2B United Overseas Bank",
-"FPX_M2E" => "FPX Maybank2e",
-"BOOST" => "Boost",
-"molwallet" => "MOLWallet",
-"cash-711" => "7-Eleven(MOLPay Cash)",
-"credit" => "Credit Card/ Debit Card",
-"cash-epay" => "E-Pay",
-"WEBCASH" => "WEBCASH",
-"PEXPLUS" => "PEx",
-"jompay" => "JOMPay",
-"ATMVA" => "ATM Transfer via Permata Bank",
-"dragonpay" => "Dragonpay",
-"paysbuy" => "PaysBuy",
-"Point-BCard" => "Bcard points",
-"NGANLUONG" => "NGANLUONG",
-"crossborder" => "Credit Card/ Debit Card",
-"paypal" => "PayPal",
-"enetsD" => "eNETS",
-"UPOP" => "China Union pay",
-"alipay" => "Alipay.com ",
-"polipayment" => "POLi Payment",
-"TH_PB_SCBPN" => "Paysbuy SCBPN",
-"TH_PB_KTBPN" => "Paysbuy KTBPN",
-"TH_PB_BBLPN" => "Paysbuy BBLPN",
-"TH_PB_BAYPN" => "Paysbuy BAYPN",
-"TH_PB_CASH" => "Paysbuy CASH",
-"vtcpay-ewallet" => "VTC Pay Channels (E-Wallet)",
-"vtcpay-bank" => "VTC Pay Channels (Banks)",
-"vtcpay-credit" => "VTC Pay Channels (Credit Card)",
-"vtcpay-ewalletbank" => "VTC Pay Channels (E-Wallet & Banks)",
-"vtcpay-ewalletcredit" => "VTC Pay Channels (E-Wallet & Credit Card)",
-"vtcpay-bankcredit" => "VTC Pay Channels (Banks & Credit Car)",
-"vtcpay-vietcombank" => "VTC Pay Channels (Vietcombank)",
-"vtcpay-techcombank" => "VTC Pay Channels (Techcom Bank)",
-"vtcpay-mb" => "VTC Pay Channels (MB)",
-"vtcpay-vietinbank" => "VTC Pay Channels (Vietin Bank)",
-"vtcpay-agribank" => "VTC Pay Channels (Agribank)",
-"vtcpay-dongabank" => "VTC Pay Channels (Dong A Bank)",
-"vtcpay-oceanbank" => "VTC Pay Channels (Ocean Bank)",
-"vtcpay-bidv" => "VTC Pay Channels (BIDV)",
-"vtcpay-shb" => "VTC Pay Channels (SHB)",
-"vtcpay-vib" => "VTC Pay Channels (VIB)",
-"vtcpay-maritimebank" => "VTC Pay Channels (Maritime Bank)",
-"vtcpay-eximbank" => "VTC Pay Channels (Eximbank)",
-"vtcpay-acb" => "VTC Pay Channels (ACB)",
-"vtcpay-hdbank" => "VTC Pay Channels (HD Bank)",
-"vtcpay-namabank" => "VTC Pay Channels (Nam A Bank)",
-"vtcpay-saigonbank" => "VTC Pay Channels (Saigon Bank)",
-"vtcpay-sacombank" => "VTC Pay Channels (Sacombank)",
-"vtcpay-vietabank" => "VTC Pay Channels (Viet A Bank)",
-"vtcpay-vpbank" => "VTC Pay Channels (VP Bank)",
-"vtcpay-tienphongbank" => "VTC Pay Channels (TP Bank)",
-"vtcpay-seaabank" => "VTC Pay Channels (Sea Bank)",
-"vtcpay-pgbank" => "VTC Pay Channels (PG Bank)",
-"vtcpay-navibank" => "VTC Pay Channels (Navi Bank)",
-"vtcpay-gpbank" => "VTC Pay Channels (GP Bank)",
-"vtcpay-bacabank" => "VTC Pay Channels (Bac A Bank)",
-"vtcpay-phuongdong" => "VTC Pay Channels (Local Bank)",
-"vtcpay-abbank" => "VTC Pay Channels (AB Bank)",
-"vtcpay-lienvietpostbank" => "VTC Pay Channels (Lienviet Bank)",
-"vtcpay-bvb" => "VTC Pay Channels (Baoviet Bank)",
-"singpost" => "Cash-SAM",
-"WeChatPay" => "WeChatPay",
-"GrabPay" => "GrabPay",
-"TNG-EWALLET" => "Touch 'n Go eWallet"		   
-	   ];
-           
-           return $choose;
-       }
+	 * @return array
+	 */
+	public function toArray()
+	{
+		$choose = [
+			"affinonline" => "Affin Bank(Affin Online)",
+			"amb" => "Am Bank (Am Online)",
+			"bankislam" => "Bank Islam",
+			"cimbclicks" => "CIMB Bank(CIMB Clicks)",
+			"hlb" => "Hong Leong Bank(HLB Connect)",
+			"maybank2u" => "Maybank(Maybank2u)",
+			"pbb" => "PublicBank (PBB Online)",
+			"rhb" => "RHB Bank(RHB Now)",
+
+			//Paynet (FPX) B2C
+			"fpx_amb" => "Am Bank (Am Online)",
+			"fpx_bimb" => "Bank Islam",
+			"fpx_cimbclicks" => "CIMB Bank(CIMB Clicks)",
+			"fpx_hlb" => "Hong Leong Bank(HLB Connect)",
+			"fpx_mb2u" => "Maybank(Maybank2u)",
+			"fpx_pbb" => "PublicBank (PBB Online)",
+			"fpx_rhb" => "RHB Bank(RHB Now)",
+			"fpx_abmb" => "Alliance Bank (Alliance Online)",
+			"fpx_uob" => "United Overseas Bank (UOB)",
+			"fpx_bsn" => "Bank Simpanan Nasional (myBSN)",
+			"FPX_OCBC" => "OCBC Ban",
+			"FPX_SCB" => "Standard Chartered Bank",
+			"FPX_ABB" => "Affin Bank Berhad",
+			
+			//Paynet (FPX) B2B
+			"FPX_B2B_ABB" => "Affin Bank",
+			"FPX_B2B_AMB" => "Ambank Berhad",
+			"FPX_B2B_BIMB" => "Bank Islam Malaysia Berhad (BIMB)",
+			"FPX_B2B_CIMB" => "BizChannel@CIMB (CIMB)",
+			"FPX_B2B_HLB" => "HongLeong Connect",
+			"FPX_B2B_HSBC" => "HSBC",
+			"FPX_B2B_PBB" => "Public Bank",
+			"FPX_B2B_RHB" => "RHB Reflex",
+			"FPX_B2B_UOB" => "United Overseas Bank",
+			"FPX_M2E" => "Maybank2e",
+
+			"molwallet" => "MOLWallet",
+			"cash-711" => "7-Eleven(MOLPay Cash)",
+			"credit" => "Credit Card/ Debit Card",
+			"cash-epay" => "E-Pay",
+			"WEBCASH" => "WEBCASH",
+			"PEXPLUS" => "PEx",
+			"jompay" => "JOMPay",
+			"ATMVA" => "ATM Transfer via Permata Bank",
+			"dragonpay" => "Dragonpay",
+			"paysbuy" => "PaysBuy",
+			"Point-BCard" => "Bcard points",
+			"NGANLUONG" => "NGANLUONG",
+			"crossborder" => "Credit Card/ Debit Card",
+			"paypal" => "PayPal",
+			"enetsD" => "eNETS",
+			"UPOP" => "China Union pay",
+			"alipay" => "Alipay.com ",
+			"polipayment" => "POLi Payment",
+			"TH_PB_SCBPN" =>"Paysbuy SCBPN",
+			"TH_PB_KTBPN" => "Paysbuy KTBPN",
+			"TH_PB_BBLPN" => "Paysbuy BBLPN",
+			"TH_PB_BAYPN" => "Paysbuy BAYPN",
+			"TH_PB_CASH" => "Paysbuy CASH",
+			"vtcpay-ewallet" => "VTC Pay Channels (E-Wallet)",
+			"vtcpay-bank" => "VTC Pay Channels (Banks)",
+			"vtcpay-credit" => "VTC Pay Channels (Credit Card)",
+			"vtcpay-ewalletbank" => "VTC Pay Channels (E-Wallet & Banks)",
+			"vtcpay-ewalletcredit" => "VTC Pay Channels (E-Wallet & Credit Card)",
+			"vtcpay-bankcredit" => "VTC Pay Channels (Banks & Credit Car)",
+			"vtcpay-vietcombank" => "VTC Pay Channels (Vietcombank)",
+			"vtcpay-techcombank" => "VTC Pay Channels (Techcom Bank)",
+			"vtcpay-mb" => "VTC Pay Channels (MB)",
+			"vtcpay-vietinbank" => "VTC Pay Channels (Vietin Bank)",
+			"vtcpay-agribank" => "VTC Pay Channels (Agribank)",
+			"vtcpay-dongabank" => "VTC Pay Channels (Dong A Bank)",
+			"vtcpay-oceanbank" => "VTC Pay Channels (Ocean Bank)",
+			"vtcpay-bidv" => "VTC Pay Channels (BIDV)",
+			"vtcpay-shb" => "VTC Pay Channels (SHB)",
+			"vtcpay-vib" => "VTC Pay Channels (VIB)",
+			"vtcpay-maritimebank" => "VTC Pay Channels (Maritime Bank)",
+			"vtcpay-eximbank" => "VTC Pay Channels (Eximbank)",
+			"vtcpay-acb" => "VTC Pay Channels (ACB)",
+			"vtcpay-hdbank" => "VTC Pay Channels (HD Bank)",
+			"vtcpay-namabank" => "VTC Pay Channels (Nam A Bank)",
+			"vtcpay-saigonbank" => "VTC Pay Channels (Saigon Bank)",
+			"vtcpay-sacombank" => "VTC Pay Channels (Sacombank)",
+			"vtcpay-vietabank" => "VTC Pay Channels (Viet A Bank)",
+			"vtcpay-vpbank" => "VTC Pay Channels (VP Bank)",
+			"vtcpay-tienphongbank" => "VTC Pay Channels (TP Bank)",
+			"vtcpay-seaabank" => "VTC Pay Channels (Sea Bank)",
+			"vtcpay-pgbank" => "VTC Pay Channels (PG Bank)",
+			"vtcpay-navibank" => "VTC Pay Channels (Navi Bank)",
+			"vtcpay-gpbank" => "VTC Pay Channels (GP Bank)",
+			"vtcpay-bacabank" => "VTC Pay Channels (Bac A Bank)",
+			"vtcpay-phuongdong" => "VTC Pay Channels (Local Bank)",
+			"vtcpay-abbank" => "VTC Pay Channels (AB Bank)",
+			"vtcpay-lienvietpostbank" => "VTC Pay Channels (Lienviet Bank)",
+			"vtcpay-bvb" => "VTC Pay Channels (Baoviet Bank)",
+			"singpost" => "Cash-SAM",
+			"WeChatPay" => "WeChatPay",
+			"GrabPay" => "GrabPay",
+			"TNG-EWALLET" => "Touch 'n Go eWallet"	
+		];
+		
+		return $choose;
+	}
 }
