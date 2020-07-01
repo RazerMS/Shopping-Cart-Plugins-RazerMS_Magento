@@ -15,14 +15,6 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
  		$option = [];
-		$option[] = [ 'value' => "affinonline" , 'label' => "Affin Bank(Affin Online)" ];
-		$option[] = [ 'value' => "amb" , 'label' => "Am Bank (Am Online)"  ];
-		$option[] = [ 'value' => "bankislam" , 'label' => "Bank Islam"  ];
-		$option[] = [ 'value' => "cimbclicks" , 'label' => "CIMB Bank(CIMB Clicks)"  ];
-		$option[] = [ 'value' => "hlb" , 'label' => "Hong Leong Bank(HLB Connect)"  ];
-		$option[] = [ 'value' => "maybank2u" , 'label' => "Maybank(Maybank2u)"  ];
-		$option[] = [ 'value' => "pbb" , 'label' => "PublicBank (PBB Online)"  ];
-		$option[] = [ 'value' => "rhb" , 'label' => "RHB Bank(RHB Now)"  ];
 
 		//Paynet (FPX) B2C
 		$option[] = [ 'value' => "fpx_amb" , 'label' => "FPX Am Bank (Am Online)"  ];
@@ -35,9 +27,9 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "fpx_abmb" , 'label' => "FPX Alliance Bank (Alliance Online)"  ];
 		$option[] = [ 'value' => "fpx_uob" , 'label' => "FPX United Overseas Bank (UOB)"  ];
 		$option[] = [ 'value' => "fpx_bsn" , 'label' => "FPX Bank Simpanan Nasional (myBSN)"  ];
-		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Ban"  ];
+		$option[] = [ 'value' => "FPX_OCBC" , 'label' => "FPX OCBC Bank"  ];
 		$option[] = [ 'value' => "FPX_SCB" , 'label' => "FPX Standard Chartered Bank"  ];
-		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berha"  ];
+		$option[] = [ 'value' => "FPX_ABB" , 'label' => "FPX Affin Bank Berhad"  ];
 
 		//Paynet (FPX) B2B
 		$option[] = [ 'value' => "FPX_B2B_ABB" , 'label' => "FPX B2B Affin Bank"  ];
@@ -50,6 +42,23 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "FPX_B2B_RHB" , 'label' => "FPX B2B RHB Reflex"  ];
 		$option[] = [ 'value' => "FPX_B2B_UOB" , 'label' => "FPX B2B United Overseas Bank"  ];
 		$option[] = [ 'value' => "FPX_M2E" , 'label' => "FPX Maybank2e"  ];
+
+		//Request RMS Support to enable below onlinebanking channel
+		$option[] = [ 'value' => "affinonline" , 'label' => "Affin Bank(Affin Online)" ];
+		$option[] = [ 'value' => "amb" , 'label' => "Am Bank (Am Online)"  ];
+		$option[] = [ 'value' => "bankislam" , 'label' => "Bank Islam"  ];
+		$option[] = [ 'value' => "cimbclicks" , 'label' => "CIMB Bank(CIMB Clicks)"  ];
+		$option[] = [ 'value' => "hlb" , 'label' => "Hong Leong Bank(HLB Connect)"  ];
+		$option[] = [ 'value' => "maybank2u" , 'label' => "Maybank(Maybank2u)"  ];
+		$option[] = [ 'value' => "pbb" , 'label' => "PublicBank (PBB Online)"  ];
+		$option[] = [ 'value' => "rhb" , 'label' => "RHB Bank(RHB Now)"  ];
+		
+		//E-Wallet
+		$option[] = [ 'value' => "BOOST" , 'label' => "Boost"  ];
+		$option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
+		$option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
+		$option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
+
 
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
 		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
@@ -110,9 +119,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "vtcpay-lienvietpostbank" , 'label' => "VTC Pay Channels (Lienviet Bank)"  ];
 		$option[] = [ 'value' => "vtcpay-bvb" , 'label' => "VTC Pay Channels (Baoviet Bank)"  ];
 		$option[] = [ 'value' => "singpost" , 'label' => "Cash-SAM"  ];
-		$option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
-		$option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
-		$option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
+
 		
 	return $option;
     }
@@ -145,7 +152,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"fpx_abmb" => "Alliance Bank (Alliance Online)",
 			"fpx_uob" => "United Overseas Bank (UOB)",
 			"fpx_bsn" => "Bank Simpanan Nasional (myBSN)",
-			"FPX_OCBC" => "OCBC Ban",
+			"FPX_OCBC" => "OCBC Bank",
 			"FPX_SCB" => "Standard Chartered Bank",
 			"FPX_ABB" => "Affin Bank Berhad",
 			
@@ -160,6 +167,12 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"FPX_B2B_RHB" => "RHB Reflex",
 			"FPX_B2B_UOB" => "United Overseas Bank",
 			"FPX_M2E" => "Maybank2e",
+
+			//E-wallet
+			"BOOST" => "Boost",
+			"WeChatPay" => "WeChatPay",
+			"GrabPay" => "GrabPay",
+			"TNG-EWALLET" => "Touch 'n Go eWallet",	
 
 			"molwallet" => "MOLWallet",
 			"cash-711" => "7-Eleven(MOLPay Cash)",
@@ -189,7 +202,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"vtcpay-credit" => "VTC Pay Channels (Credit Card)",
 			"vtcpay-ewalletbank" => "VTC Pay Channels (E-Wallet & Banks)",
 			"vtcpay-ewalletcredit" => "VTC Pay Channels (E-Wallet & Credit Card)",
-			"vtcpay-bankcredit" => "VTC Pay Channels (Banks & Credit Car)",
+			"vtcpay-bankcredit" => "VTC Pay Channels (Banks & Credit Card)",
 			"vtcpay-vietcombank" => "VTC Pay Channels (Vietcombank)",
 			"vtcpay-techcombank" => "VTC Pay Channels (Techcom Bank)",
 			"vtcpay-mb" => "VTC Pay Channels (MB)",
@@ -219,10 +232,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"vtcpay-abbank" => "VTC Pay Channels (AB Bank)",
 			"vtcpay-lienvietpostbank" => "VTC Pay Channels (Lienviet Bank)",
 			"vtcpay-bvb" => "VTC Pay Channels (Baoviet Bank)",
-			"singpost" => "Cash-SAM",
-			"WeChatPay" => "WeChatPay",
-			"GrabPay" => "GrabPay",
-			"TNG-EWALLET" => "Touch 'n Go eWallet"	
+			"singpost" => "Cash-SAM"
 		];
 		
 		return $choose;
