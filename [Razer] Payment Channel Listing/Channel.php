@@ -58,6 +58,8 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "WeChatPay" , 'label' => "WeChatPay (China)"  ];
 		$option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
 		$option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
+		$option[] = [ 'value' => "RazerPay" , 'label' => "RazerPay"  ];
+		$option[] = [ 'value' => "MB2U_QRPay-Push" , 'label' => "Maybank QR Pay"  ];
 
 
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
@@ -173,6 +175,8 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"WeChatPay" => "WeChatPay",
 			"GrabPay" => "GrabPay",
 			"TNG-EWALLET" => "Touch 'n Go eWallet",	
+			"RazerPay" => "RazerPay",	
+			"MB2U_QRPay-Push" => "Maybank QR Pay",	
 
 			"molwallet" => "MOLWallet",
 			"cash-711" => "7-Eleven(MOLPay Cash)",
