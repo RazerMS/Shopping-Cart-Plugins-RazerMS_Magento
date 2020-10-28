@@ -59,7 +59,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "GrabPay" , 'label' => "GrabPay"  ];
 		$option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
 		$option[] = [ 'value' => "RazerPay" , 'label' => "RazerPay"  ];
-		$option[] = [ 'value' => "MB2U_QRPay-Push" , 'label' => "Maybank QR Pay"  ];
+		$option[] = [ 'value' => "MB2U_QRPay-Push" , 'label' => "MAE by Maybank2u"  ];
 
 
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
@@ -176,7 +176,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"GrabPay" => "GrabPay",
 			"TNG-EWALLET" => "Touch 'n Go eWallet",	
 			"RazerPay" => "RazerPay",	
-			"MB2U_QRPay-Push" => "Maybank QR Pay",	
+			"MB2U_QRPay-Push" => "MAE by Maybank2u",	
 
 			"molwallet" => "MOLWallet",
 			"cash-711" => "7-Eleven(MOLPay Cash)",
