@@ -63,7 +63,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "ShopeePay" , 'label' => "ShopeePay"  ];
 	    
 	    	//New 2021 BPL
-		$option[] = [ 'value' => "Rely-PW" , 'label' => "Rely-Buy Now, Pay Later"  ],
+		$option[] = [ 'value' => "Rely-PW" , 'label' => "Rely-Buy Now, Pay Later"  ];
 
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
 		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
