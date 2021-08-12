@@ -60,7 +60,10 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "TNG-EWALLET" , 'label' => "Touch 'n Go eWallet"  ];
 		$option[] = [ 'value' => "RazerPay" , 'label' => "RazerPay"  ];
 		$option[] = [ 'value' => "MB2U_QRPay-Push" , 'label' => "MAE by Maybank2u"  ];
-
+		$option[] = [ 'value' => "ShopeePay" , 'label' => "ShopeePay"  ];
+	    
+	    	//New 2021 BPL
+		$option[] = [ 'value' => "Rely-PW" , 'label' => "Rely-Buy Now, Pay Later"  ],
 
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
 		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
@@ -177,6 +180,10 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"TNG-EWALLET" => "Touch 'n Go eWallet",	
 			"RazerPay" => "RazerPay",	
 			"MB2U_QRPay-Push" => "MAE by Maybank2u",	
+			"ShopeePay" => "ShopeePay",
+			
+			//New 2021 BPL
+			"Rely-PW" => "Rely-Buy Now, Pay Later",
 
 			"molwallet" => "MOLWallet",
 			"cash-711" => "7-Eleven(MOLPay Cash)",
