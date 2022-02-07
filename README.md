@@ -1,4 +1,4 @@
-Razer Merchant Services Magento Plugin
+[Shopping Cart Plugins] – RazerMS Magento
 =====================
 
 <img src="https://user-images.githubusercontent.com/38641542/74420751-e99a2900-4e86-11ea-99e6-904e4eba1574.jpg">
