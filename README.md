@@ -56,6 +56,15 @@ Plugin Releases
 * [MOLPay Seamless Plugin for Magento Version 2.0.X](https://github.com/RazerMS/Magento_Plugin/tree/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.0.x)
 
 
+## Resources
+
+- GitHub:     https://github.com/RazerMS
+- Website:    https://merchant.razer.com/
+- Twitter:    https://twitter.com/Razer_MS
+- YouTube:    https://www.youtube.com/c/RazerMerchantServices
+- Facebook:   https://www.facebook.com/RazerMerchantServices/
+- Instagram:  https://www.instagram.com/RazerMerchantServices/
+
 
 Support
 -------
