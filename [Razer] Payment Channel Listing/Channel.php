@@ -66,8 +66,9 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "Rely-PW" , 'label' => "Rely-Buy Now, Pay Later"  ];
 
 		$option[] = [ 'value' => "molwallet" , 'label' => "MOLWallet"  ];
-		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven(MOLPay Cash)"  ];
-		$option[] = [ 'value' => "credit" , 'label' => "Credit Card/ Debit Card"  ];
+		$option[] = [ 'value' => "cash-711" , 'label' => "7-Eleven (Razer Cash)"  ];
+		$option[] = [ 'value' => "credit" , 'label' => "Credit Card / Debit Card **Sandbox** "  ];
+		$option[] = [ 'value' => "creditAN" , 'label' => "Credit Card / Debit Card"  ];
 		$option[] = [ 'value' => "cash-epay" , 'label' => "E-Pay"  ];
 		$option[] = [ 'value' => "WEBCASH" , 'label' => "WEBCASH"  ];
 		$option[] = [ 'value' => "PEXPLUS" , 'label' => "PEx"  ];
@@ -77,7 +78,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 		$option[] = [ 'value' => "paysbuy" , 'label' => "PaysBuy"  ];
 		$option[] = [ 'value' => "Point-BCard" , 'label' => "Bcard points"  ];
 		$option[] = [ 'value' => "NGANLUONG" , 'label' => "NGANLUONG"  ];
-		$option[] = [ 'value' => "crossborder" , 'label' => "Credit Card/ Debit Card"  ];
+		$option[] = [ 'value' => "crossborder" , 'label' => "Credit Card/ Debit Card (N/A)"  ];
 		$option[] = [ 'value' => "paypal" , 'label' => "PayPal"  ];
 		$option[] = [ 'value' => "enetsD" , 'label' => "eNETS"  ];
 		$option[] = [ 'value' => "UPOP" , 'label' => "China Union pay"  ];
@@ -188,6 +189,7 @@ class Channel implements \Magento\Framework\Option\ArrayInterface
 			"molwallet" => "MOLWallet",
 			"cash-711" => "7-Eleven(MOLPay Cash)",
 			"credit" => "Credit Card/ Debit Card",
+			"creditAN" => "Credit Card/ Debit Card",
 			"cash-epay" => "E-Pay",
 			"WEBCASH" => "WEBCASH",
 			"PEXPLUS" => "PEx",
