@@ -1,0 +1,24 @@
+.razerpay-payment-label {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.razerpay-payment-logo {
+  height: 4em;
+  margin-right: 0.5em;
+}
+
+.razerpay-payment-channels .razerpay-payment-channel-label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  margin: 0.5em 0;
+}
+
+.razerpay-payment-channels .razerpay-payment-channel-logo {
+  height: 3em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}

@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var \RazerPay\Payment\Block\Sales\Order\Info $block
+ */
+?>
+<p><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
+<?php if ($block->getChannel()): ?>
+    <table class="admin__table-secondary">
+        <tbody>
+        <tr>
+            <th>Channel</th>
+            <td><?= $block->escapeHtml($block->getChannel()) ?></td>
+        </tr>
+        <?php if ($block->getLastTransId()): ?>
+          <tr>
+              <th>Transaction ID</th>
+            <td><?= $block->escapeHtml($block->getLastTransId()) ?></td>
+          </tr>
+        <?php endif ?>
+        </tbody>
+    </table>
+<?php endif; ?>

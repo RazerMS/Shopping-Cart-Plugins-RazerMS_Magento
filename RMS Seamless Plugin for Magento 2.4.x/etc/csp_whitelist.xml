@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp/etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="form-action">
+            <values>
+                <value id="razerpay-payment-base" type="host">https://pay.merchant.razer.com</value>
+                <value id="razerpay-payment-sandbox-base" type="host">https://sandbox.merchant.razer.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

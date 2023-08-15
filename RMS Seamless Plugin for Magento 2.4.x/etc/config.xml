@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <razerpay_payment/>
+
+        <payment>
+            <razerpay_payment>
+                <active>0</active>
+                <model>RazerPayPaymentFacade</model>
+                <order_status>pending_payment</order_status>
+                <payment_action>initialize</payment_action>
+                <title>Razer Merchant Services</title>
+                <currency>MYR</currency>
+                <can_initialize>1</can_initialize>
+                <can_capture>1</can_capture>
+                <can_use_checkout>1</can_use_checkout>
+                <sort_order>1</sort_order>
+                <account_type>production</account_type>
+            </razerpay_payment>
+        </payment>
+    </default>
+</config>

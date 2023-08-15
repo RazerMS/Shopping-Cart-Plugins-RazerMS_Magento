@@ -1,0 +1,18 @@
+{
+    "sales_order": {
+        "column": {
+            "razerpay_payment_refund_status": true
+        },
+        "index": {
+            "SALES_ORDER_RAZERPAY_PAYMENT_REFUND_STATUS": true
+        }
+    },
+    "sales_order_grid": {
+        "column": {
+            "razerpay_payment_refund_status": true
+        },
+        "index": {
+            "SALES_ORDER_GRID_RAZERPAY_PAYMENT_REFUND_STATUS": true
+        }
+    }
+}

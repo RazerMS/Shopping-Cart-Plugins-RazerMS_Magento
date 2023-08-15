@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_order" resource="default">
+        <column xsi:type="varchar" name="razerpay_payment_refund_status" nullable="true" comment="RazerPay Payment Refund Status"/>
+        <index referenceId="SALES_ORDER_RAZERPAY_PAYMENT_REFUND_STATUS" indexType="btree">
+            <column name="razerpay_payment_refund_status"/>
+        </index>
+    </table>
+    <table name="sales_order_grid" resource="default">
+        <column xsi:type="varchar" name="razerpay_payment_refund_status" nullable="true" comment="RazerPay Payment Refund Status"/>
+        <index referenceId="SALES_ORDER_GRID_RAZERPAY_PAYMENT_REFUND_STATUS" indexType="btree">
+            <column name="razerpay_payment_refund_status"/>
+        </index>
+    </table>
+</schema>

@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="RazerPay\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">RazerPay\Payment\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="RazerPayPaymentFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">RazerPay\Payment\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">RazerPay\Payment\Block\Sales\Order\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">RazerPayPaymentValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">RazerPayPaymentCommandPool</argument>
+            <argument name="logger" xsi:type="object">RazerPay\Payment\Logger\Logger</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RazerPayPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">RazerPayPaymentConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RazerPayPaymentConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">RazerPay\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RazerPayPaymentCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">RazerPayPaymentInitializeCommand</item>
+                <item name="capture" xsi:type="string">RazerPayPaymentCaptureCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RazerPayPaymentInitializeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">RazerPayInitializationRequest</argument>
+            <argument name="transferFactory" xsi:type="object">RazerPay\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">RazerPay\Payment\Gateway\Http\Client\Client</argument>
+            <argument name="logger" xsi:type="object">RazerPay\Payment\Logger\Logger</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RazerPayInitializationRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="transaction" xsi:type="string">RazerPay\Payment\Gateway\Request\InitializationRequest</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="RazerPay\Payment\Gateway\Request\InitializationRequest">
+        <arguments>
+            <argument name="config" xsi:type="object">RazerPay\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="RazerPayPaymentCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">RazerPayCaptureRequest</argument>
+            <argument name="transferFactory" xsi:type="object">RazerPay\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">RazerPay\Payment\Gateway\Http\Client\CaptureClient</argument>
+            <argument name="validator" xsi:type="object">RazerPay\Payment\Gateway\Validator\CaptureValidator</argument>
+            <argument name="logger" xsi:type="object">RazerPay\Payment\Logger\Logger</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RazerPayCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="transaction" xsi:type="string">RazerPay\Payment\Gateway\Request\CaptureRequest</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="RazerPay\Payment\Logger\Handler\Base">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="RazerPay\Payment\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">razerpay_payment</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="base" xsi:type="object">RazerPay\Payment\Logger\Handler\Base</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="RazerPay\Payment\Logger\Handler\Api">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="RazerPay\Payment\Logger\Api">
+        <arguments>
+            <argument name="name" xsi:type="string">razerpay_payment</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="base" xsi:type="object">RazerPay\Payment\Logger\Handler\Api</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="razerpay_payment_refund_status" xsi:type="string">sales_order.razerpay_payment_refund_status</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+</config>

@@ -1,0 +1,7 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="razerpay_payment" frontName="razerpay_payment">
+            <module name="RazerPay_Payment" />
+        </route>
+    </router>
+</config>

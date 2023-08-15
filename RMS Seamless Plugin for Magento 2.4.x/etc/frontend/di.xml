@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="razerpay_payment_config_provider" xsi:type="object">RazerPay\Payment\Model\Ui\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Stdlib\Cookie\PhpCookieManager">
+        <plugin
+            name="razerpay_payment_magento_framework_stdlib_cookie_php_cookie_manager_force_none_same_site"
+            type="RazerPay\Payment\Plugin\Magento\Framework\Stdlib\Cookie\PhpCookieManager\ForceNoneSameSite"
+        />
+    </type>
+</config>

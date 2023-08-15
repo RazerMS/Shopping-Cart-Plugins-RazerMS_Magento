@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var \RazerPay\Payment\Block\Sales\Order\Info $block
+ */
+?>
+<dl class="payment-method">
+    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <?php if ($block->getChannel()): ?>
+        <dd class="content"><?= $block->escapeHtml($block->getChannel()) ?></dd>
+    <?php endif; ?>
+</dl>

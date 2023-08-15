@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="razerpay_payment" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Razer Merchant Services</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="merchant_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Merchant Code</label>
+                </field>
+                <field id="verify_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Verify Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="secret_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="account_type" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Type</label>
+                    <source_model>RazerPay\Payment\Model\Config\Source\AccountType</source_model>
+                </field>
+                <field id="channels" translate="label" type="multiselect" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Channels</label>
+                    <source_model>RazerPay\Payment\Model\Config\Source\Channel</source_model>
+                </field>
+                <field id="credit_channel_transaction_type" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Credit Card / Debit Card Channel Transaction Type</label>
+                    <source_model>RazerPay\Payment\Model\Config\Source\CreditChannelTransactionType</source_model>
+                </field>
+                <field id="return_endpoint" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Return Endpoint</label>
+                    <comment>
+                        <![CDATA[To enable return webhook feature, you must copy the above url to setup at <a href="https://portal.merchant.razer.com"><strong>Razer Merchant Portal</strong></a>.]]>
+                    </comment>
+                    <frontend_model>RazerPay\Payment\Block\Adminhtml\System\Config\ReturnEndpoint</frontend_model>
+                </field>
+                <field id="callback_endpoint" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Callback Endpoint</label>
+                    <comment>
+                        <![CDATA[To enable callback webhook feature, you must copy the above url to setup at <a href="https://portal.merchant.razer.com"><strong>Razer Merchant Portal</strong></a>.]]>
+                    </comment>
+                    <frontend_model>RazerPay\Payment\Block\Adminhtml\System\Config\CallbackEndpoint</frontend_model>
+                </field>
+                <field id="notify_endpoint" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Notify Endpoint</label>
+                    <comment>
+                        <![CDATA[To enable notify webhook feature, you must copy the above url to setup at <a href="https://portal.merchant.razer.com"><strong>Razer Merchant Portal</strong></a>.]]>
+                    </comment>
+                    <frontend_model>RazerPay\Payment\Block\Adminhtml\System\Config\NotifyEndpoint</frontend_model>
+                </field>
+                <field id="cancel_endpoint" translate="label" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cancel Endpoint</label>
+                    <comment>
+                        <![CDATA[To enable cancel webhook feature, you must copy the above url to setup at <a href="https://portal.merchant.razer.com"><strong>Razer Merchant Portal</strong></a>.]]>
+                    </comment>
+                    <frontend_model>RazerPay\Payment\Block\Adminhtml\System\Config\CancelEndpoint</frontend_model>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sort Order</label>
+                    <frontend_class>validate-number</frontend_class>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

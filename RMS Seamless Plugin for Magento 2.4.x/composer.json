@@ -1,0 +1,21 @@
+{
+  "name": "razer-pay/payment",
+  "version": "1.0.0",
+  "description": "RazerPay for Magento 2.4",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "102.0.*|103.0.*",
+    "ext-json": "*"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "RazerPay\\Payment\\": ""
+    }
+  }
+}
