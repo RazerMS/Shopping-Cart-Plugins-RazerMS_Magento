@@ -12,8 +12,8 @@ Important Notice
 ----------------
 
 * As 2nd July 2020, for those who are already used this plugin, kindly change https://sandbox.molpay.com/ to https://sandbox.merchant.razer.com/ to avoid any unnecessary error during your testing payment in RMS Sandbox Environment.
-* Latest plugin has published with respective changes as in this link https://github.com/RazerMS/Magento_Plugin/blob/master/MOLPay%20Seamless%20Plugin%20for%20Magento%202.3.x/Default/Latest/RMS_SeamlessIntegration_Magento2.3.4_20200701.zip
-
+* Latest plugin has published with respective changes as in this link 
+https://github.com/RazerMS/Shopping-Cart-Plugins-RazerMS_Magento/blob/master/RMS%20Seamless%20Plugin%20for%20Magento%202.4.x/magento2-module-razerpay-payment-1.0.0-20230807.zip
 
 Prerequisites
 -------------
