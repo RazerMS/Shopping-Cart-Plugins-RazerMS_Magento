@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace MOLPay\Seamless\Test\Unit\Observer;
+namespace RMS\Seamless\Test\Unit\Observer;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use MOLPay\Seamless\Gateway\Http\Client\ClientMock;
-use MOLPay\Seamless\Observer\DataAssignObserver;
+use RMS\Seamless\Gateway\Http\Client\ClientMock;
+use RMS\Seamless\Observer\DataAssignObserver;
 
 class DataAssignObserverTest extends \PHPUnit_Framework_TestCase
 {
