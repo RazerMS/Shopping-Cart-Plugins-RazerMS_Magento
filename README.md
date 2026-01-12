@@ -5,6 +5,10 @@
 
 The Razer Merchant Services Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
 
+UPDATE NOTICE
+-----------------
+Latest Shopping Cart plugin Magento moved to new URL https://github.com/FiuuPayment/Shopping-Cart-Plugins-Fiuu_Magento
+
 ###### MOLPay Plugin for Magento Community Edition ######
 
 
@@ -69,12 +73,12 @@ Plugin Releases
 Support
 -------
 
-Merchant Technical Support / Customer Care : support-sa@fiuu.com <br>
-Marketing Campaign : marketing-sa@fiuu.com <br>
-Channel/Partner Enquiry : channel-sa@fiuu.com <br>
-Media Contact : media-sa@fiuu.com <br>
-R&D and Tech-related Suggestion : technical-sa@fiuu.com <br>
-Abuse Reporting : abuse-sa@fiuu.com
+Merchant Technical Support / Customer Care : support@fiuu.com <br>
+Marketing Campaign : marketing@fiuu.com <br>
+Channel/Partner Enquiry : channel@fiuu.com <br>
+Media Contact : media@fiuu.com <br>
+R&D and Tech-related Suggestion : technical@fiuu.com <br>
+Abuse Reporting : abuse@fiuu.com
 
 Disclaimer
 ----------
