@@ -1,3 +1,8 @@
+[Shopping Cart Plugins] – RazerMS Magento
+=====================
+
+<img src="https://user-images.githubusercontent.com/38641542/74420751-e99a2900-4e86-11ea-99e6-904e4eba1574.jpg">
+
 # 🚚 Repository Moved
 
 This repository has been moved to a new location and is no longer actively maintained.
@@ -11,11 +16,6 @@ All future updates, bug fixes, and feature enhancements will be published in the
 Thank you for your support.
 
 ---
-
-[Shopping Cart Plugins] – RazerMS Magento
-=====================
-
-<img src="https://user-images.githubusercontent.com/38641542/74420751-e99a2900-4e86-11ea-99e6-904e4eba1574.jpg">
 
 The Razer Merchant Services Magento Plugin makes it easy to add MOLPay payment gateway to your Magento shopping cart.
 
@@ -93,3 +93,4 @@ Abuse Reporting : abuse-sa@razer.com
 Disclaimer
 ----------
 Any amendment by your end is at your own risk.
+
